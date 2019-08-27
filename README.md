@@ -4,8 +4,8 @@
 | Nombre | Padrón | Contacto |
 | - | - |- |
 | Araujo, Manuel | - | - |
-| Fernández, Christian | - | - |
-| Giménez, Andrea | - | - |
+| Fernández, Christian | - |
+| Giménez, Andrea | 100462 | gim.andr26@gmail.com |
 | Harfuch, Mateo | 95049 | mharfuch@fi.uba.ar |
 
 ## Requerimientos
