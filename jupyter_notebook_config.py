@@ -26,5 +26,5 @@ def post_save(model, os_path, contents_manager):
     check_call(['ipython', 'nbconvert', '--to', 'script', fname], cwd=d)
     check_call(['ipython', 'nbconvert', '--to', 'html', fname], cwd=d)
 
-c.FileContentsManager.pre_save_hook = scrub_output_pre_save
+# c.FileContentsManager.pre_save_hook = scrub_output_pre_save
 c.FileContentsManager.post_save_hook = post_save
