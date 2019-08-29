@@ -18,4 +18,4 @@ El desarrollo de los trabajos prácticos está hecho en notebooks. Aquellos loca
 Los resultados finales están en el directorio de cada tp y dentro de la carpeta utils hay scripts  de utilidad comunes a ambos trabajos.
 No hay tests ni branching.
 
-> **Importante**: para editar los notebooks, ejecutar el comando `jupyter lab` desde el directorio raíz, de forma tal que se usen las configuraciones de pre y post guardado que remueven el output y general los _.html_ y _.py_ de los notebooks.
+> **Importante**: para editar los notebooks, ejecutar el comando `jupyter lab` desde el directorio src, de forma tal que se usen las configuraciones de pre y post guardado que remueven el output y general los _.html_ y _.py_ de los notebooks.

@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[84]:
+# In[9]:
 
 
 import pandas as pd
 
-FULL_DATASET = "../enunciado/data/train.csv"
+DATASET_RELATIVE_PATH = "enunciado/data/train.csv"
 
 
-# In[99]:
+# In[10]:
 
 
-def levantar_datos(csv_file: str = FULL_DATASET, optimizar: bool = True) -> pd.DataFrame:
+def levantar_datos(csv_file: str = "../"+DATASET_RELATIVE_PATH, optimizar: bool = True) -> pd.DataFrame:
     """
         Recibe un .csv que debe tener el formato de columnas específico del tp.
         Si optimizar = True, asigna mejores tipos y agrega columnas útiles.
