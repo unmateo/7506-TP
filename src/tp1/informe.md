@@ -60,6 +60,10 @@ Se exploró un dataset de publicaciones de venta de propiedades. El mismo contie
 
 ¿Cómo influye el tiempo en cada columna? ¿Hay inflación? ¿Hay modas?
 
+- La cantidad de publicaciones total es creciente mes a mes, y en el último mes (Diciembre 2016) se multiplica casi cinco veces. ¿Qué paso?
+
+- ¿Hay estacionalidad en la cantidad de publicaciones? ¿Y en el precio? Si hay, ¿Depende del tipo de propiedad o de alguna otra cosa (ej pileta)?
+
 ## Particularidades
 
 ¿Descubrimos algo que no esperábamos?
