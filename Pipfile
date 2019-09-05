@@ -10,6 +10,8 @@ jupyterlab = "*"
 pandas = "*"
 matplotlib = "*"
 seaborn = "*"
+geopandas = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.7"
