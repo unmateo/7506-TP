@@ -10,6 +10,7 @@ jupyterlab = "*"
 pandas = "*"
 matplotlib = "*"
 seaborn = "*"
+nltk = "*"
 
 [requires]
 python_version = "3.7"

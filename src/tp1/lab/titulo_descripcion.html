@@ -13090,6 +13090,301 @@ div#notebook {
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#importo las funciones para levantar los dataframes</span>
+<span class="o">%</span><span class="k">run</span> &quot;../../utils/dataset_parsing.ipynb&quot;
+<span class="c1">#importo las funciones para graficar</span>
+<span class="o">%</span><span class="k">run</span> &quot;../../utils/graphs.ipynb&quot;
+<span class="n">df</span> <span class="o">=</span> <span class="n">levantar_datos</span><span class="p">(</span><span class="s2">&quot;../../&quot;</span><span class="o">+</span><span class="n">DATASET_RELATIVE_PATH</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[3]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Index([&#39;id&#39;, &#39;titulo&#39;, &#39;descripcion&#39;, &#39;tipodepropiedad&#39;, &#39;direccion&#39;, &#39;ciudad&#39;,
+       &#39;provincia&#39;, &#39;antiguedad&#39;, &#39;habitaciones&#39;, &#39;garages&#39;, &#39;banos&#39;,
+       &#39;metroscubiertos&#39;, &#39;metrostotales&#39;, &#39;idzona&#39;, &#39;lat&#39;, &#39;lng&#39;, &#39;fecha&#39;,
+       &#39;gimnasio&#39;, &#39;usosmultiples&#39;, &#39;piscina&#39;, &#39;escuelascercanas&#39;,
+       &#39;centroscomercialescercanos&#39;, &#39;precio&#39;, &#39;mes&#39;, &#39;ano&#39;, &#39;dia&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">nltk</span>  
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="k">import</span> <span class="n">stopwords</span>  
+<span class="kn">from</span> <span class="nn">string</span> <span class="k">import</span> <span class="n">punctuation</span>  
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">spanish_stopwords</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;spanish&#39;</span><span class="p">))</span>
+<span class="n">non_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">punctuation</span><span class="p">)</span>
+<span class="n">non_words</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;¿&#39;</span><span class="p">,</span> <span class="s1">&#39;¡&#39;</span><span class="p">})</span>
+<span class="n">non_words</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[79]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">add_to_dict</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">dictionary</span><span class="p">):</span>
+    <span class="n">dictionary</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> 
+
+<span class="k">def</span> <span class="nf">get_word_count</span><span class="p">(</span><span class="n">series</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">words_count</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">no_words_count</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">series</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span> <span class="k">continue</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot; &quot;</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">non_words</span> <span class="k">else</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">word</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">spanish_stopwords</span><span class="p">:</span> 
+                <span class="n">add_to_dict</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">no_words_count</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">add_to_dict</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">words_count</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">words_count</span><span class="p">,</span> <span class="n">no_words_count</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[116]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
+
+<span class="k">def</span> <span class="nf">get_word_counters</span><span class="p">(</span><span class="n">series</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Faltaría hacer stemming</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">words_counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+    <span class="n">no_words_counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">series</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span> <span class="k">continue</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot; &quot;</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">non_words</span> <span class="k">else</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">word</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">text_ok</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">spanish_stopwords</span>
+            <span class="n">counter_to_update</span> <span class="o">=</span> <span class="n">words_counter</span> <span class="k">if</span> <span class="n">text_ok</span> <span class="k">else</span> <span class="n">no_words_counter</span> 
+            <span class="n">counter_to_update</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">text</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">words_counter</span><span class="p">,</span> <span class="n">no_words_counter</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[117]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">titulo_palabras</span><span class="p">,</span> <span class="n">titulo_no_palabras</span> <span class="o">=</span> <span class="n">get_word_counters</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;titulo&quot;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[119]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">descripcion_palabras</span><span class="p">,</span> <span class="n">descripcion_no_palabras</span> <span class="o">=</span> <span class="n">get_word_counters</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;descripcion&quot;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[120]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">titulo_palabras</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">titulo_no_palabras</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">descripcion_palabras</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">descripcion_no_palabras</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>25477 406 174523 585
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[118]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">titulo_palabras</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[118]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(&#39;casa&#39;, 121528),
+ (&#39;venta&#39;, 104820),
+ (&#39;departamento&#39;, 38162),
+ (&#39;san&#39;, 16410),
+ (&#39;excelente&#39;, 12397),
+ (&#39;lomas&#39;, 11088),
+ (&#39;terreno&#39;, 10608),
+ (&#39;col&#39;, 10349),
+ (&#39;residencial&#39;, 10035),
+ (&#39;hermosa&#39;, 9299),
+ (&#39;condominio&#39;, 8538),
+ (&#39;valle&#39;, 7861),
+ (&#39;oportunidad&#39;, 6847),
+ (&#39;santa&#39;, 6844),
+ (&#39;fracc&#39;, 6272),
+ (&#39;fraccionamiento&#39;, 6028),
+ (&#39;nueva&#39;, 5896),
+ (&#39;casas&#39;, 5847),
+ (&#39;remate&#39;, 5602),
+ (&#39;bonita&#39;, 5445)]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[122]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">descripcion_palabras</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[122]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(&#39;baño&#39;, 185496),
+ (&#39;cocina&#39;, 155094),
+ (&#39;casa&#39;, 148033),
+ (&#39;sala&#39;, 129318),
+ (&#39;recamaras&#39;, 114087),
+ (&#39;comedor&#39;, 108051),
+ (&#39;cuenta&#39;, 88651),
+ (&#39;p  p&#39;, 82425),
+ (&#39;servicio&#39;, 80654),
+ (&#39;dos&#39;, 76341),
+ (&#39;cuarto&#39;, 72810),
+ (&#39;planta&#39;, 70813),
+ (&#39;baños&#39;, 70715),
+ (&#39;completo&#39;, 66226),
+ (&#39;principal&#39;, 61872),
+ (&#39;estacionamiento&#39;, 61793),
+ (&#39;excelente&#39;, 58634),
+ (&#39;integral&#39;, 58423),
+ (&#39;lavado&#39;, 58311),
+ (&#39;autos&#39;, 55402)]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
     </div>
   </div>
 </body>
