@@ -13083,11 +13083,747 @@ div#notebook {
 <li>idzona</li>
 </ul>
 <h2 id="Ideas">Ideas<a class="anchor-link" href="#Ideas">&#182;</a></h2><ul>
-<li>Agregar info externa</li>
+<li>Agregar info externa (transporte cercano? barrios "de moda"?)</li>
+<li>Precio promedio por metro cuadrado según zona</li>
 </ul>
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#importo las funciones para levantar los dataframes</span>
+<span class="o">%</span><span class="k">run</span> &quot;../../utils/dataset_parsing.ipynb&quot;
+<span class="c1">#importo las funciones para graficar</span>
+<span class="o">%</span><span class="k">run</span> &quot;../../utils/graphs.ipynb&quot;
+<span class="n">df</span> <span class="o">=</span> <span class="n">levantar_datos</span><span class="p">(</span><span class="s2">&quot;../../&quot;</span><span class="o">+</span><span class="n">DATASET_RELATIVE_PATH</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[1]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Index([&#39;id&#39;, &#39;titulo&#39;, &#39;descripcion&#39;, &#39;tipodepropiedad&#39;, &#39;direccion&#39;, &#39;ciudad&#39;,
+       &#39;provincia&#39;, &#39;antiguedad&#39;, &#39;habitaciones&#39;, &#39;garages&#39;, &#39;banos&#39;,
+       &#39;metroscubiertos&#39;, &#39;metrostotales&#39;, &#39;idzona&#39;, &#39;lat&#39;, &#39;lng&#39;, &#39;fecha&#39;,
+       &#39;gimnasio&#39;, &#39;usosmultiples&#39;, &#39;piscina&#39;, &#39;escuelascercanas&#39;,
+       &#39;centroscomercialescercanos&#39;, &#39;precio&#39;, &#39;mes&#39;, &#39;ano&#39;, &#39;dia&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;precio_metro_cubierto&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;precio&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;metroscubiertos&quot;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;precio_metro_total&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;precio&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;metrostotales&quot;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[55]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">promedios</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;idzona&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="s2">&quot;precio_metro_total&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span><span class="s2">&quot;std&quot;</span><span class="p">],</span> <span class="s2">&quot;precio_metro_cubierto&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span><span class="s2">&quot;std&quot;</span><span class="p">]})</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">promedios</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;publicaciones&quot;</span><span class="p">,</span> <span class="s2">&quot;promedio_metrostotales&quot;</span><span class="p">,</span> <span class="s2">&quot;desvio_metrostotales&quot;</span><span class="p">,</span> <span class="s2">&quot;promedio_metroscubiertos&quot;</span><span class="p">,</span><span class="s2">&quot;desvio_metroscubiertos&quot;</span><span class="p">]</span>
+<span class="n">promedios</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">promedios</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">promedios</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[55]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>publicaciones</th>
+      <th>promedio_metrostotales</th>
+      <th>desvio_metrostotales</th>
+      <th>promedio_metroscubiertos</th>
+      <th>desvio_metroscubiertos</th>
+    </tr>
+    <tr>
+      <th>idzona</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>22</td>
+      <td>15</td>
+      <td>22044</td>
+      <td>11082</td>
+      <td>24215</td>
+      <td>13060</td>
+    </tr>
+    <tr>
+      <td>23</td>
+      <td>26</td>
+      <td>8136</td>
+      <td>3078</td>
+      <td>6918</td>
+      <td>2533</td>
+    </tr>
+    <tr>
+      <td>26</td>
+      <td>10</td>
+      <td>5617</td>
+      <td>2043</td>
+      <td>6492</td>
+      <td>1341</td>
+    </tr>
+    <tr>
+      <td>27</td>
+      <td>1</td>
+      <td>6190</td>
+      <td>0</td>
+      <td>7222</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>28</td>
+      <td>2</td>
+      <td>6875</td>
+      <td>4419</td>
+      <td>5481</td>
+      <td>1122</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">promedios</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">promedios</span><span class="o">.</span><span class="n">index</span> <span class="o">==</span> <span class="mi">74</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[46]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>publicaciones</th>
+      <th>promedio_metrostotales</th>
+      <th>desvio_metrostotales</th>
+      <th>promedio_metroscubierto</th>
+      <th>desvio_metroscubiertos</th>
+    </tr>
+    <tr>
+      <th>idzona</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>74</td>
+      <td>3</td>
+      <td>9250</td>
+      <td>750</td>
+      <td>7072</td>
+      <td>1625</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># me quedo con las zonas que tengan más publicaciones</span>
+<span class="n">top_100_publicaciones</span> <span class="o">=</span> <span class="n">promedios</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;publicaciones&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">top_100_publicaciones</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;promedio_metroscubiertos&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[63]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>publicaciones</th>
+      <th>promedio_metrostotales</th>
+      <th>desvio_metrostotales</th>
+      <th>promedio_metroscubiertos</th>
+      <th>desvio_metroscubiertos</th>
+    </tr>
+    <tr>
+      <th>idzona</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>275358</td>
+      <td>1274</td>
+      <td>43868</td>
+      <td>17483</td>
+      <td>43322</td>
+      <td>16522</td>
+    </tr>
+    <tr>
+      <td>24598</td>
+      <td>227</td>
+      <td>42227</td>
+      <td>14948</td>
+      <td>43185</td>
+      <td>14550</td>
+    </tr>
+    <tr>
+      <td>24597</td>
+      <td>263</td>
+      <td>42195</td>
+      <td>16639</td>
+      <td>41557</td>
+      <td>16244</td>
+    </tr>
+    <tr>
+      <td>23771</td>
+      <td>418</td>
+      <td>39844</td>
+      <td>14354</td>
+      <td>39383</td>
+      <td>13249</td>
+    </tr>
+    <tr>
+      <td>23815</td>
+      <td>1023</td>
+      <td>42065</td>
+      <td>18752</td>
+      <td>38524</td>
+      <td>15330</td>
+    </tr>
+    <tr>
+      <td>23816</td>
+      <td>266</td>
+      <td>35473</td>
+      <td>14404</td>
+      <td>36337</td>
+      <td>14375</td>
+    </tr>
+    <tr>
+      <td>23191</td>
+      <td>599</td>
+      <td>36041</td>
+      <td>12998</td>
+      <td>35528</td>
+      <td>17345</td>
+    </tr>
+    <tr>
+      <td>275338</td>
+      <td>346</td>
+      <td>33990</td>
+      <td>12793</td>
+      <td>34855</td>
+      <td>12780</td>
+    </tr>
+    <tr>
+      <td>23837</td>
+      <td>510</td>
+      <td>35922</td>
+      <td>18157</td>
+      <td>33952</td>
+      <td>25158</td>
+    </tr>
+    <tr>
+      <td>23569</td>
+      <td>863</td>
+      <td>33050</td>
+      <td>13602</td>
+      <td>33536</td>
+      <td>13364</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[66]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">idzona</span><span class="o">==</span><span class="mi">275358</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[66]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>titulo</th>
+      <th>descripcion</th>
+      <th>tipodepropiedad</th>
+      <th>direccion</th>
+      <th>ciudad</th>
+      <th>provincia</th>
+      <th>antiguedad</th>
+      <th>habitaciones</th>
+      <th>garages</th>
+      <th>...</th>
+      <th>piscina</th>
+      <th>escuelascercanas</th>
+      <th>centroscomercialescercanos</th>
+      <th>precio</th>
+      <th>mes</th>
+      <th>ano</th>
+      <th>dia</th>
+      <th>precio_metro_cubierto</th>
+      <th>precio_metro_totales</th>
+      <th>precio_metro_total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>95</td>
+      <td>257588</td>
+      <td>hermosa casa de oportunidad en polanco, del. m...</td>
+      <td>4 recámaras \nsala \ncocina \ncomedor \n2 baño...</td>
+      <td>Casa</td>
+      <td>Polanco III Sección, Miguel Hidalgo.</td>
+      <td>Miguel Hidalgo</td>
+      <td>Distrito Federal</td>
+      <td>5.0</td>
+      <td>4.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>2700000.0</td>
+      <td>12</td>
+      <td>2014</td>
+      <td>17</td>
+      <td>20769.230769</td>
+      <td>13500.000000</td>
+      <td>13500.000000</td>
+    </tr>
+    <tr>
+      <td>150</td>
+      <td>46540</td>
+      <td>magnífica suite a la venta sobre arquímedes (p...</td>
+      <td>atención inversionistas!! magnífico depto tipo...</td>
+      <td>Apartamento</td>
+      <td>ARQUÍMEDES</td>
+      <td>Miguel Hidalgo</td>
+      <td>Distrito Federal</td>
+      <td>5.0</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>3800000.0</td>
+      <td>8</td>
+      <td>2015</td>
+      <td>29</td>
+      <td>63333.333333</td>
+      <td>63333.333333</td>
+      <td>63333.333333</td>
+    </tr>
+    <tr>
+      <td>165</td>
+      <td>95548</td>
+      <td>oferta de departamento</td>
+      <td>descripción única oportunidad inmobiliaria her...</td>
+      <td>Apartamento</td>
+      <td>Polanco, Miguel Hidalgo, distrito federal</td>
+      <td>Miguel Hidalgo</td>
+      <td>Distrito Federal</td>
+      <td>10.0</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>3100000.0</td>
+      <td>4</td>
+      <td>2015</td>
+      <td>24</td>
+      <td>26956.521739</td>
+      <td>26956.521739</td>
+      <td>26956.521739</td>
+    </tr>
+    <tr>
+      <td>194</td>
+      <td>241949</td>
+      <td>precioso depto. en la mejor zona de polanco</td>
+      <td>en planta baja, impecable, iluminado, 3 terraz...</td>
+      <td>Apartamento</td>
+      <td>SHILLER</td>
+      <td>Miguel Hidalgo</td>
+      <td>Distrito Federal</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>9500000.0</td>
+      <td>7</td>
+      <td>2015</td>
+      <td>10</td>
+      <td>79166.666667</td>
+      <td>79166.666667</td>
+      <td>79166.666667</td>
+    </tr>
+    <tr>
+      <td>386</td>
+      <td>112278</td>
+      <td>departamento venta polanco, remodelado</td>
+      <td>excelente departamento remodelado en polanco c...</td>
+      <td>Apartamento</td>
+      <td>luis vives</td>
+      <td>Miguel Hidalgo</td>
+      <td>Distrito Federal</td>
+      <td>10.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>6700000.0</td>
+      <td>5</td>
+      <td>2016</td>
+      <td>17</td>
+      <td>57758.620690</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>238186</td>
+      <td>91658</td>
+      <td>departamento clave  en venta en polanco, d.f.,...</td>
+      <td>excelente departamento en preventa, se entrega...</td>
+      <td>Apartamento</td>
+      <td>NaN</td>
+      <td>Miguel Hidalgo</td>
+      <td>Distrito Federal</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>10476570.0</td>
+      <td>3</td>
+      <td>2013</td>
+      <td>8</td>
+      <td>39091.679104</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>238329</td>
+      <td>298882</td>
+      <td>arquimedes norma kim2</td>
+      <td>&lt;p&gt;excelente desarrollo en el corazon de polan...</td>
+      <td>Apartamento</td>
+      <td>NaN</td>
+      <td>Miguel Hidalgo</td>
+      <td>Distrito Federal</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>10800000.0</td>
+      <td>2</td>
+      <td>2015</td>
+      <td>11</td>
+      <td>64670.658683</td>
+      <td>64670.658683</td>
+      <td>64670.658683</td>
+    </tr>
+    <tr>
+      <td>239465</td>
+      <td>168152</td>
+      <td>lago meru</td>
+      <td>&lt;p&gt;precioso departamento con area de lavado, b...</td>
+      <td>Apartamento</td>
+      <td>NaN</td>
+      <td>Miguel Hidalgo</td>
+      <td>Distrito Federal</td>
+      <td>NaN</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>2950000.0</td>
+      <td>12</td>
+      <td>2013</td>
+      <td>2</td>
+      <td>34705.882353</td>
+      <td>34705.882353</td>
+      <td>34705.882353</td>
+    </tr>
+    <tr>
+      <td>239504</td>
+      <td>142202</td>
+      <td>venta departamento en arquimedes</td>
+      <td>muy buen departamento de 60 m2, 1 recamara con...</td>
+      <td>Apartamento</td>
+      <td>ARQUIMEDES</td>
+      <td>Miguel Hidalgo</td>
+      <td>Distrito Federal</td>
+      <td>5.0</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>3800000.0</td>
+      <td>8</td>
+      <td>2015</td>
+      <td>14</td>
+      <td>63333.333333</td>
+      <td>63333.333333</td>
+      <td>63333.333333</td>
+    </tr>
+    <tr>
+      <td>239918</td>
+      <td>236584</td>
+      <td>departamento, polanco, miguel hidalgo</td>
+      <td>&lt;p&gt;en muy buen estado, hay que actualizar coci...</td>
+      <td>Apartamento</td>
+      <td>NaN</td>
+      <td>Miguel Hidalgo</td>
+      <td>Distrito Federal</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>3500000.0</td>
+      <td>8</td>
+      <td>2015</td>
+      <td>25</td>
+      <td>24137.931034</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>1274 rows × 29 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
     </div>
   </div>

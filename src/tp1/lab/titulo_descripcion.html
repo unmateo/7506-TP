@@ -13086,6 +13086,10 @@ div#notebook {
 <li>normalizacion</li>
 <li>stemming</li>
 </ul>
+<h2 id="Hip&#243;tesis">Hip&#243;tesis<a class="anchor-link" href="#Hip&#243;tesis">&#182;</a></h2><ul>
+<li>ciertas palabras indican mayor precio (luminoso, jardín, hermoso, vista...)</li>
+<li>a más palabras, mayor precio</li>
+</ul>
 
 </div>
 </div>
@@ -13204,7 +13208,7 @@ div#notebook {
 
 <span class="k">def</span> <span class="nf">get_word_counters</span><span class="p">(</span><span class="n">series</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Faltaría hacer stemming</span>
+<span class="sd">        Faltaría analizar stemming</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">words_counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
     <span class="n">no_words_counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
@@ -13283,10 +13287,10 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[118]:</div>
+<div class="prompt input_prompt">In&nbsp;[131]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">titulo_palabras</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">titulo_palabras</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13299,7 +13303,7 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[118]:</div>
+    <div class="prompt output_prompt">Out[131]:</div>
 
 
 
@@ -13324,7 +13328,87 @@ div#notebook {
  (&#39;nueva&#39;, 5896),
  (&#39;casas&#39;, 5847),
  (&#39;remate&#39;, 5602),
- (&#39;bonita&#39;, 5445)]</pre>
+ (&#39;bonita&#39;, 5445),
+ (&#39;recamaras&#39;, 5426),
+ (&#39;cerca&#39;, 5096),
+ (&#39;zona&#39;, 4983),
+ (&#39;colonia&#39;, 4877),
+ (&#39;residencia&#39;, 4776),
+ (&#39;real&#39;, 4608),
+ (&#39;privada&#39;, 4188),
+ (&#39;centro&#39;, 3897),
+ (&#39;jardines&#39;, 3768),
+ (&#39;depto&#39;, 3711),
+ (&#39;vendo&#39;, 3631),
+ (&#39;vista&#39;, 3512),
+ (&#39;sur&#39;, 3448),
+ (&#39;nuevo&#39;, 3289),
+ (&#39;departamentos&#39;, 3268),
+ (&#39;amplia&#39;, 3220),
+ (&#39;preciosa&#39;, 3195),
+ (&#39;juriquilla&#39;, 3107),
+ (&#39;ciudad&#39;, 3097),
+ (&#39;vende&#39;, 3074),
+ (&#39;norte&#39;, 3061),
+ (&#39;comercial&#39;, 2989),
+ (&#39;villa&#39;, 2956),
+ (&#39;méxico&#39;, 2920),
+ (&#39;hacienda&#39;, 2848),
+ (&#39;cumbres&#39;, 2826),
+ (&#39;planta&#39;, 2822),
+ (&#39;juárez&#39;, 2773),
+ (&#39;local&#39;, 2634),
+ (&#39;bosques&#39;, 2619),
+ (&#39;bosque&#39;, 2545),
+ (&#39;calle&#39;, 2529),
+ (&#39;parque&#39;, 2512),
+ (&#39;miguel&#39;, 2477),
+ (&#39;villas&#39;, 2475),
+ (&#39;zapopan&#39;, 2426),
+ (&#39;preventa&#39;, 2420),
+ (&#39;ubicación&#39;, 2364),
+ (&#39;benito&#39;, 2181),
+ (&#39;alberca&#39;, 2171),
+ (&#39;bancario&#39;, 2142),
+ (&#39;hermoso&#39;, 2110),
+ (&#39;sola&#39;, 2097),
+ (&#39;lujo&#39;, 2067),
+ (&#39;bonito&#39;, 2057),
+ (&#39;precio&#39;, 2034),
+ (&#39;morelos&#39;, 2002),
+ (&#39;club&#39;, 1998),
+ (&#39;acabados&#39;, 1959),
+ (&#39;lago&#39;, 1948),
+ (&#39;coto&#39;, 1849),
+ (&#39;privado&#39;, 1795),
+ (&#39;pedregal&#39;, 1768),
+ (&#39;esquina&#39;, 1761),
+ (&#39;hidalgo&#39;, 1755),
+ (&#39;dos&#39;, 1742),
+ (&#39;gran&#39;, 1733),
+ (&#39;pedro&#39;, 1719),
+ (&#39;plaza&#39;, 1719),
+ (&#39;querétaro&#39;, 1705),
+ (&#39;tlalpan&#39;, 1699),
+ (&#39;guadalupe&#39;, 1695),
+ (&#39;amplio&#39;, 1664),
+ (&#39;rec&#39;, 1658),
+ (&#39;renta&#39;, 1649),
+ (&#39;niveles&#39;, 1641),
+ (&#39;puebla&#39;, 1641),
+ (&#39;recámaras&#39;, 1613),
+ (&#39;frente&#39;, 1602),
+ (&#39;federal&#39;, 1574),
+ (&#39;ubicacion&#39;, 1550),
+ (&#39;distrito&#39;, 1547),
+ (&#39;naucalpan&#39;, 1519),
+ (&#39;loma&#39;, 1517),
+ (&#39;edificio&#39;, 1494),
+ (&#39;colinas&#39;, 1479),
+ (&#39;sol&#39;, 1461),
+ (&#39;baños&#39;, 1455),
+ (&#39;monterrey&#39;, 1449),
+ (&#39;bodega&#39;, 1445)]</pre>
 </div>
 
 </div>
@@ -13335,10 +13419,10 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[122]:</div>
+<div class="prompt input_prompt">In&nbsp;[130]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">descripcion_palabras</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">descripcion_palabras</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13351,7 +13435,7 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[122]:</div>
+    <div class="prompt output_prompt">Out[130]:</div>
 
 
 
@@ -13376,11 +13460,130 @@ div#notebook {
  (&#39;excelente&#39;, 58634),
  (&#39;integral&#39;, 58423),
  (&#39;lavado&#39;, 58311),
- (&#39;autos&#39;, 55402)]</pre>
+ (&#39;autos&#39;, 55402),
+ (&#39;patio&#39;, 53690),
+ (&#39;área&#39;, 50664),
+ (&#39;vestidor&#39;, 49661),
+ (&#39;terreno&#39;, 46634),
+ (&#39;departamento&#39;, 45781),
+ (&#39;recámaras&#39;, 45639),
+ (&#39;terraza&#39;, 43879),
+ (&#39;closet&#39;, 43754),
+ (&#39;cochera&#39;, 43275),
+ (&#39;jardín&#39;, 40586),
+ (&#39;piso&#39;, 39404),
+ (&#39;baja&#39;, 37862),
+ (&#39;vigilancia&#39;, 37638),
+ (&#39;venta&#39;, 36143),
+ (&#39;cerca&#39;, 35357),
+ (&#39;recamara&#39;, 35016),
+ (&#39;alta&#39;, 33990),
+ (&#39;amplia&#39;, 33479),
+ (&#39;acabados&#39;, 32928),
+ (&#39;zona&#39;, 32708),
+ (&#39;medio&#39;, 32505),
+ (&#39;estudio&#39;, 30702),
+ (&#39;equipada&#39;, 30670),
+ (&#39;niveles&#39;, 29301),
+ (&#39;acceso&#39;, 27453),
+ (&#39;alberca&#39;, 26676),
+ (&#39;vista&#39;, 26648),
+ (&#39;area&#39;, 26144),
+ (&#39;tres&#39;, 25707),
+ (&#39;nivel&#39;, 25630),
+ (&#39;construcción&#39;, 25289),
+ (&#39;amplio&#39;, 25138),
+ (&#39;precio&#39;, 24742),
+ (&#39;fraccionamiento&#39;, 24128),
+ (&#39;estancia&#39;, 23903),
+ (&#39;pisos&#39;, 23750),
+ (&#39;ba ntilde o&#39;, 23470),
+ (&#39;ubicación&#39;, 22686),
+ (&#39;visitas&#39;, 21795),
+ (&#39;cada&#39;, 21376),
+ (&#39;oportunidad&#39;, 21351),
+ (&#39;bodega&#39;, 21117),
+ (&#39;techada&#39;, 21095),
+ (&#39;ubicada&#39;, 20324),
+ (&#39;minutos&#39;, 20249),
+ (&#39;mts&#39;, 20225),
+ (&#39;jardin&#39;, 19672),
+ (&#39;frente&#39;, 19529),
+ (&#39;solo&#39;, 19081),
+ (&#39;comercial&#39;, 19071),
+ (&#39;espacios&#39;, 19058),
+ (&#39;tipo&#39;, 18965),
+ (&#39;cisterna&#39;, 18558),
+ (&#39;completos&#39;, 18498),
+ (&#39;madera&#39;, 18357),
+ (&#39;comerciales&#39;, 18247),
+ (&#39;calle&#39;, 18128),
+ (&#39;servicios&#39;, 17971),
+ (&#39;áreas&#39;, 17947),
+ (&#39;recámara&#39;, 17865),
+ (&#39;seguridad&#39;, 17825),
+ (&#39;juegos&#39;, 17798),
+ (&#39;privada&#39;, 17009),
+ (&#39;espacio&#39;, 16895),
+ (&#39;departamentos&#39;, 16766),
+ (&#39;consta&#39;, 16689),
+ (&#39;closets&#39;, 16647),
+ (&#39;encuentra&#39;, 16545),
+ (&#39;hermosa&#39;, 16444),
+ (&#39;amplios&#39;, 16379),
+ (&#39;sala comedor&#39;, 16323),
+ (&#39;granito&#39;, 16048),
+ (&#39;ubicado&#39;, 15872),
+ (&#39;propiedad&#39;, 15782),
+ (&#39;verdes&#39;, 15490),
+ (&#39;centro&#39;, 15460),
+ (&#39;casas&#39;, 15369),
+ (&#39;auto&#39;, 15369),
+ (&#39;escuelas&#39;, 15300),
+ (&#39;doble&#39;, 15033)]</pre>
 </div>
 
 </div>
 
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[125]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[128]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">titulo_palabras_top_200</span> <span class="o">=</span> <span class="n">titulo_palabras</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
 </div>
 </div>
 

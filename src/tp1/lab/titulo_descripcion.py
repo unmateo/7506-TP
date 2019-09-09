@@ -12,7 +12,10 @@
 # - normalizacion
 # - stemming
 # 
+# ## Hipótesis
 # 
+# - ciertas palabras indican mayor precio (luminoso, jardín, hermoso, vista...)
+# - a más palabras, mayor precio
 
 # In[3]:
 
@@ -73,7 +76,7 @@ from collections import Counter
 
 def get_word_counters(series):
     """
-        Faltaría hacer stemming
+        Faltaría analizar stemming
     """
     words_counter = Counter()
     no_words_counter = Counter()
@@ -106,14 +109,32 @@ descripcion_palabras, descripcion_no_palabras = get_word_counters(df["descripcio
 print(len(titulo_palabras), len(titulo_no_palabras), len(descripcion_palabras), len(descripcion_no_palabras))
 
 
-# In[118]:
+# In[131]:
 
 
-titulo_palabras.most_common(20)
+titulo_palabras.most_common(100)
 
 
-# In[122]:
+# In[130]:
 
 
-descripcion_palabras.most_common(20)
+descripcion_palabras.most_common(100)
+
+
+# In[125]:
+
+
+import matplotlib.pyplot as plt
+
+
+# In[128]:
+
+
+titulo_palabras_top_200 = titulo_palabras.most_common(200)
+
+
+# In[ ]:
+
+
+
 
