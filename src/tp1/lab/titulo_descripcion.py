@@ -21,6 +21,7 @@
 # 
 # ## Resultados
 # - la correlacion entre longitud de descripcion y precio es bastante baja (0.1)
+# - la correlacion entre la cantidad de palabras positivas en la descripcion y el precio es bastante alta (0.3) [tener en cuenta que metrostotales tiene correlacion 0.5]
 
 # In[1]:
 
