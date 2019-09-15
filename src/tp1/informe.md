@@ -64,6 +64,7 @@ Se exploró un dataset de publicaciones de venta de propiedades. El mismo contie
 
 - ¿Hay estacionalidad en la cantidad de publicaciones? ¿Y en el precio? Si hay, ¿Depende del tipo de propiedad o de alguna otra cosa (ej pileta)?
 
+
 ## Particularidades
 
 ¿Descubrimos algo que no esperábamos?

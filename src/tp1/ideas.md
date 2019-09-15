@@ -1,0 +1,13 @@
+- cercania a
+ - medios de transporte
+ - universidades
+ - frontera
+ - barrios carenciados
+ - centros turisticos
+ - frontera
+- condiciones climaticas
+- tipo de calle
+ - avenida
+ - calle tierra/asfaltada
+ - boulevard
+- longitud de descripcion y titulo
