@@ -38,12 +38,18 @@ pd.set_option("display.max_colwidth", -1)
 # In[2]:
 
 
+pd.set_option("display.max_columns", 50)
+
+
+# In[3]:
+
+
 import nltk  
 from nltk.corpus import stopwords  
 from string import punctuation  
 
 
-# In[3]:
+# In[4]:
 
 
 spanish_stopwords = set(stopwords.words('spanish'))
@@ -52,7 +58,7 @@ non_words.update({'¿', '¡'})
 non_words.update(map(str,range(10)))
 
 
-# In[179]:
+# In[5]:
 
 
 import re
@@ -88,34 +94,21 @@ def limpiar_campo(field: str) -> str:
     return meaningful
 
 
-# In[182]:
+# In[6]:
 
 
 df["descripcion_limpia"] = df["descripcion"].map(limpiar_campo)
 df["len_descripcion"] = df["descripcion_limpia"].map(lambda x: len(x.split()))
 
 
-# In[183]:
+# In[7]:
 
 
 df["titulo_limpio"] = df["titulo"].map(limpiar_campo)
 df["len_titulo"] = df["titulo_limpio"].map(lambda x: len(x.split()))
 
 
-# In[184]:
-
-
-# df["titulo_limpio"].sample(10)
-df["descripcion_limpia"].sample(10)
-
-
-# In[185]:
-
-
-df[["len_descripcion","precio"]].corr()
-
-
-# In[148]:
+# In[8]:
 
 
 from collections import Counter
@@ -130,71 +123,71 @@ def get_word_counter(series):
     return counter
 
 
-# In[186]:
+# In[9]:
 
 
 titulo_palabras = get_word_counter(df["titulo_limpio"])
 descripcion_palabras = get_word_counter(df["descripcion_limpia"])
 
 
-# In[151]:
+# In[10]:
 
 
 print(len(titulo_palabras),len(descripcion_palabras))
 
 
-# In[155]:
+# In[11]:
 
 
 # titulo_palabras.most_common(10)
 
 
-# In[96]:
+# In[12]:
 
 
 # descripcion_palabras.most_common(10)
 
 
-# In[156]:
+# In[13]:
 
 
 palabras_positivas = {"conservacion","tenis","balcon","panoramica","exclusivos","golf","canchas","remodelada","acondicionado","lujo","jacuzzi","diseno","exclusiva","magnifica","exclusivo","country","precioso","estilo","seguridad","verdes","juegos","servicio","excelente","terraza","jardin","hermosa","vista","bonita","renta", "granito"}
 palabras_negativas = {"oportunidad","remato","oferta","remodelar"}
 
 
-# In[188]:
+# In[14]:
 
 
 df["palabras_positivas_descripcion"] = df["descripcion_limpia"].map(lambda x: len([y for y in x.split() if y in palabras_positivas]))
 df[["palabras_positivas_descripcion","precio"]].corr()
 
 
-# In[189]:
+# In[15]:
 
 
 df["palabras_negativas_descripcion"] = df["descripcion_limpia"].map(lambda x: len([y for y in x.split() if y in palabras_negativas]))
 df[["palabras_negativas_descripcion","precio"]].corr()
 
 
-# In[196]:
+# In[16]:
 
 
 df.palabras_positivas_descripcion.value_counts()
 
 
-# In[199]:
+# In[17]:
 
 
 # df.loc[df.palabras_positivas_descripcion > 14]["descripcion"]
 
 
-# In[203]:
+# In[18]:
 
 
 df.loc[df.palabras_negativas_descripcion > 2]["descripcion"]
 
 
-# In[214]:
+# In[19]:
 
 
 df_corr_positivas = df[["descripcion_limpia","precio"]]
@@ -203,7 +196,7 @@ for palabra in palabras_positivas:
 df_corr_positivas.corr()["precio"].sort_values(ascending=False)
 
 
-# In[215]:
+# In[20]:
 
 
 df_corr_negativas = df[["descripcion_limpia","precio"]]
@@ -212,7 +205,7 @@ for palabra in palabras_negativas:
 df_corr_negativas.corr()["precio"].sort_values(ascending=True)
 
 
-# In[216]:
+# In[21]:
 
 
 test = df[["descripcion_limpia","precio","metrostotales"]]
@@ -220,19 +213,19 @@ for palabra in palabras_positivas:
     test[palabra] = test["descripcion_limpia"].map(lambda x: int(palabra in x))
 
 
-# In[222]:
+# In[ ]:
 
 
 
 
 
-# In[239]:
+# In[22]:
 
 
 top = list(set(test.corr()["metrostotales"].sort_values(ascending=False).head(8).index).union(set(test.corr()["precio"].sort_values(ascending=False).head(8).index)))
 
 
-# In[244]:
+# In[23]:
 
 
 test_corr = test[top].corr()
@@ -240,15 +233,76 @@ test_corr["dif"] = test_corr["precio"] - test_corr["metrostotales"]
 test_corr["dif"] = abs(test_corr["dif"])
 
 
-# In[246]:
+# In[24]:
 
 
 test_corr["dif"].sort_values(ascending=False)
 #estas se me ocurre que serian las palabras que mayor diferencia podrian hacer
 
 
-# In[247]:
+# In[25]:
 
 
 test_corr
+
+
+# In[103]:
+
+
+con_descripcion_y_titulo = df.loc[(df["len_descripcion"]>0) & (df["len_titulo"]>0)]
+
+
+# In[104]:
+
+
+con_descripcion_y_titulo["titulo_descripcion"] = con_descripcion_y_titulo["titulo_limpio"] + "_" + con_descripcion_y_titulo["descripcion_limpia"]
+con_descripcion_y_titulo["tiene_duplicado"] = con_descripcion_y_titulo["titulo_descripcion"].duplicated(keep=False)
+
+
+# In[87]:
+
+
+duplicadas = con_descripcion_y_titulo.loc[con_descripcion_y_titulo["tiene_duplicado"]].sort_values(by="titulo_descripcion")
+
+
+# In[88]:
+
+
+grouped = duplicadas.groupby(["titulo_descripcion"]).agg({"fecha":"nunique", "precio": ["nunique", "mean", "max", "min"]})
+
+
+# In[89]:
+
+
+grouped.columns = [x+"_"+y for x,y in grouped.columns]
+
+
+# In[90]:
+
+
+grouped["precio_dif"] = (grouped["precio_max"] - grouped["precio_min"]).astype(int)
+
+
+# In[91]:
+
+
+grouped["precio_dif"].describe()
+
+
+# In[96]:
+
+
+grouped.loc[grouped["precio_dif"]>grouped["precio_dif"].mean()].sort_values(by="precio_nunique", ascending=False)
+
+
+# In[100]:
+
+
+con_descripcion_y_titulo.loc[con_descripcion_y_titulo["titulo_descripcion"]=="venta casa tijuana_lote manzana nocnok encuentra vivienda"].head(2)
+
+
+# In[101]:
+
+
+con_descripcion_y_titulo.loc[con_descripcion_y_titulo["titulo_descripcion"]=="venta casa chihuahua_nocnok tipo credito contado venta posesion fisica ningun acepta exclusiva"].head(2)
 

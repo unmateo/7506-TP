@@ -13118,35 +13118,23 @@ div#notebook {
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[1]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>Index([&#39;id&#39;, &#39;titulo&#39;, &#39;descripcion&#39;, &#39;tipodepropiedad&#39;, &#39;direccion&#39;, &#39;ciudad&#39;,
-       &#39;provincia&#39;, &#39;antiguedad&#39;, &#39;habitaciones&#39;, &#39;garages&#39;, &#39;banos&#39;,
-       &#39;metroscubiertos&#39;, &#39;metrostotales&#39;, &#39;idzona&#39;, &#39;lat&#39;, &#39;lng&#39;, &#39;fecha&#39;,
-       &#39;gimnasio&#39;, &#39;usosmultiples&#39;, &#39;piscina&#39;, &#39;escuelascercanas&#39;,
-       &#39;centroscomercialescercanos&#39;, &#39;precio&#39;, &#39;mes&#39;, &#39;ano&#39;, &#39;dia&#39;],
-      dtype=&#39;object&#39;)</pre>
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_columns&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+</pre></div>
 
-</div>
-
+    </div>
 </div>
 </div>
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">nltk</span>  
@@ -13161,7 +13149,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">spanish_stopwords</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;spanish&#39;</span><span class="p">))</span>
@@ -13177,7 +13165,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[179]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
@@ -13220,7 +13208,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[182]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;descripcion_limpia&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;descripcion&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">limpiar_campo</span><span class="p">)</span>
@@ -13234,7 +13222,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[183]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;titulo_limpio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;titulo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">limpiar_campo</span><span class="p">)</span>
@@ -13248,118 +13236,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[184]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># df[&quot;titulo_limpio&quot;].sample(10)</span>
-<span class="n">df</span><span class="p">[</span><span class="s2">&quot;descripcion_limpia&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[184]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>131504    hidroneumatico split completo recamaras cocina closet sala servicio espacio dos cuentan comparten agua cuarto republica casa medio integral techada lts ademas servicios cuenta gas antecomedor lavanderia alta planta baja excelente patio colonia luz mini cisterna comedor bano amplios                                                                                                                                                                                                                                                                                                  
-129360    motor completo recamaras bano terreno cocina closet sala construccion servicio jardin bardas lavado tendido alacena desayunadora garage cuarto porton integral barra techada techado acabados terraza iluminacion amplia recamara modernos granito perimetrales preparacion acondicionado lavabo gavetas piscina alta planta baja doble autos area principal vestidor filtro plantas lujo comedor herreria aire vista                                                                                                                                                                       
-15563     ser recamaras varias caracteristicas aceptan creditos cocina accesorias arquitectonico tirol sala forma cruz pagos dos cuentan equipo ubicacion usadas independientes calles agua previa zaragoza cita adicional acabados diseno ines juana pagado distribucion servicios gravamen cetram pago almacenar edificio ceramica comedor encuentra totalmente buena departamento cosas equina muestra visitas solo pisos cemento avenida tres departamentos pulido sor excelente autos transitada unas contado luz habitaciones pueden neza estacionamiento cisterna cuenta bano corriente drenaje
-121357    nbsp segunda casa planta completo habitaciones condiciones pueden rentar cada separado bano excelentes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-191008    santa tijuana excelente villas pasando recamaras plaza totalmente banos completos pajarita oportunidad dos ordenes independiente                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-75414     recamaras controlados cocina electrico lavado tanque porton gimnasio caseta ademas salon cochera gas usos auto privada visitas estacionario aljibe vigilancia departamentos accesos multiples area contaran estacionamiento comedor ala                                                                                                                                                                                                                                                                                                                                                     
-159991    fraccionamientos hermosas felipe rentar credito independientes aprovecha escritura diferentes propiedades tramitamos lic deja ofertas bancario cerezo infonavit informes listas ciudad                                                                                                                                                                                                                                                                                                                                                                                                      
-200581    casa nueva hermosa lista recamaras avitarla perfectas acabados condiciones alberca lujo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-24415     recamaras cocina propiedad sala ubicacion libre casa terraza cochera gravamen amplia buena alta planta baja excelente autos comedor bano                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-103473    calle recamaras sala servicio lavado paseos medio cuarto casa garage tranquila bonita bosque amplia visitas banos autos area completos comedor bano                                                                                                                                                                                                                                                                                                                                                                                                                                         
-Name: descripcion_limpia, dtype: object</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[185]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;len_descripcion&quot;</span><span class="p">,</span><span class="s2">&quot;precio&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[185]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>len_descripcion</th>
-      <th>precio</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>len_descripcion</td>
-      <td>1.000000</td>
-      <td>0.098862</td>
-    </tr>
-    <tr>
-      <td>precio</td>
-      <td>0.098862</td>
-      <td>1.000000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[148]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
@@ -13381,7 +13258,7 @@ Name: descripcion_limpia, dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[186]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">titulo_palabras</span> <span class="o">=</span> <span class="n">get_word_counter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;titulo_limpio&quot;</span><span class="p">])</span>
@@ -13395,7 +13272,7 @@ Name: descripcion_limpia, dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[151]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">titulo_palabras</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">descripcion_palabras</span><span class="p">))</span>
@@ -13426,7 +13303,7 @@ Name: descripcion_limpia, dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[155]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># titulo_palabras.most_common(10)</span>
@@ -13439,7 +13316,7 @@ Name: descripcion_limpia, dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[96]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># descripcion_palabras.most_common(10)</span>
@@ -13452,7 +13329,7 @@ Name: descripcion_limpia, dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[156]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">palabras_positivas</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;conservacion&quot;</span><span class="p">,</span><span class="s2">&quot;tenis&quot;</span><span class="p">,</span><span class="s2">&quot;balcon&quot;</span><span class="p">,</span><span class="s2">&quot;panoramica&quot;</span><span class="p">,</span><span class="s2">&quot;exclusivos&quot;</span><span class="p">,</span><span class="s2">&quot;golf&quot;</span><span class="p">,</span><span class="s2">&quot;canchas&quot;</span><span class="p">,</span><span class="s2">&quot;remodelada&quot;</span><span class="p">,</span><span class="s2">&quot;acondicionado&quot;</span><span class="p">,</span><span class="s2">&quot;lujo&quot;</span><span class="p">,</span><span class="s2">&quot;jacuzzi&quot;</span><span class="p">,</span><span class="s2">&quot;diseno&quot;</span><span class="p">,</span><span class="s2">&quot;exclusiva&quot;</span><span class="p">,</span><span class="s2">&quot;magnifica&quot;</span><span class="p">,</span><span class="s2">&quot;exclusivo&quot;</span><span class="p">,</span><span class="s2">&quot;country&quot;</span><span class="p">,</span><span class="s2">&quot;precioso&quot;</span><span class="p">,</span><span class="s2">&quot;estilo&quot;</span><span class="p">,</span><span class="s2">&quot;seguridad&quot;</span><span class="p">,</span><span class="s2">&quot;verdes&quot;</span><span class="p">,</span><span class="s2">&quot;juegos&quot;</span><span class="p">,</span><span class="s2">&quot;servicio&quot;</span><span class="p">,</span><span class="s2">&quot;excelente&quot;</span><span class="p">,</span><span class="s2">&quot;terraza&quot;</span><span class="p">,</span><span class="s2">&quot;jardin&quot;</span><span class="p">,</span><span class="s2">&quot;hermosa&quot;</span><span class="p">,</span><span class="s2">&quot;vista&quot;</span><span class="p">,</span><span class="s2">&quot;bonita&quot;</span><span class="p">,</span><span class="s2">&quot;renta&quot;</span><span class="p">,</span> <span class="s2">&quot;granito&quot;</span><span class="p">}</span>
@@ -13466,7 +13343,7 @@ Name: descripcion_limpia, dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[188]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;palabras_positivas_descripcion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;descripcion_limpia&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">([</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">palabras_positivas</span><span class="p">]))</span>
@@ -13483,7 +13360,7 @@ Name: descripcion_limpia, dtype: object</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[188]:</div>
+    <div class="prompt output_prompt">Out[14]:</div>
 
 
 
@@ -13534,7 +13411,7 @@ Name: descripcion_limpia, dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[189]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;palabras_negativas_descripcion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;descripcion_limpia&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">([</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">palabras_negativas</span><span class="p">]))</span>
@@ -13551,7 +13428,7 @@ Name: descripcion_limpia, dtype: object</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[189]:</div>
+    <div class="prompt output_prompt">Out[15]:</div>
 
 
 
@@ -13602,7 +13479,7 @@ Name: descripcion_limpia, dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[196]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">palabras_positivas_descripcion</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -13618,7 +13495,7 @@ Name: descripcion_limpia, dtype: object</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[196]:</div>
+    <div class="prompt output_prompt">Out[16]:</div>
 
 
 
@@ -13652,7 +13529,7 @@ Name: palabras_positivas_descripcion, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[199]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># df.loc[df.palabras_positivas_descripcion &gt; 14][&quot;descripcion&quot;]</span>
@@ -13665,7 +13542,7 @@ Name: palabras_positivas_descripcion, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[203]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">palabras_negativas_descripcion</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">][</span><span class="s2">&quot;descripcion&quot;</span><span class="p">]</span>
@@ -13681,7 +13558,7 @@ Name: palabras_positivas_descripcion, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[203]:</div>
+    <div class="prompt output_prompt">Out[18]:</div>
 
 
 
@@ -13704,7 +13581,7 @@ Name: descripcion, dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[214]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_corr_positivas</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;descripcion_limpia&quot;</span><span class="p">,</span><span class="s2">&quot;precio&quot;</span><span class="p">]]</span>
@@ -13739,7 +13616,7 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[214]:</div>
+    <div class="prompt output_prompt">Out[19]:</div>
 
 
 
@@ -13787,7 +13664,7 @@ Name: precio, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[215]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_corr_negativas</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;descripcion_limpia&quot;</span><span class="p">,</span><span class="s2">&quot;precio&quot;</span><span class="p">]]</span>
@@ -13822,7 +13699,7 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[215]:</div>
+    <div class="prompt output_prompt">Out[20]:</div>
 
 
 
@@ -13844,7 +13721,7 @@ Name: precio, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[216]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">test</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;descripcion_limpia&quot;</span><span class="p">,</span><span class="s2">&quot;precio&quot;</span><span class="p">,</span><span class="s2">&quot;metrostotales&quot;</span><span class="p">]]</span>
@@ -13876,58 +13753,13 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 </div>
 </div>
 
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[216]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>precio           1.000000
-metrostotales    0.514411
-terraza          0.223338
-jardin           0.208592
-vista            0.194534
-jacuzzi          0.157660
-lujo             0.155200
-juegos           0.144366
-servicio         0.132612
-granito          0.102580
-estilo           0.099340
-hermosa          0.097818
-exclusivo        0.091339
-panoramica       0.087759
-precioso         0.086908
-balcon           0.081591
-tenis            0.073820
-excelente        0.065813
-golf             0.064149
-seguridad        0.060509
-exclusiva        0.055698
-diseno           0.052607
-country          0.051681
-remodelada       0.051611
-exclusivos       0.040721
-magnifica        0.039993
-conservacion     0.028719
-renta            0.026840
-acondicionado    0.022942
-canchas          0.021226
-verdes          -0.022241
-bonita          -0.040270
-Name: precio, dtype: float64</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[222]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span> 
@@ -13937,62 +13769,10 @@ Name: precio, dtype: float64</pre>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[222]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>metrostotales    1.000000
-precio           0.514411
-jardin           0.234522
-terraza          0.184700
-vista            0.124387
-granito          0.109006
-jacuzzi          0.105397
-hermosa          0.102505
-servicio         0.087094
-lujo             0.077831
-estilo           0.074213
-juegos           0.065640
-panoramica       0.057353
-tenis            0.055924
-golf             0.055919
-acondicionado    0.052472
-exclusivo        0.044286
-exclusiva        0.042953
-country          0.037417
-diseno           0.030468
-magnifica        0.027192
-excelente        0.025536
-canchas          0.015788
-exclusivos       0.012004
-remodelada       0.010258
-precioso         0.006164
-balcon           0.002815
-renta            0.002466
-seguridad        0.001984
-conservacion    -0.005672
-verdes          -0.031609
-bonita          -0.036421
-Name: metrostotales, dtype: float64</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[239]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">top</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">corr</span><span class="p">()[</span><span class="s2">&quot;metrostotales&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">corr</span><span class="p">()[</span><span class="s2">&quot;precio&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">)))</span>
@@ -14005,7 +13785,7 @@ Name: metrostotales, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[244]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_corr</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="n">top</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
@@ -14020,7 +13800,7 @@ Name: metrostotales, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[246]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_corr</span><span class="p">[</span><span class="s2">&quot;dif&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -14037,14 +13817,14 @@ Name: metrostotales, dtype: float64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[246]:</div>
+    <div class="prompt output_prompt">Out[24]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>precio           0.485589
-metrostotales    0.485589
+<pre>metrostotales    0.485589
+precio           0.485589
 juegos           0.078725
 lujo             0.077370
 vista            0.070146
@@ -14064,7 +13844,7 @@ Name: dif, dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[247]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_corr</span>
@@ -14080,7 +13860,7 @@ Name: dif, dtype: float64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[247]:</div>
+    <div class="prompt output_prompt">Out[25]:</div>
 
 
 
@@ -14103,159 +13883,816 @@ Name: dif, dtype: float64</pre>
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>metrostotales</th>
-      <th>hermosa</th>
-      <th>jacuzzi</th>
       <th>juegos</th>
       <th>granito</th>
-      <th>terraza</th>
-      <th>jardin</th>
       <th>precio</th>
-      <th>lujo</th>
       <th>vista</th>
+      <th>jacuzzi</th>
+      <th>lujo</th>
+      <th>jardin</th>
+      <th>terraza</th>
+      <th>metrostotales</th>
+      <th>hermosa</th>
       <th>dif</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>metrostotales</td>
-      <td>1.000000</td>
-      <td>0.102505</td>
-      <td>0.105397</td>
-      <td>0.065640</td>
-      <td>0.109006</td>
-      <td>0.184700</td>
-      <td>0.234522</td>
-      <td>0.514411</td>
-      <td>0.077831</td>
-      <td>0.124387</td>
-      <td>0.485589</td>
-    </tr>
-    <tr>
-      <td>hermosa</td>
-      <td>0.102505</td>
-      <td>1.000000</td>
-      <td>0.047128</td>
-      <td>0.054155</td>
-      <td>0.080282</td>
-      <td>0.096229</td>
-      <td>0.122408</td>
-      <td>0.097818</td>
-      <td>0.067182</td>
-      <td>0.156207</td>
-      <td>0.004686</td>
-    </tr>
-    <tr>
-      <td>jacuzzi</td>
-      <td>0.105397</td>
-      <td>0.047128</td>
-      <td>1.000000</td>
-      <td>0.109528</td>
-      <td>0.040159</td>
-      <td>0.120713</td>
-      <td>0.102968</td>
-      <td>0.157660</td>
-      <td>0.066057</td>
-      <td>0.094428</td>
-      <td>0.052263</td>
-    </tr>
-    <tr>
       <td>juegos</td>
-      <td>0.065640</td>
-      <td>0.054155</td>
-      <td>0.109528</td>
       <td>1.000000</td>
       <td>0.055081</td>
-      <td>0.111850</td>
-      <td>0.146598</td>
       <td>0.144366</td>
-      <td>0.046619</td>
       <td>0.101708</td>
+      <td>0.109528</td>
+      <td>0.046619</td>
+      <td>0.146598</td>
+      <td>0.111850</td>
+      <td>0.065640</td>
+      <td>0.054155</td>
       <td>0.078725</td>
     </tr>
     <tr>
       <td>granito</td>
-      <td>0.109006</td>
-      <td>0.080282</td>
-      <td>0.040159</td>
       <td>0.055081</td>
       <td>1.000000</td>
-      <td>0.163145</td>
-      <td>0.148632</td>
       <td>0.102580</td>
-      <td>0.164585</td>
       <td>0.094475</td>
+      <td>0.040159</td>
+      <td>0.164585</td>
+      <td>0.148632</td>
+      <td>0.163145</td>
+      <td>0.109006</td>
+      <td>0.080282</td>
       <td>0.006427</td>
     </tr>
     <tr>
-      <td>terraza</td>
-      <td>0.184700</td>
-      <td>0.096229</td>
-      <td>0.120713</td>
-      <td>0.111850</td>
-      <td>0.163145</td>
-      <td>1.000000</td>
-      <td>0.207999</td>
-      <td>0.223338</td>
-      <td>0.113100</td>
-      <td>0.191207</td>
-      <td>0.038639</td>
-    </tr>
-    <tr>
-      <td>jardin</td>
-      <td>0.234522</td>
-      <td>0.122408</td>
-      <td>0.102968</td>
-      <td>0.146598</td>
-      <td>0.148632</td>
-      <td>0.207999</td>
-      <td>1.000000</td>
-      <td>0.208592</td>
-      <td>0.071130</td>
-      <td>0.124513</td>
-      <td>0.025931</td>
-    </tr>
-    <tr>
       <td>precio</td>
-      <td>0.514411</td>
-      <td>0.097818</td>
-      <td>0.157660</td>
       <td>0.144366</td>
       <td>0.102580</td>
-      <td>0.223338</td>
-      <td>0.208592</td>
       <td>1.000000</td>
-      <td>0.155200</td>
       <td>0.194534</td>
+      <td>0.157660</td>
+      <td>0.155200</td>
+      <td>0.208592</td>
+      <td>0.223338</td>
+      <td>0.514411</td>
+      <td>0.097818</td>
       <td>0.485589</td>
     </tr>
     <tr>
-      <td>lujo</td>
-      <td>0.077831</td>
-      <td>0.067182</td>
+      <td>vista</td>
+      <td>0.101708</td>
+      <td>0.094475</td>
+      <td>0.194534</td>
+      <td>1.000000</td>
+      <td>0.094428</td>
+      <td>0.107811</td>
+      <td>0.124513</td>
+      <td>0.191207</td>
+      <td>0.124387</td>
+      <td>0.156207</td>
+      <td>0.070146</td>
+    </tr>
+    <tr>
+      <td>jacuzzi</td>
+      <td>0.109528</td>
+      <td>0.040159</td>
+      <td>0.157660</td>
+      <td>0.094428</td>
+      <td>1.000000</td>
       <td>0.066057</td>
+      <td>0.102968</td>
+      <td>0.120713</td>
+      <td>0.105397</td>
+      <td>0.047128</td>
+      <td>0.052263</td>
+    </tr>
+    <tr>
+      <td>lujo</td>
       <td>0.046619</td>
       <td>0.164585</td>
-      <td>0.113100</td>
-      <td>0.071130</td>
       <td>0.155200</td>
-      <td>1.000000</td>
       <td>0.107811</td>
+      <td>0.066057</td>
+      <td>1.000000</td>
+      <td>0.071130</td>
+      <td>0.113100</td>
+      <td>0.077831</td>
+      <td>0.067182</td>
       <td>0.077370</td>
     </tr>
     <tr>
-      <td>vista</td>
-      <td>0.124387</td>
-      <td>0.156207</td>
-      <td>0.094428</td>
-      <td>0.101708</td>
-      <td>0.094475</td>
-      <td>0.191207</td>
+      <td>jardin</td>
+      <td>0.146598</td>
+      <td>0.148632</td>
+      <td>0.208592</td>
       <td>0.124513</td>
-      <td>0.194534</td>
-      <td>0.107811</td>
+      <td>0.102968</td>
+      <td>0.071130</td>
       <td>1.000000</td>
-      <td>0.070146</td>
+      <td>0.207999</td>
+      <td>0.234522</td>
+      <td>0.122408</td>
+      <td>0.025931</td>
+    </tr>
+    <tr>
+      <td>terraza</td>
+      <td>0.111850</td>
+      <td>0.163145</td>
+      <td>0.223338</td>
+      <td>0.191207</td>
+      <td>0.120713</td>
+      <td>0.113100</td>
+      <td>0.207999</td>
+      <td>1.000000</td>
+      <td>0.184700</td>
+      <td>0.096229</td>
+      <td>0.038639</td>
+    </tr>
+    <tr>
+      <td>metrostotales</td>
+      <td>0.065640</td>
+      <td>0.109006</td>
+      <td>0.514411</td>
+      <td>0.124387</td>
+      <td>0.105397</td>
+      <td>0.077831</td>
+      <td>0.234522</td>
+      <td>0.184700</td>
+      <td>1.000000</td>
+      <td>0.102505</td>
+      <td>0.485589</td>
+    </tr>
+    <tr>
+      <td>hermosa</td>
+      <td>0.054155</td>
+      <td>0.080282</td>
+      <td>0.097818</td>
+      <td>0.156207</td>
+      <td>0.047128</td>
+      <td>0.067182</td>
+      <td>0.122408</td>
+      <td>0.096229</td>
+      <td>0.102505</td>
+      <td>1.000000</td>
+      <td>0.004686</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[103]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">con_descripcion_y_titulo</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;len_descripcion&quot;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;len_titulo&quot;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[104]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">con_descripcion_y_titulo</span><span class="p">[</span><span class="s2">&quot;titulo_descripcion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">con_descripcion_y_titulo</span><span class="p">[</span><span class="s2">&quot;titulo_limpio&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">con_descripcion_y_titulo</span><span class="p">[</span><span class="s2">&quot;descripcion_limpia&quot;</span><span class="p">]</span>
+<span class="n">con_descripcion_y_titulo</span><span class="p">[</span><span class="s2">&quot;tiene_duplicado&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">con_descripcion_y_titulo</span><span class="p">[</span><span class="s2">&quot;titulo_descripcion&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>c:\users\dev\repos\fiuba\75-06\2019-2\tp\.venv\lib\site-packages\ipykernel_launcher.py:1: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  &#34;&#34;&#34;Entry point for launching an IPython kernel.
+c:\users\dev\repos\fiuba\75-06\2019-2\tp\.venv\lib\site-packages\ipykernel_launcher.py:2: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[87]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">duplicadas</span> <span class="o">=</span> <span class="n">con_descripcion_y_titulo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">con_descripcion_y_titulo</span><span class="p">[</span><span class="s2">&quot;tiene_duplicado&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;titulo_descripcion&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[88]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grouped</span> <span class="o">=</span> <span class="n">duplicadas</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;titulo_descripcion&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s2">&quot;fecha&quot;</span><span class="p">:</span><span class="s2">&quot;nunique&quot;</span><span class="p">,</span> <span class="s2">&quot;precio&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;nunique&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">]})</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[89]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grouped</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="s2">&quot;_&quot;</span><span class="o">+</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">grouped</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[90]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grouped</span><span class="p">[</span><span class="s2">&quot;precio_dif&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">grouped</span><span class="p">[</span><span class="s2">&quot;precio_max&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">grouped</span><span class="p">[</span><span class="s2">&quot;precio_min&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[91]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grouped</span><span class="p">[</span><span class="s2">&quot;precio_dif&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[91]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>count    2.137000e+03
+mean     3.185803e+05
+std      7.299117e+05
+min      0.000000e+00
+25%      0.000000e+00
+50%      7.000000e+04
+75%      3.000000e+05
+max      1.131212e+07
+Name: precio_dif, dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[96]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">grouped</span><span class="p">[</span><span class="s2">&quot;precio_dif&quot;</span><span class="p">]</span><span class="o">&gt;</span><span class="n">grouped</span><span class="p">[</span><span class="s2">&quot;precio_dif&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;precio_nunique&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[96]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>fecha_nunique</th>
+      <th>precio_nunique</th>
+      <th>precio_mean</th>
+      <th>precio_max</th>
+      <th>precio_min</th>
+      <th>precio_dif</th>
+    </tr>
+    <tr>
+      <th>titulo_descripcion</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>venta casa tijuana_lote manzana nocnok encuentra vivienda</td>
+      <td>11</td>
+      <td>38</td>
+      <td>5.366581e+05</td>
+      <td>820000.0</td>
+      <td>310808.0</td>
+      <td>509192</td>
+    </tr>
+    <tr>
+      <td>venta casa chihuahua_nocnok tipo credito contado venta posesion fisica ningun acepta exclusiva</td>
+      <td>6</td>
+      <td>16</td>
+      <td>4.929856e+05</td>
+      <td>895730.0</td>
+      <td>318696.0</td>
+      <td>577034</td>
+    </tr>
+    <tr>
+      <td>venta lote zapopan terreno_segundo canchas baja fut cine areas dos sauna semi residencial verdes terraza nivel multiusos olimpica lote voley basquet etapa club squash planta salon vestidores jogging alberca mas amplia vip sala fraccionamiento rapido tenis metros cancha juegos manzana cuenta vapor pista terreno arauca gimnasio casa</td>
+      <td>6</td>
+      <td>14</td>
+      <td>2.369864e+06</td>
+      <td>2913790.0</td>
+      <td>1823000.0</td>
+      <td>1090790</td>
+    </tr>
+    <tr>
+      <td>local placita sahuaros_tuboplus ventaneria concreto asfaltica cubiertas extractor excelente plaza tinaco norte enrollable medio instalacion adeblock ceramica guarniciones comercial agua ciudad aluminio amplia puerta carpeta bano aplanados marquesina metalica centimetros banquetas area aire cuenta nueva pisos local muros columnas estacionamiento fachada</td>
+      <td>4</td>
+      <td>13</td>
+      <td>7.737869e+05</td>
+      <td>1708350.0</td>
+      <td>479500.0</td>
+      <td>1228850</td>
+    </tr>
+    <tr>
+      <td>hipotecario chihuahua remate_diferencias explicamos litigiosos garantia inversion contado venta hipotecario realidad crediticios adjudicatarios superficies presentadas representar descripcion unicamente segura numeracion sabes media cesiones dedicada empresa pago avaluo derechos buenas imagenes sino condiciones registro aqui ubicacion debajo exactitud remate grandes tener publico notario pueden preocupes relacion oportunidades hipotecaria creditos inmobiliaria</td>
+      <td>2</td>
+      <td>13</td>
+      <td>8.024475e+05</td>
+      <td>1805692.0</td>
+      <td>334391.0</td>
+      <td>1471301</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>monte real_infonavitcasa buenas centro condiciones usar credito hospitales minutos ideal recamaras centros comerciales cerca casa</td>
+      <td>2</td>
+      <td>2</td>
+      <td>7.331000e+05</td>
+      <td>904000.0</td>
+      <td>562200.0</td>
+      <td>341800</td>
+    </tr>
+    <tr>
+      <td>monte depto huixquilucan remate col venta oferta jesus valor_contactenos apartado contado venta firma cita contrato cesion valor meses cel bancaria mayor departamento entrega pago inmobiliario derechos programar informacion recuperacion atte darle remate tels inversionistas publico real oferta notario consultor atencion creditos oficinas</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1.075000e+06</td>
+      <td>1300000.0</td>
+      <td>850000.0</td>
+      <td>450000</td>
+    </tr>
+    <tr>
+      <td>modelo fincas privada_horno automoviles gas servicio canceles estacionario privada estufa techada equipada aspersion recamaras microondas planta integral lavavajillas bano cuarto jardin tanque riego campana calentador area banos cochera lavado casa cocina</td>
+      <td>2</td>
+      <td>2</td>
+      <td>3.720000e+06</td>
+      <td>4445000.0</td>
+      <td>2995000.0</td>
+      <td>1450000</td>
+    </tr>
+    <tr>
+      <td>miguel hidalgo chap lomas casa_casa remodelar</td>
+      <td>2</td>
+      <td>2</td>
+      <td>8.500000e+06</td>
+      <td>9000000.0</td>
+      <td>8000000.0</td>
+      <td>1000000</td>
+    </tr>
+    <tr>
+      <td>zapopan real recamaras valle casa zona_altura espacios moderno servicio barra medio recamaras estudio cada vestidor sala bano jardin cuarto area doble comedor amplios proyecto tres desayunadora cocina</td>
+      <td>2</td>
+      <td>2</td>
+      <td>5.900000e+06</td>
+      <td>6150000.0</td>
+      <td>5650000.0</td>
+      <td>500000</td>
+    </tr>
+  </tbody>
+</table>
+<p>502 rows × 6 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[100]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">con_descripcion_y_titulo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">con_descripcion_y_titulo</span><span class="p">[</span><span class="s2">&quot;titulo_descripcion&quot;</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;venta casa tijuana_lote manzana nocnok encuentra vivienda&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[100]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>titulo</th>
+      <th>descripcion</th>
+      <th>tipodepropiedad</th>
+      <th>direccion</th>
+      <th>ciudad</th>
+      <th>provincia</th>
+      <th>antiguedad</th>
+      <th>habitaciones</th>
+      <th>garages</th>
+      <th>banos</th>
+      <th>metroscubiertos</th>
+      <th>metrostotales</th>
+      <th>idzona</th>
+      <th>lat</th>
+      <th>lng</th>
+      <th>fecha</th>
+      <th>gimnasio</th>
+      <th>usosmultiples</th>
+      <th>piscina</th>
+      <th>escuelascercanas</th>
+      <th>centroscomercialescercanos</th>
+      <th>precio</th>
+      <th>mes</th>
+      <th>ano</th>
+      <th>dia</th>
+      <th>descripcion_limpia</th>
+      <th>len_descripcion</th>
+      <th>titulo_limpio</th>
+      <th>len_titulo</th>
+      <th>palabras_positivas_descripcion</th>
+      <th>palabras_negativas_descripcion</th>
+      <th>tiene_descripcion</th>
+      <th>tiene_titulo</th>
+      <th>titulo_descripcion</th>
+      <th>tiene_duplicado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>740</td>
+      <td>233323</td>
+      <td>casa en venta en tijuana</td>
+      <td>nocnok id: mx14-av4212. la vivienda se encuentra en el lote: 7; manzana: 404</td>
+      <td>Casa</td>
+      <td>NaN</td>
+      <td>Tijuana</td>
+      <td>Baja California Norte</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>69.0</td>
+      <td>123.0</td>
+      <td>NaN</td>
+      <td>32.549237</td>
+      <td>-116.947863</td>
+      <td>2015-04-16</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>706000.0</td>
+      <td>4</td>
+      <td>2015</td>
+      <td>16</td>
+      <td>lote manzana nocnok encuentra vivienda</td>
+      <td>5</td>
+      <td>venta casa tijuana</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>38</td>
+      <td>18</td>
+      <td>venta casa tijuana_lote manzana nocnok encuentra vivienda</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>12426</td>
+      <td>284591</td>
+      <td>casa en venta en tijuana</td>
+      <td>nocnok id: mx14-av3755. la vivienda se encuentra en el lote: 8; manzana: 816</td>
+      <td>Casa</td>
+      <td>NaN</td>
+      <td>Tijuana</td>
+      <td>Baja California Norte</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>68.0</td>
+      <td>127.0</td>
+      <td>2305.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2015-05-15</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>601000.0</td>
+      <td>5</td>
+      <td>2015</td>
+      <td>15</td>
+      <td>lote manzana nocnok encuentra vivienda</td>
+      <td>5</td>
+      <td>venta casa tijuana</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>38</td>
+      <td>18</td>
+      <td>venta casa tijuana_lote manzana nocnok encuentra vivienda</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[101]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">con_descripcion_y_titulo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">con_descripcion_y_titulo</span><span class="p">[</span><span class="s2">&quot;titulo_descripcion&quot;</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;venta casa chihuahua_nocnok tipo credito contado venta posesion fisica ningun acepta exclusiva&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[101]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>titulo</th>
+      <th>descripcion</th>
+      <th>tipodepropiedad</th>
+      <th>direccion</th>
+      <th>ciudad</th>
+      <th>provincia</th>
+      <th>antiguedad</th>
+      <th>habitaciones</th>
+      <th>garages</th>
+      <th>banos</th>
+      <th>metroscubiertos</th>
+      <th>metrostotales</th>
+      <th>idzona</th>
+      <th>lat</th>
+      <th>lng</th>
+      <th>fecha</th>
+      <th>gimnasio</th>
+      <th>usosmultiples</th>
+      <th>piscina</th>
+      <th>escuelascercanas</th>
+      <th>centroscomercialescercanos</th>
+      <th>precio</th>
+      <th>mes</th>
+      <th>ano</th>
+      <th>dia</th>
+      <th>descripcion_limpia</th>
+      <th>len_descripcion</th>
+      <th>titulo_limpio</th>
+      <th>len_titulo</th>
+      <th>palabras_positivas_descripcion</th>
+      <th>palabras_negativas_descripcion</th>
+      <th>tiene_descripcion</th>
+      <th>tiene_titulo</th>
+      <th>titulo_descripcion</th>
+      <th>tiene_duplicado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>27050</td>
+      <td>189570</td>
+      <td>casa en venta en chihuahua</td>
+      <td>nocnok id: mx14-as2768. sin posesión física. no se acepta ningún tipo de crédito venta exclusiva al contado.</td>
+      <td>Casa</td>
+      <td>NaN</td>
+      <td>Chihuahua</td>
+      <td>Chihuahua</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>43.0</td>
+      <td>125.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2016-03-11</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>339680.0</td>
+      <td>3</td>
+      <td>2016</td>
+      <td>11</td>
+      <td>nocnok tipo credito contado venta posesion fisica ningun acepta exclusiva</td>
+      <td>10</td>
+      <td>venta casa chihuahua</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>73</td>
+      <td>20</td>
+      <td>venta casa chihuahua_nocnok tipo credito contado venta posesion fisica ningun acepta exclusiva</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>52413</td>
+      <td>295344</td>
+      <td>casa en venta en chihuahua</td>
+      <td>nocnok id: mx14-as2769. sin posesión física. no se acepta ningún tipo de crédito venta exclusiva al contado.</td>
+      <td>Casa</td>
+      <td>NaN</td>
+      <td>Chihuahua</td>
+      <td>Chihuahua</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>69.0</td>
+      <td>120.0</td>
+      <td>15591.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2016-02-09</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>895730.0</td>
+      <td>2</td>
+      <td>2016</td>
+      <td>9</td>
+      <td>nocnok tipo credito contado venta posesion fisica ningun acepta exclusiva</td>
+      <td>10</td>
+      <td>venta casa chihuahua</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>73</td>
+      <td>20</td>
+      <td>venta casa chihuahua_nocnok tipo credito contado venta posesion fisica ningun acepta exclusiva</td>
+      <td>True</td>
     </tr>
   </tbody>
 </table>

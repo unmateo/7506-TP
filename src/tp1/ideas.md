@@ -11,3 +11,5 @@
  - calle tierra/asfaltada
  - boulevard
 - longitud de descripcion y titulo
+
+- publicaciones repetidas (misma u otras fechas)
