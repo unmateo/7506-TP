@@ -1,25 +1,15 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[12]:
+# In[1]:
 
 
 #importo las funciones para levantar los dataframes
 get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 #importo las funciones para graficar
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
-
-
-# In[4]:
-
-
 df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
-
-
-# In[19]:
-
-
-df.info()
+df.columns
 
 
 # In[61]:

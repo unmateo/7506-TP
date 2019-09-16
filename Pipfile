@@ -12,6 +12,8 @@ matplotlib = "*"
 seaborn = "*"
 geopandas = "*"
 numpy = "*"
+nltk = "*"
+unidecode = "*"
 
 [requires]
 python_version = "3.7"

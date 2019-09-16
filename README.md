@@ -3,8 +3,8 @@
 ## Grupo: _Organización de Gatos_
 | Nombre | Padrón | Contacto |
 | - | - |- |
-| Araujo, Manuel | - | - |
-| Fernández, Christian | - |
+| Araujo, Manuel | 93641 | 1991manuelaraujo@gmail.com |
+| Fernández, Christian | 91224 | cefernandez@fi.uba.ar |
 | Giménez, Andrea | 100462 | gim.andr26@gmail.com |
 | Harfuch, Mateo | 95049 | mharfuch@fi.uba.ar |
 
