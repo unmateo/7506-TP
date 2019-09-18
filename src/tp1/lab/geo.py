@@ -134,21 +134,13 @@ def buscar_provincia(punto: Point, provincias):
 geoDF.loc[geoDF["estado"].isna(), "estado"] = geoDF.loc[geoDF["estado"].isna()]["coord"].map(lambda x: buscar_provincia(x, estados))
 
 
-# In[82]:
-
-
-geoDF.loc[~geoDF["estado"].isna()].groupby(["estado"]).agg({"id":"count"})
-
-
-# In[91]:
+# In[130]:
 
 
 publicaciones_por_estado = geoDF.loc[~geoDF["estado"].isna()].groupby(["estado"]).agg({"estado":"count"})
-grafico = pais.plot(figsize=(18,9))
-estados.plot(ax=grafico, color="white", column= publicaciones_por_estado["estado"])
 
 
-# In[126]:
+# In[131]:
 
 
 def choropleth_estados(estados, serie, nombre, titulo=""):
@@ -158,7 +150,7 @@ def choropleth_estados(estados, serie, nombre, titulo=""):
     return plot
 
 
-# In[127]:
+# In[132]:
 
 
 plot = choropleth_estados(estados, publicaciones_por_estado["estado"], "publicaciones", "Cantidad de publicaciones por estado")
