@@ -29,7 +29,7 @@ import matplotlib.pyplot as plt
 from shapely.geometry import Point, Polygon
 
 
-# In[3]:
+# In[2]:
 
 
 #importo las funciones para levantar los dataframes
@@ -38,24 +38,26 @@ get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
 
 
-# In[7]:
+# In[3]:
 
 
 pais = geopandas.read_file("./MEX_adm/MEX_adm0.shp")
 estados = geopandas.read_file("./MEX_adm/MEX_adm1.shp")
 municipios = geopandas.read_file("./MEX_adm/MEX_adm2.shp")
 ciudades = geopandas.read_file("./México_Centros_Urbanos/México_Centros_Urbanos.shp")
+mexico_polygon = pais.iloc[0]["geometry"]
 
 
-# In[56]:
+# In[17]:
 
 
 df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
-con_gps = df.loc[~ (df["lat"].isna() & df["lng"].isna())]
-con_gps["coord_point"] = con_gps.apply(lambda x: Point(x["lng"],x["lat"]), axis=1)
+df["tiene_gps"] = ~ (df["lat"].isna() & df["lng"].isna())
+crear_punto = lambda x: Point(x["lng"],x["lat"]) if x["tiene_gps"] else None
+df["coord"] = df.apply(crear_punto, axis=1)
 
 
-# In[76]:
+# In[5]:
 
 
 def esta_en_mexico(point: Point) -> bool:
@@ -68,38 +70,25 @@ def esta_en_mexico(point: Point) -> bool:
     return (MEX_MIN_LNG < point.x < MEX_MAX_LNG) and (MEX_MIN_LAT < point.y < MEX_MAX_LAT)
 
 
-# In[82]:
+# In[19]:
 
 
-con_gps["en_mexico"] = con_gps["coord_point"].map(esta_en_mexico)
+df["en_mexico"] = df.loc[df["tiene_gps"]]["coord"].map(esta_en_mexico)
 
 
-# In[83]:
+# In[20]:
 
 
-con_gps["en_mexico"].value_counts()
+df["en_mexico"].value_counts()
 
 
-# In[87]:
+# In[60]:
 
 
-fuera_de_mexico = con_gps.loc[~con_gps["en_mexico"]]
-en_mexico = con_gps.loc[con_gps["en_mexico"]]
+geoDF = geopandas.GeoDataFrame(df.loc[df["tiene_gps"] & df["en_mexico"]], geometry="coord")
 
 
-# In[88]:
-
-
-validos = geopandas.GeoDataFrame(en_mexico, geometry="coord_point")
-
-
-# In[61]:
-
-
-mexico_polygon = pais.iloc[0]["geometry"]
-
-
-# In[131]:
+# In[11]:
 
 
 def dibujar_mexico(puntos):
@@ -110,51 +99,67 @@ def dibujar_mexico(puntos):
     puntos.plot(ax=grafico, color="green")
 
 
-# In[122]:
+# In[79]:
 
 
-# le cambio los nombres a las siguientes provincias, para que coincidan con mi info geografica 
-provincias_mapper = {
-    "Baja California Norte": "Baja California",
-    "Edo. de México": "México",
-    "San luis Potosí": "San Luis Potosí"
-}
-validos["provincia"] = validos["provincia"].map(lambda x: provincias_mapper.get(x, x))
-set(validos["provincia"].dropna().unique()) == set(estados["NAME_1"]) #verifico
+def fix_provincias(df, provincias) -> bool:
+    # le cambio los nombres a las siguientes provincias, para que coincidan con mi info geografica 
+    provincias_mapper = {
+        "Baja California Norte": "Baja California",
+        "Edo. de México": "México",
+        "San luis Potosí": "San Luis Potosí"
+    }
+    df["estado"] = df["provincia"].map(lambda x: provincias_mapper.get(x, x))
+    return set(validos["provincia"].dropna().unique()) == set(provincias["NAME_1"]) #verifico
 
 
-# In[163]:
+# In[80]:
 
 
-# estos tienen datos gps pero no de provincia
-sin_provincia = validos.loc[validos["provincia"].isna()]
+fix_provincias(geoDF, estados)
+
+
+# In[81]:
+
 
 def buscar_provincia(punto: Point, provincias):
     """
         Devuelve en qué provincia de mexico se encuentra el punto.
     """
+#     if not punto: return None
     for provincia, geometry in provincias[["NAME_1","geometry"]].values:
         if geometry.contains(punto): return provincia
-    return None
 
 # agrego las provincias faltantes
-sin_provincia["provincia"] = sin_provincia["coord_point"].map(lambda x: buscar_provincia(x, estados))
+geoDF.loc[geoDF["estado"].isna(), "estado"] = geoDF.loc[geoDF["estado"].isna()]["coord"].map(lambda x: buscar_provincia(x, estados))
 
 
-# In[164]:
+# In[82]:
 
 
-validos.loc[validos["provincia"].isna()]
+geoDF.loc[~geoDF["estado"].isna()].groupby(["estado"]).agg({"id":"count"})
 
 
-# In[161]:
+# In[91]:
 
 
-sin_provincia
+publicaciones_por_estado = geoDF.loc[~geoDF["estado"].isna()].groupby(["estado"]).agg({"estado":"count"})
+grafico = pais.plot(figsize=(18,9))
+estados.plot(ax=grafico, color="white", column= publicaciones_por_estado["estado"])
 
 
-# In[162]:
+# In[126]:
 
 
-dibujar_mexico(sin_provincia)
+def choropleth_estados(estados, serie, nombre, titulo=""):
+    estados[nombre] = estados["NAME_1"].map(serie)
+    plot = estados.plot(column=nombre, legend=True, figsize=(24,8))    
+    plot.set_title(titulo)
+    return plot
+
+
+# In[127]:
+
+
+plot = choropleth_estados(estados, publicaciones_por_estado["estado"], "publicaciones", "Cantidad de publicaciones por estado")
 
