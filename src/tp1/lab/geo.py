@@ -48,7 +48,7 @@ ciudades = geopandas.read_file("./México_Centros_Urbanos/México_Centros_Urbano
 mexico_polygon = pais.iloc[0]["geometry"]
 
 
-# In[17]:
+# In[4]:
 
 
 df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
@@ -60,35 +60,22 @@ df["coord"] = df.apply(crear_punto, axis=1)
 # In[5]:
 
 
-def esta_en_mexico(point: Point) -> bool:
-    """ 
-        Recibe un punto (lat,lng) y devuelve (muy aproximadamente) True si está dentro de Mexico, False si no.
-        Hacerlo con ```df["coord"].map(lambda x: mexico_polygon.contains(x))``` sería muy lento.
-    """
-    MEX_MIN_LNG, MEX_MAX_LNG = (-120, -85)
-    MEX_MIN_LAT, MEX_MAX_LAT = (14,33)
-    return (MEX_MIN_LNG < point.x < MEX_MAX_LNG) and (MEX_MIN_LAT < point.y < MEX_MAX_LAT)
-
-
-# In[19]:
-
-
 df["en_mexico"] = df.loc[df["tiene_gps"]]["coord"].map(esta_en_mexico)
 
 
-# In[20]:
+# In[6]:
 
 
 df["en_mexico"].value_counts()
 
 
-# In[60]:
+# In[7]:
 
 
 geoDF = geopandas.GeoDataFrame(df.loc[df["tiene_gps"] & df["en_mexico"]], geometry="coord")
 
 
-# In[11]:
+# In[8]:
 
 
 def dibujar_mexico(puntos):
@@ -99,7 +86,7 @@ def dibujar_mexico(puntos):
     puntos.plot(ax=grafico, color="green")
 
 
-# In[79]:
+# In[11]:
 
 
 def fix_provincias(df, provincias) -> bool:
@@ -110,16 +97,16 @@ def fix_provincias(df, provincias) -> bool:
         "San luis Potosí": "San Luis Potosí"
     }
     df["estado"] = df["provincia"].map(lambda x: provincias_mapper.get(x, x))
-    return set(validos["provincia"].dropna().unique()) == set(provincias["NAME_1"]) #verifico
+    return set(df["provincia"].dropna().unique()) == set(provincias["NAME_1"]) #verifico
 
 
-# In[80]:
+# In[12]:
 
 
 fix_provincias(geoDF, estados)
 
 
-# In[81]:
+# In[13]:
 
 
 def buscar_provincia(punto: Point, provincias):
@@ -134,13 +121,13 @@ def buscar_provincia(punto: Point, provincias):
 geoDF.loc[geoDF["estado"].isna(), "estado"] = geoDF.loc[geoDF["estado"].isna()]["coord"].map(lambda x: buscar_provincia(x, estados))
 
 
-# In[130]:
+# In[14]:
 
 
 publicaciones_por_estado = geoDF.loc[~geoDF["estado"].isna()].groupby(["estado"]).agg({"estado":"count"})
 
 
-# In[131]:
+# In[15]:
 
 
 def choropleth_estados(estados, serie, nombre, titulo=""):
@@ -150,7 +137,7 @@ def choropleth_estados(estados, serie, nombre, titulo=""):
     return plot
 
 
-# In[132]:
+# In[16]:
 
 
 plot = choropleth_estados(estados, publicaciones_por_estado["estado"], "publicaciones", "Cantidad de publicaciones por estado")
