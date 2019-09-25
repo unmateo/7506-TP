@@ -20,7 +20,7 @@
 # - Agregar información externa (distrito electoral, etc.)
 # 
 
-# In[42]:
+# In[1]:
 
 
 import pandas as pd
@@ -29,7 +29,7 @@ import matplotlib.pyplot as plt
 from shapely.geometry import Point, Polygon
 
 
-# In[43]:
+# In[2]:
 
 
 #importo las funciones para levantar los dataframes
@@ -38,7 +38,7 @@ get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
 
 
-# In[44]:
+# In[3]:
 
 
 pais = geopandas.read_file("./MEX_adm/MEX_adm0.shp")
@@ -48,7 +48,7 @@ ciudades = geopandas.read_file("./México_Centros_Urbanos/México_Centros_Urbano
 mexico_polygon = pais.iloc[0]["geometry"]
 
 
-# In[74]:
+# In[4]:
 
 
 df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
@@ -57,7 +57,7 @@ crear_punto = lambda x: Point(x["lng"],x["lat"]) if x["tiene_gps"] else None
 df["coord"] = df.apply(crear_punto, axis=1)
 
 
-# In[46]:
+# In[5]:
 
 
 def esta_en_mexico(point: Point) -> bool:
@@ -70,13 +70,13 @@ def esta_en_mexico(point: Point) -> bool:
     return (MEX_MIN_LNG < point.x < MEX_MAX_LNG) and (MEX_MIN_LAT < point.y < MEX_MAX_LAT)
 
 
-# In[47]:
+# In[6]:
 
 
 df["en_mexico"] = df.loc[df["tiene_gps"]]["coord"].map(esta_en_mexico)
 
 
-# In[48]:
+# In[11]:
 
 
 df["en_mexico"].value_counts()
@@ -156,12 +156,30 @@ def choropleth_estados(estados, serie, nombre, titulo=""):
 plot = choropleth_estados(estados, publicaciones_por_estado["estado"], "publicaciones", "Cantidad de publicaciones por estado")
 
 
-# # Presento un análisis del valor del metro cuadrado en relacion al clima
+# # Presento un análisis del valor del metro cuadrado en relacion a la ciudad
 
-# In[93]:
+# ### Primero realizo una limpieza de los datos. Selecciono las ciudades con mayor cantidad de publicaciones
+
+# In[7]:
 
 
-#Primero realizo un calculo del promedio del valor del metro cuadrado por 
+mas_publicadas = df.groupby("ciudad").agg({"id":"count"})
+mas_publicadas.columns = ["total"]
+mas_publicadas=mas_publicadas.sort_values("total", ascending=False).head(100)
+print(mas_publicadas)
+
+
+# In[ ]:
+
+
+mas_publicadas=pd.merge(df,mas_publicadas, on='ciudad', how='inner').ciudad.value_counts().head(101)
+mas_publicadas
+
+
+# In[14]:
+
+
+#Realizo un calculo del promedio del valor del metro cuadrado por 
 por_ciudad=df.groupby("ciudad").agg({"metrostotales":"sum"})
 por_ciudad["precios"] = df.groupby("ciudad").agg({"precio":"sum"})
 por_ciudad["valormetrocuadrado"] = por_ciudad["precios"] / por_ciudad["metrostotales"]
@@ -169,36 +187,47 @@ por_ciudad["valormetrocuadrado"] = por_ciudad["precios"] / por_ciudad["metrostot
 
 # ### Limpio el dataset de valores nulos en metrostotales y/o precios
 
-# In[94]:
+# In[10]:
 
 
 por_ciudad=por_ciudad.loc[(por_ciudad.metrostotales != 0.0)]
 por_ciudad=por_ciudad.loc[(por_ciudad.precios != 0.0)]
 
 
-# # Busco las ciudades extremo, la mas cara y la mas barata
+# # Busco las ciudades extremo, la más cara y la más barata
 
-# In[109]:
+# In[39]:
 
 
 por_ciudad = por_ciudad.sort_values("valormetrocuadrado")
 print(por_ciudad)
-ciudad_mas_barata = por_ciudad["valormetrocuadrado"].min()
-ciudad_mas_cara = por_ciudad["valormetrocuadrado"].max()
-amplitud = ciudad_mas_cara - ciudad_mas_barata
-print(amplitud)#ver como sacar el nombre de la ciudad
 
 
-# In[111]:
+# ### Ahora armo un dataframe con las 20 ciudades más caras y las 20 más baratas.
+
+# In[36]:
 
 
 top_20_ciudades_mas_caras = por_ciudad.tail(20)
-top_20_ciudades_mas_caras 
+top_20_ciudades_mas_caras.reset_index(inplace=True)
+top_20_ciudades_mas_caras
 
 
-# In[112]:
+# In[34]:
 
 
 top_20_ciudades_mas_baratas = por_ciudad.head(20)
+top_20_ciudades_mas_baratas.reset_index(inplace=True)
 top_20_ciudades_mas_baratas
+
+
+# In[56]:
+
+
+ciudad_mas_barata = (top_20_ciudades_mas_baratas.loc[0,:].ciudad,top_20_ciudades_mas_baratas.loc[0,:].valormetrocuadrado)
+print("Ciudad mas barata {}".format(ciudad_mas_barata))
+ciudad_mas_cara = (top_20_ciudades_mas_caras.loc[0,:].ciudad,top_20_ciudades_mas_caras.loc[0,:].valormetrocuadrado)
+print("Ciudad mas cara {}".format(ciudad_mas_cara))
+amplitud = ciudad_mas_cara[1] - ciudad_mas_barata[1]
+print("Amplitud de precio {}".format(amplitud))
 
