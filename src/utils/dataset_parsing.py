@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[ ]:
 
 
 import pandas as pd
@@ -10,7 +10,7 @@ from shapely.geometry import Point
 DATASET_RELATIVE_PATH = "enunciado/data/train.csv"
 
 
-# In[10]:
+# In[ ]:
 
 
 def levantar_datos(csv_file: str = "../"+DATASET_RELATIVE_PATH, optimizar: bool = True) -> pd.DataFrame:
@@ -38,13 +38,37 @@ def levantar_datos(csv_file: str = "../"+DATASET_RELATIVE_PATH, optimizar: bool 
         "metrostotales": "float32",
     }
     df = pd.read_csv(csv_file, dtype=dtypes, parse_dates=["fecha"])
-    df["mes"] = df["fecha"].dt.month
-    df["ano"] = df["fecha"].dt.year
-    df["dia"] = df["fecha"].dt.day
+    agregar_columnas_tiempo(df)
+    agregar_columnas_precio(df)
+    agregar_columnas_gps(df)
     return df
 
 
-# In[3]:
+# In[ ]:
+
+
+def agregar_columnas_tiempo(df):
+    df["mes"] = df["fecha"].dt.month
+    df["ano"] = df["fecha"].dt.year
+    df["dia"] = df["fecha"].dt.day
+
+
+# In[ ]:
+
+
+def agregar_columnas_precio(df):
+    df["precio_metro_cubierto"] = df["precio"] / df["metroscubiertos"]
+    df["precio_metro_total"] = df["precio"] / df["metrostotales"]
+
+
+# In[ ]:
+
+
+def agregar_columnas_gps(df):
+    df.loc[:,"gps"] = df.loc[~ df["lng"].isna()].apply(lambda x: Point(x["lng"],x["lat"]), axis=1)
+
+
+# In[ ]:
 
 
 def esta_en_mexico(point: Point) -> bool:
@@ -55,4 +79,10 @@ def esta_en_mexico(point: Point) -> bool:
     MEX_MIN_LNG, MEX_MAX_LNG = (-120, -85)
     MEX_MIN_LAT, MEX_MAX_LAT = (14,33)
     return (MEX_MIN_LNG < point.x < MEX_MAX_LNG) and (MEX_MIN_LAT < point.y < MEX_MAX_LAT)
+
+
+# In[ ]:
+
+
+
 
