@@ -152,10 +152,9 @@ queretaro = estados.loc[estados["NAME_1"]=="Querétaro"].plot(figsize=(18,9),col
 plot = geoDF.plot(ax=queretaro, cmap="Greens_r")
 
 
-# In[129]:
+# In[135]:
 
 
-# quiero un mapa de mexico con todas las zonas (centroides), donde cada zona tenga un color que la diferencie de acuerdo a la cantidad de publicaciones que tiene
 con_centroide = zonas_ok.loc[~zonas_ok["centroid"].isna()]
 en_mexico = con_centroide.loc[con_centroide["centroid"].map(esta_en_mexico)]
 geoDF = geopandas.GeoDataFrame(en_mexico, geometry="centroid")
@@ -164,10 +163,32 @@ estados_plot = estados.plot(ax=base, color="white")
 plot = geoDF.plot(ax=estados_plot, cmap="viridis_r",legend=True, column="id_count")
 
 
-# In[109]:
+# In[134]:
 
 
-en_mexico.loc[en_mexico["id_count"]>300]
+con_centroide = zonas_ok.loc[~zonas_ok["centroid"].isna()]
+en_mexico = con_centroide.loc[con_centroide["centroid"].map(esta_en_mexico)]
+geoDF = geopandas.GeoDataFrame(en_mexico, geometry="centroid")
+base = pais.plot(figsize=(24,12))
+estados_plot = estados.plot(ax=base, color="white")
+plot = geoDF.plot(ax=estados_plot, cmap="viridis_r",legend=True, column="precio_metro_cubierto_mean")
+
+
+# In[138]:
+
+
+con_centroide = zonas_ok.loc[~zonas_ok["centroid"].isna()]
+en_mexico = con_centroide.loc[con_centroide["centroid"].map(esta_en_mexico)]
+geoDF = geopandas.GeoDataFrame(en_mexico, geometry="centroid")
+base = pais.plot(figsize=(24,12))
+estados_plot = estados.plot(ax=base, color="white")
+plot = geoDF.plot(ax=estados_plot, cmap="viridis_r",legend=True, column="antiguedad_mean")
+
+
+# In[132]:
+
+
+en_mexico.loc[en_mexico["id_count"]>300].columns
 
 
 # In[110]:
