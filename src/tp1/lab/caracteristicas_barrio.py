@@ -24,6 +24,8 @@
 
 import seaborn as sns
 import matplotlib.pyplot as plt
+import geopandas
+from shapely.geometry import Point
 
 
 # In[2]:
@@ -70,39 +72,9 @@ top_10 = top_100_publicaciones.head(10)
 last_10 = top_100_publicaciones.tail(10)
 
 
-# In[7]:
-
-
-top_10
-
-
-# In[8]:
-
-
-last_10
-
-
-# In[9]:
-
-
-df.loc[df.idzona.isin(top_10.index)].describe()
-
-
-# In[10]:
-
-
-df.loc[df.idzona.isin(last_10.index)].describe()
-
-
-# In[11]:
-
-
-df.loc[df.idzona==113862].describe()
-
-
 # ## Armo un Dataframe donde las filas son las zonas
 
-# In[12]:
+# In[7]:
 
 
 calculations = ["mean","std","max","min"]
@@ -111,42 +83,43 @@ zonas = df.groupby(["idzona"]).agg(aggregations)
 zonas.columns = [x+"_"+y for x,y in zonas.columns]
 
 
-# In[13]:
+# In[8]:
 
 
 zonas.head()
 
 
-# In[14]:
+# In[9]:
 
 
 zonas["lat_dif"] = zonas["lat_max"] - zonas["lat_min"]
 zonas["lng_dif"] = zonas["lng_max"] - zonas["lng_min"]
 
 
-# In[15]:
+# In[10]:
 
 
-zonas["has_gps"] = ~zonas["lat_mean"].isna()
+zonas["has_gps"] = (~zonas["lat_mean"].isna()) & (zonas["lat_mean"] > 10) & (zonas["lng_mean"] < -80)
 
 
-# In[16]:
+# In[11]:
 
 
 zonas.has_gps.value_counts()
 
 
-# In[17]:
+# In[12]:
 
 
 # dimensiones (en cantidad de publicaciones) de las zonas que no tienen info gps
 zonas.loc[~zonas["has_gps"]]["id_count"].sort_values(ascending=False).head()
 
 
-# In[18]:
+# In[13]:
 
 
 zonas_con_gps = zonas.loc[(zonas.has_gps) & (zonas.id_count > 10)]
+zonas_con_gps = zonas_con_gps.loc[z]
 
 def doble_violin(serie_izq, serie_der, titulo_izq, titulo_der):
     fig, ax = plt.subplots(1,2)
@@ -159,13 +132,7 @@ def doble_violin(serie_izq, serie_der, titulo_izq, titulo_der):
 plot = doble_violin(zonas_con_gps.lng_dif, zonas_con_gps.lat_dif, "Diferencia de Longitud", "Diferencia de Latitud")
 
 
-# In[27]:
-
-
-zonas_con_gps.columns
-
-
-# In[28]:
+# In[14]:
 
 
 # en base a esto, me quedo con las zonas que tienen:
@@ -174,46 +141,45 @@ zonas_ok = zonas_con_gps.loc[(zonas_con_gps.id_count > 5) & (zonas_con_gps.lat_d
 plot = doble_violin(zonas_ok.lng_dif, zonas_ok.lat_dif, "Diferencia de Longitud", "Diferencia de Latitud")
 
 
-# In[36]:
+# In[15]:
 
 
 zonas_ok.loc[zonas_ok.lat_mean < 10]
 zonas_ok.loc[zonas_ok.lat_mean < 10]
 
 
-# In[38]:
+# In[16]:
 
 
-df.loc[df.idzona==70108.0]
+df.loc[df.idzona==70108.0][["lat","lng"]]
 
 
-# In[20]:
+# In[22]:
 
 
-import geopandas
-from shapely.geometry import Point
+zonas_ok.loc[:,"coord"] = zonas_ok.apply(lambda x: Point(x["lng_mean"],x["lat_mean"]), axis=1)
 
 
-# In[29]:
+# In[24]:
 
 
-zonas_ok["coord"] = zonas_ok.apply(lambda x: Point(x["lng_mean"],x["lat_mean"]), axis=1)
+zonas_ok["en_mexico"] = zonas_ok["coord"].map(esta_en_mexico)
 
 
-# In[30]:
+# In[25]:
 
 
 geoDF = geopandas.GeoDataFrame(zonas_ok, geometry="coord")
 
 
-# In[31]:
+# In[26]:
 
 
 pais = geopandas.read_file("./MEX_adm/MEX_adm0.shp")
 estados = geopandas.read_file("./MEX_adm/MEX_adm1.shp")
 
 
-# In[32]:
+# In[27]:
 
 
 base = pais.plot(figsize=(18,9))
@@ -222,7 +188,7 @@ estados_plot = estados.plot(ax=base, color="white")
 geoDF.plot(ax=estados_plot)
 
 
-# In[26]:
+# In[28]:
 
 
 geoDF.lng_mean.describe()
