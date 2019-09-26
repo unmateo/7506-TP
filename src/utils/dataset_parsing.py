@@ -6,6 +6,7 @@
 
 import pandas as pd
 from shapely.geometry import Point
+import numpy
 
 DATASET_RELATIVE_PATH = "enunciado/data/train.csv"
 
@@ -61,11 +62,17 @@ def agregar_columnas_precio(df):
     df["precio_metro_total"] = df["precio"] / df["metrostotales"]
 
 
-# In[ ]:
+# In[1]:
 
 
 def agregar_columnas_gps(df):
+    """
+        Creo los puntos para todas las filas que tengan latitud/longitud.
+        Anulo los puntos que estén fuera de México (pongo NaN).
+    """
+    filter_mexico = lambda x: x if x is not numpy.NaN and esta_en_mexico(x) else numpy.NaN
     df.loc[:,"gps"] = df.loc[~ df["lng"].isna()].apply(lambda x: Point(x["lng"],x["lat"]), axis=1)
+    df.loc[:,"gps"] = df.loc[~ df["gps"].isna()]["gps"].map(filter_mexico)
 
 
 # In[ ]:

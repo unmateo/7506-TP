@@ -39,7 +39,7 @@ from shapely.geometry import Point, Polygon
 import numpy
 
 
-# In[2]:
+# In[156]:
 
 
 # importo las funciones para levantar los dataframes
@@ -48,7 +48,7 @@ get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
 
 
-# In[3]:
+# In[157]:
 
 
 # cargo el dataset
@@ -56,7 +56,7 @@ df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
 df.columns
 
 
-# In[5]:
+# In[163]:
 
 
 def agg_polygon(point_series):
@@ -72,7 +72,7 @@ def agg_polygon(point_series):
 
 # ## Armo un Dataframe donde las filas son las zonas
 
-# In[6]:
+# In[164]:
 
 
 calculations = ["mean","std","max","min"]
@@ -82,69 +82,69 @@ zonas.columns = [x+"_"+y for x,y in zonas.columns]
 zonas.rename({"gps_agg_polygon": "polygon"}, axis="columns", inplace=True)
 
 
-# In[18]:
+# In[165]:
 
 
 zonas["lat_dif"] = zonas["lat_max"] - zonas["lat_min"]
 zonas["lng_dif"] = zonas["lng_max"] - zonas["lng_min"]
 
 
-# In[62]:
+# In[166]:
 
 
 zonas.shape
 
 
-# In[53]:
+# In[167]:
 
 
 zonas[["lat_dif","lng_dif"]].describe()
 
 
-# In[64]:
+# In[168]:
 
 
 zonas_ok = zonas.loc[(zonas["lat_dif"] < zonas["lat_dif"].mean()) & (zonas["lng_dif"] < zonas["lng_dif"].mean())]
 zonas_ok.shape
 
 
-# In[7]:
+# In[169]:
 
 
 pais = geopandas.read_file("./MEX_adm/MEX_adm0.shp")
 estados = geopandas.read_file("./MEX_adm/MEX_adm1.shp")
 
 
-# In[65]:
+# In[179]:
 
 
 con_polygon = zonas_ok.loc[~zonas["polygon"].isna()]
 geoDF = geopandas.GeoDataFrame(con_polygon, geometry="polygon")
-base = pais.plot(figsize=(18,9))
+base = pais.plot(figsize=(24,12))
 estados_plot = estados.plot(ax=base, color="white")
 plot = geoDF.plot(ax=estados_plot, cmap="Greens_r")
 
 
-# In[75]:
+# In[180]:
 
 
-zonas_ok.loc[:,"centroid"] = zonas_ok.loc[~zonas_ok["polygon"].isna()]["polygon"].map(lambda x: x.centroid)
+zonas_ok.loc[:,"centroid"] = con_polygon["polygon"].map(lambda x: x.centroid)
 
 
-# In[78]:
+# In[182]:
 
 
-zonas_ok.sort_values(by="id_count", ascending=False)
+zonas_ok.sort_values(by="id_count", ascending=False).head(5)
 
 
-# In[81]:
+# In[173]:
 
 
 publicaciones_84028 = df.loc[df["idzona"]==84028.0] 
 publicaciones_84028.head(1)
 
 
-# In[88]:
+# In[174]:
 
 
 geoDF = geopandas.GeoDataFrame(publicaciones_84028, geometry="gps")
@@ -152,47 +152,32 @@ queretaro = estados.loc[estados["NAME_1"]=="Querétaro"].plot(figsize=(18,9),col
 plot = geoDF.plot(ax=queretaro, cmap="Greens_r")
 
 
-# In[135]:
+# In[187]:
 
 
+def plot_mexico(df, geometry, columna, titulo):
+    geoDF = geopandas.GeoDataFrame(df, geometry=geometry)
+    base = pais.plot(figsize=(24,12))
+    estados_plot = estados.plot(ax=base, color="white")
+    plot = geoDF.plot(ax=estados_plot, cmap="viridis_r",legend=True, column=columna)
+    plot.set_title(titulo)
+    return plot
+    
 con_centroide = zonas_ok.loc[~zonas_ok["centroid"].isna()]
 en_mexico = con_centroide.loc[con_centroide["centroid"].map(esta_en_mexico)]
-geoDF = geopandas.GeoDataFrame(en_mexico, geometry="centroid")
-base = pais.plot(figsize=(24,12))
-estados_plot = estados.plot(ax=base, color="white")
-plot = geoDF.plot(ax=estados_plot, cmap="viridis_r",legend=True, column="id_count")
+publicaciones_minimas = en_mexico["id_count"].mean() + 2* en_mexico["id_count"].std()
+en_mexico = en_mexico.loc[en_mexico["id_count"] > publicaciones_minimas]
+
+msg_minimo = " ({} zonas con más de {} publicaciones)".format(en_mexico.shape[0], int(publicaciones_minimas))
+
+id_count = plot_mexico(en_mexico, "centroid", "id_count", "Cantidad de publicaciones por cada zona"+msg_minimo)
+precio_metro_cubierto_mean = plot_mexico(en_mexico, "centroid", "precio_metro_cubierto_mean", "Promedio de precio por metro cubierto en cada zona"+msg_minimo)
+precio_metro_total_mean = plot_mexico(en_mexico, "centroid", "precio_metro_total_mean", "Promedio de precio por metro total en cada zona"+msg_minimo)
 
 
-# In[134]:
+# In[188]:
 
 
-con_centroide = zonas_ok.loc[~zonas_ok["centroid"].isna()]
-en_mexico = con_centroide.loc[con_centroide["centroid"].map(esta_en_mexico)]
-geoDF = geopandas.GeoDataFrame(en_mexico, geometry="centroid")
-base = pais.plot(figsize=(24,12))
-estados_plot = estados.plot(ax=base, color="white")
-plot = geoDF.plot(ax=estados_plot, cmap="viridis_r",legend=True, column="precio_metro_cubierto_mean")
-
-
-# In[138]:
-
-
-con_centroide = zonas_ok.loc[~zonas_ok["centroid"].isna()]
-en_mexico = con_centroide.loc[con_centroide["centroid"].map(esta_en_mexico)]
-geoDF = geopandas.GeoDataFrame(en_mexico, geometry="centroid")
-base = pais.plot(figsize=(24,12))
-estados_plot = estados.plot(ax=base, color="white")
-plot = geoDF.plot(ax=estados_plot, cmap="viridis_r",legend=True, column="antiguedad_mean")
-
-
-# In[132]:
-
-
-en_mexico.loc[en_mexico["id_count"]>300].columns
-
-
-# In[110]:
-
-
-df.loc[df["idzona"]==113851.0]
+cantidad_publicaciones_por_zona = sns.violinplot(en_mexico["id_count"], orient="v")
+en_mexico["id_count"].describe()
 
