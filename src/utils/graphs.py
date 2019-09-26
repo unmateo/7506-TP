@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 import pandas as pd
@@ -25,7 +25,7 @@ def get_heatmap(data, title="Titulo", xlabel="Mes", ylabel="Año" ,show_values=F
     return heatmap
 
 
-# In[ ]:
+# In[3]:
 
 
 def get_barplot(series, h_align=False, title="", x_label="", y_label="", show_grid=False):
@@ -48,6 +48,13 @@ def get_barplot(series, h_align=False, title="", x_label="", y_label="", show_gr
         y_pos = index if h_align else value+margin
         plot.text(x_pos, y_pos, str(value), horizontalalignment='center', verticalalignment='center')
     return plot
+
+
+# In[4]:
+
+
+def bar_plot(dataframe, x="", y="", rot="0"):
+    return dataframe.plot.bar(x=x, y=y, rot=0)
 
 
 # In[ ]:

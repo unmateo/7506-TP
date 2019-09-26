@@ -20,7 +20,7 @@
 # - Agregar información externa (distrito electoral, etc.)
 # 
 
-# In[1]:
+# In[253]:
 
 
 import pandas as pd
@@ -29,7 +29,7 @@ import matplotlib.pyplot as plt
 from shapely.geometry import Point, Polygon
 
 
-# In[2]:
+# In[254]:
 
 
 #importo las funciones para levantar los dataframes
@@ -38,7 +38,7 @@ get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
 
 
-# In[3]:
+# In[180]:
 
 
 pais = geopandas.read_file("./MEX_adm/MEX_adm0.shp")
@@ -48,7 +48,7 @@ ciudades = geopandas.read_file("./México_Centros_Urbanos/México_Centros_Urbano
 mexico_polygon = pais.iloc[0]["geometry"]
 
 
-# In[4]:
+# In[186]:
 
 
 df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
@@ -57,7 +57,7 @@ crear_punto = lambda x: Point(x["lng"],x["lat"]) if x["tiene_gps"] else None
 df["coord"] = df.apply(crear_punto, axis=1)
 
 
-# In[5]:
+# In[187]:
 
 
 def esta_en_mexico(point: Point) -> bool:
@@ -70,25 +70,37 @@ def esta_en_mexico(point: Point) -> bool:
     return (MEX_MIN_LNG < point.x < MEX_MAX_LNG) and (MEX_MIN_LAT < point.y < MEX_MAX_LAT)
 
 
-# In[6]:
+# In[189]:
 
 
 df["en_mexico"] = df.loc[df["tiene_gps"]]["coord"].map(esta_en_mexico)
 
 
-# In[11]:
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[191]:
 
 
 df["en_mexico"].value_counts()
 
 
-# In[49]:
+# In[192]:
 
 
 geoDF = geopandas.GeoDataFrame(df.loc[df["tiene_gps"] & df["en_mexico"]], geometry="coord")
 
 
-# In[50]:
+# In[193]:
 
 
 def dibujar_mexico(puntos):
@@ -99,7 +111,7 @@ def dibujar_mexico(puntos):
     puntos.plot(ax=grafico, color="green")
 
 
-# In[51]:
+# In[194]:
 
 
 def fix_provincias(df, provincias) -> bool:
@@ -113,13 +125,13 @@ def fix_provincias(df, provincias) -> bool:
     return set(validos["provincia"].dropna().unique()) == set(provincias["NAME_1"]) #verifico
 
 
-# In[52]:
+# In[195]:
 
 
 fix_provincias(geoDF, estados)
 
 
-# In[53]:
+# In[196]:
 
 
 def buscar_provincia(punto: Point, provincias):
@@ -134,13 +146,13 @@ def buscar_provincia(punto: Point, provincias):
 geoDF.loc[geoDF["estado"].isna(), "estado"] = geoDF.loc[geoDF["estado"].isna()]["coord"].map(lambda x: buscar_provincia(x, estados))
 
 
-# In[54]:
+# In[197]:
 
 
 publicaciones_por_estado = geoDF.loc[~geoDF["estado"].isna()].groupby(["estado"]).agg({"estado":"count"})
 
 
-# In[55]:
+# In[198]:
 
 
 def choropleth_estados(estados, serie, nombre, titulo=""):
@@ -150,7 +162,7 @@ def choropleth_estados(estados, serie, nombre, titulo=""):
     return plot
 
 
-# In[56]:
+# In[199]:
 
 
 plot = choropleth_estados(estados, publicaciones_por_estado["estado"], "publicaciones", "Cantidad de publicaciones por estado")
@@ -160,60 +172,69 @@ plot = choropleth_estados(estados, publicaciones_por_estado["estado"], "publicac
 
 # ### Primero realizo una limpieza de los datos. Selecciono las ciudades con mayor cantidad de publicaciones
 
-# In[7]:
+# In[200]:
 
 
+df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
 mas_publicadas = df.groupby("ciudad").agg({"id":"count"})
 mas_publicadas.columns = ["total"]
 mas_publicadas=mas_publicadas.sort_values("total", ascending=False).head(100)
+mas_publicadas.reset_index(inplace=True)
 print(mas_publicadas)
 
 
-# In[ ]:
+# In[201]:
 
 
-mas_publicadas=pd.merge(df,mas_publicadas, on='ciudad', how='inner').ciudad.value_counts().head(101)
-mas_publicadas
+lista_de_ciudades = mas_publicadas.ciudad
+lista_de_ciudades = lista_de_ciudades.to_list()
+lista_de_ciudades
+df=df[df["ciudad"].isin(lista_de_ciudades)]
+df
 
 
-# In[14]:
+# In[202]:
 
 
 #Realizo un calculo del promedio del valor del metro cuadrado por 
 por_ciudad=df.groupby("ciudad").agg({"metrostotales":"sum"})
+por_ciudad=por_ciudad.loc[por_ciudad.metrostotales != 0.0]
 por_ciudad["precios"] = df.groupby("ciudad").agg({"precio":"sum"})
 por_ciudad["valormetrocuadrado"] = por_ciudad["precios"] / por_ciudad["metrostotales"]
+por_ciudad.reset_index(inplace=True)
 
 
 # ### Limpio el dataset de valores nulos en metrostotales y/o precios
 
-# In[10]:
+# In[203]:
 
 
 por_ciudad=por_ciudad.loc[(por_ciudad.metrostotales != 0.0)]
 por_ciudad=por_ciudad.loc[(por_ciudad.precios != 0.0)]
+por_ciudad
 
 
 # # Busco las ciudades extremo, la más cara y la más barata
 
-# In[39]:
+# In[204]:
 
 
 por_ciudad = por_ciudad.sort_values("valormetrocuadrado")
-print(por_ciudad)
+por_ciudad.reset_index(drop=True,inplace=True)
+por_ciudad
 
 
 # ### Ahora armo un dataframe con las 20 ciudades más caras y las 20 más baratas.
 
-# In[36]:
+# In[205]:
 
 
 top_20_ciudades_mas_caras = por_ciudad.tail(20)
-top_20_ciudades_mas_caras.reset_index(inplace=True)
+top_20_ciudades_mas_caras.reset_index(drop=True, inplace=True)
 top_20_ciudades_mas_caras
 
 
-# In[34]:
+# In[206]:
 
 
 top_20_ciudades_mas_baratas = por_ciudad.head(20)
@@ -221,7 +242,7 @@ top_20_ciudades_mas_baratas.reset_index(inplace=True)
 top_20_ciudades_mas_baratas
 
 
-# In[56]:
+# In[233]:
 
 
 ciudad_mas_barata = (top_20_ciudades_mas_baratas.loc[0,:].ciudad,top_20_ciudades_mas_baratas.loc[0,:].valormetrocuadrado)
@@ -230,4 +251,15 @@ ciudad_mas_cara = (top_20_ciudades_mas_caras.loc[0,:].ciudad,top_20_ciudades_mas
 print("Ciudad mas cara {}".format(ciudad_mas_cara))
 amplitud = ciudad_mas_cara[1] - ciudad_mas_barata[1]
 print("Amplitud de precio {}".format(amplitud))
+
+
+# In[255]:
+
+
+ciudades_punta= pd.DataFrame([ciudad_mas_barata, ciudad_mas_cara])
+ciudades_punta.columns = ["ciudad","valormetrocuadrado"]
+ciudades_punta = ciudades_punta.reset_index(drop=True)
+ciudades_punta.reset_index(inplace=True)
+#ciudades_punta.plot.bar(x='ciudad', y='valormetrocuadrado', rot=0)
+bar_plot(ciudades_punta,x='ciudad', y='valormetrocuadrado')
 
