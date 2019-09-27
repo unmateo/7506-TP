@@ -13084,7 +13084,7 @@ div#notebook {
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mtl</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="c1"># from pywaffle import Waffle</span>
+<span class="kn">from</span> <span class="nn">pywaffle</span> <span class="k">import</span> <span class="n">Waffle</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">,</span><span class="n">family</span><span class="o">=</span><span class="s2">&quot;monospace&quot;</span><span class="p">)</span>
 </pre></div>
 
@@ -13185,35 +13185,52 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_waffleplot</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">boolean</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Espera una serie de valores normalizados [0,1].</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;La serie no puede tener más de 10 elementos&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">precision</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">}:</span> <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Los valores admitidos para precisión son {10,20}&quot;</span><span class="p">)</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Set3_r</span>
+    <span class="n">max_char</span> <span class="o">=</span> <span class="mi">25</span>
+    <span class="n">series</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">boolean</span><span class="p">:</span>
+        <span class="n">otros</span> <span class="o">=</span> <span class="mf">0.9999</span> <span class="o">-</span> <span class="n">series</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">otros</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">series</span><span class="p">[</span><span class="s2">&quot;Otros valores&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">otros</span>
+        <span class="n">series</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[:</span><span class="mi">25</span><span class="p">]</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">max_char</span><span class="p">)))</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">mtl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">rgb2hex</span><span class="p">(</span><span class="n">cmap</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">))]</span>
+    <span class="n">y_legend</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">35</span><span class="o">+</span><span class="mf">0.55</span>
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span>
+        <span class="n">FigureClass</span><span class="o">=</span><span class="n">Waffle</span><span class="p">,</span> 
+        <span class="n">rows</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
+        <span class="n">columns</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
+        <span class="n">values</span><span class="o">=</span><span class="n">series</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span>
+        <span class="n">title</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span><span class="n">title</span><span class="p">,</span> <span class="s2">&quot;horizontalalignment&quot;</span><span class="p">:</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;fontsize&quot;</span><span class="p">:</span><span class="mi">18</span><span class="p">,</span> <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;pad&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">},</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">%)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="o">*</span><span class="mi">100</span><span class="p">)[:</span><span class="mi">4</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">series</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">y_legend</span><span class="p">),</span> <span class="s2">&quot;fontsize&quot;</span><span class="p">:</span><span class="mi">14</span><span class="p">},</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="n">colors</span>
+    <span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">set_tight_layout</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plot</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># def get_waffleplot(series, title=&quot; &quot;, precision=10, boolean=False):</span>
-<span class="c1">#     &quot;&quot;&quot;Espera una serie de valores normalizados [0,1].&quot;&quot;&quot;</span>
-<span class="c1">#     if len(series)&gt;10: raise Exception(&quot;La serie no puede tener más de 10 elementos&quot;)</span>
-<span class="c1">#     if precision not in {10,20}: raise Exception(&quot;Los valores admitidos para precisión son {10,20}&quot;)</span>
-<span class="c1">#     cmap = plt.cm.Set3_r</span>
-<span class="c1">#     max_char = 15</span>
-<span class="c1">#     series.index = series.index.tolist()</span>
-<span class="c1">#     if not boolean:</span>
-<span class="c1">#         otros = 0.9999 - series.sum()</span>
-<span class="c1">#         if otros &gt; 0: series[&quot;Otros valores&quot;] = otros</span>
-<span class="c1">#         series.index = pd.Index(series.index.map(lambda x: x[:13].ljust(max_char)))</span>
-<span class="c1">#     colors = [mtl.colors.rgb2hex(cmap(i)) for i in range(len(series))]</span>
-<span class="c1">#     y_legend = (len(series)-1)/35+0.55</span>
-<span class="c1">#     plot = plt.figure(</span>
-<span class="c1">#         FigureClass=Waffle, </span>
-<span class="c1">#         rows=precision,</span>
-<span class="c1">#         columns=precision,</span>
-<span class="c1">#         values=series*100,</span>
-<span class="c1">#         figsize= (12,6),</span>
-<span class="c1">#         title={&quot;label&quot;:title, &quot;horizontalalignment&quot;:&quot;center&quot;, &quot;fontsize&quot;:18, &quot;position&quot;: (1,1), &quot;pad&quot;: 20},</span>
-<span class="c1">#         labels = [&quot;{} ({}%)&quot;.format(n, str(v*100)[:4]) for n, v in series.items()],</span>
-<span class="c1">#         legend = {&#39;bbox_to_anchor&#39;: (1.9, y_legend), &quot;fontsize&quot;:14},</span>
-<span class="c1">#         colors = colors</span>
-<span class="c1">#     )</span>
-<span class="c1">#     plot.set_tight_layout(False)</span>
-<span class="c1">#     return plot</span>
+<div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 
     </div>

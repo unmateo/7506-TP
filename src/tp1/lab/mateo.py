@@ -1,37 +1,54 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[23]:
 
 
 #importo las funciones para levantar los dataframes
 get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 #importo las funciones para graficar
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
+
+
+# In[ ]:
+
+
 df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
 df.columns
 
 
-# In[61]:
+# In[2]:
 
 
 grouped = df.groupby(["ano","mes"]).aggregate({"id": "count"}).unstack()
 grouped.columns = grouped.columns.droplevel()
 
 
-# In[62]:
+# In[25]:
+
+
+waffle_tipo = get_waffleplot(df.tipodepropiedad.value_counts(normalize=True).head(10), "Publicaciones por tipo de propiedad")
+
+
+# In[26]:
+
+
+waffle_tipo.savefig("../graficos/waffle_publicaciones_por_tipo.png")
+
+
+# In[3]:
 
 
 grouped
 
 
-# In[18]:
+# In[4]:
 
 
 get_heatmap(grouped, title="Cantidad de publicaciones por año/mes")
 
 
-# In[23]:
+# In[5]:
 
 
 get_barplot(df.tipodepropiedad.value_counts().head(5))

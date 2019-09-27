@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mtl
 import seaborn as sns
 import numpy as np
-# from pywaffle import Waffle
+from pywaffle import Waffle
 plt.rc("font",family="monospace")
 
 
@@ -75,33 +75,43 @@ def get_hist(serie, title="", xlabel="", ylabel="", bins=50, size=(12, 6)):
     return plot
 
 
+# In[1]:
+
+
+def get_waffleplot(series, title=" ", precision=10, boolean=False):
+    """
+        Espera una serie de valores normalizados [0,1].
+        
+    """
+    
+    if len(series)>10: raise Exception("La serie no puede tener más de 10 elementos")
+    if precision not in {10,20}: raise Exception("Los valores admitidos para precisión son {10,20}")
+    cmap = plt.cm.Set3_r
+    max_char = 25
+    series.index = series.index.tolist()
+    if not boolean:
+        otros = 0.9999 - series.sum()
+        if otros > 0: series["Otros valores"] = otros
+        series.index = pd.Index(series.index.map(lambda x: x[:25].ljust(max_char)))
+    colors = [mtl.colors.rgb2hex(cmap(i)) for i in range(len(series))]
+    y_legend = (len(series)-1)/35+0.55
+    plot = plt.figure(
+        FigureClass=Waffle, 
+        rows=precision,
+        columns=precision,
+        values=series*100,
+        figsize= (12,6),
+        title={"label":title, "horizontalalignment":"center", "fontsize":18, "position": (1,1), "pad": 20},
+        labels = ["{} ({}%)".format(n, str(v*100)[:4]) for n, v in series.items()],
+        legend = {'bbox_to_anchor': (2.2, y_legend), "fontsize":14},
+        colors = colors
+    )
+    plot.set_tight_layout(False)
+    return plot
+
+
 # In[ ]:
 
 
-# def get_waffleplot(series, title=" ", precision=10, boolean=False):
-#     """Espera una serie de valores normalizados [0,1]."""
-#     if len(series)>10: raise Exception("La serie no puede tener más de 10 elementos")
-#     if precision not in {10,20}: raise Exception("Los valores admitidos para precisión son {10,20}")
-#     cmap = plt.cm.Set3_r
-#     max_char = 15
-#     series.index = series.index.tolist()
-#     if not boolean:
-#         otros = 0.9999 - series.sum()
-#         if otros > 0: series["Otros valores"] = otros
-#         series.index = pd.Index(series.index.map(lambda x: x[:13].ljust(max_char)))
-#     colors = [mtl.colors.rgb2hex(cmap(i)) for i in range(len(series))]
-#     y_legend = (len(series)-1)/35+0.55
-#     plot = plt.figure(
-#         FigureClass=Waffle, 
-#         rows=precision,
-#         columns=precision,
-#         values=series*100,
-#         figsize= (12,6),
-#         title={"label":title, "horizontalalignment":"center", "fontsize":18, "position": (1,1), "pad": 20},
-#         labels = ["{} ({}%)".format(n, str(v*100)[:4]) for n, v in series.items()],
-#         legend = {'bbox_to_anchor': (1.9, y_legend), "fontsize":14},
-#         colors = colors
-#     )
-#     plot.set_tight_layout(False)
-#     return plot
+
 
