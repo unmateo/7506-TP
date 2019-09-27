@@ -16,10 +16,12 @@ plt.rc("font",family="monospace")
 # In[2]:
 
 
-def get_heatmap(data, title="Titulo", xlabel="Mes", ylabel="Año" ,show_values=False):
+def get_heatmap(data, title="Titulo", xlabel="Mes", ylabel="Año" , show_values=False, **kwargs):
     fig, ax = plt.subplots(figsize=(20,15))
-    heatmap = sns.heatmap(data, cmap="summer_r", square=True, cbar_kws={"shrink":0.3}, ax=ax, annot=show_values)
-    heatmap.set_title(title)
+    defaults = {"cmap": "YlGn", "square": True, "cbar_kws": {"shrink":0.3}, "ax": ax, "annot": show_values}
+    for k,v in defaults.items(): kwargs.setdefault(k, v)
+    heatmap = sns.heatmap(data, **kwargs)
+    heatmap.set_title(title, fontdict={"fontsize": 18})
     heatmap.set_ylabel(ylabel)
     heatmap.set_xlabel(xlabel)
     return heatmap
@@ -38,7 +40,7 @@ def get_barplot(series, h_align=False, title="", x_label="", y_label="", show_gr
         kind = "bar"
         y_lim = (0, max_value * 1.08)
         x_lim = None
-    plot = series.plot(kind=kind, figsize=size, fontsize=12, cmap="Greens_r", grid=show_grid,xlim=x_lim, ylim=y_lim )
+    plot = series.plot(kind=kind, figsize=size, fontsize=12, cmap="summer_r", grid=show_grid,xlim=x_lim, ylim=y_lim )
     plot.set_xlabel(x_label, fontsize=12)
     plot.set_ylabel(y_label, fontsize=12)
     plot.set_title(title, fontsize=16)

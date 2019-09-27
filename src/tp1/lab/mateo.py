@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[23]:
+# In[72]:
 
 
 #importo las funciones para levantar los dataframes
@@ -17,11 +17,10 @@ df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
 df.columns
 
 
-# In[2]:
+# In[89]:
 
 
-grouped = df.groupby(["ano","mes"]).aggregate({"id": "count"}).unstack()
-grouped.columns = grouped.columns.droplevel()
+df.columns
 
 
 # In[25]:
@@ -36,16 +35,42 @@ waffle_tipo = get_waffleplot(df.tipodepropiedad.value_counts(normalize=True).hea
 waffle_tipo.savefig("../graficos/waffle_publicaciones_por_tipo.png")
 
 
-# In[3]:
+# In[2]:
+
+
+grouped = df.groupby(["ano","mes"]).aggregate({"id": "count"}).unstack()
+grouped.columns = grouped.columns.droplevel()
+
+
+# In[46]:
 
 
 grouped
 
 
-# In[4]:
+# In[38]:
 
 
-get_heatmap(grouped, title="Cantidad de publicaciones por año/mes")
+df.groupby(["fecha"]).agg({"id": "count"}).tail()
+
+
+# In[86]:
+
+
+top_dias = df.groupby(["fecha"]).agg({"id": "count"}).sort_values(by="id",ascending=False).head(30)
+top_dias.columns = ["cantidad_publicaciones"]
+
+
+# In[73]:
+
+
+plot = get_heatmap(grouped, title="Cantidad de publicaciones por año/mes")
+
+
+# In[74]:
+
+
+plot.figure.savefig("../graficos/heatmap_publicaciones_por_mes.png")
 
 
 # In[5]:
