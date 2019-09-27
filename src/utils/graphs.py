@@ -28,7 +28,7 @@ def get_heatmap(data, title="Titulo", xlabel="Mes", ylabel="Año" ,show_values=F
 # In[ ]:
 
 
-def get_barplot(series, h_align=False, title="", x_label="", y_label="", show_grid=False):
+def get_barplot(series, h_align=False, title="", x_label="", y_label="", show_grid=False, size=(12,6)):
     max_value = series.max()
     if h_align:
         kind = "barh"
@@ -38,7 +38,7 @@ def get_barplot(series, h_align=False, title="", x_label="", y_label="", show_gr
         kind = "bar"
         y_lim = (0, max_value * 1.08)
         x_lim = None
-    plot = series.plot(kind=kind, figsize=(12,6), fontsize=12, cmap="Greens_r", grid=show_grid,xlim=x_lim, ylim=y_lim )
+    plot = series.plot(kind=kind, figsize=size, fontsize=12, cmap="Greens_r", grid=show_grid,xlim=x_lim, ylim=y_lim )
     plot.set_xlabel(x_label, fontsize=12)
     plot.set_ylabel(y_label, fontsize=12)
     plot.set_title(title, fontsize=16)
@@ -47,6 +47,31 @@ def get_barplot(series, h_align=False, title="", x_label="", y_label="", show_gr
         x_pos = value+margin if h_align else index
         y_pos = index if h_align else value+margin
         plot.text(x_pos, y_pos, str(value), horizontalalignment='center', verticalalignment='center')
+    return plot
+
+
+# In[4]:
+
+
+def get_boxplot(data_toshow, value_x, value_y, size, title="", label_x="", label_y=""):
+    plt.subplots(figsize=size)
+    plot = sns.boxplot(x=value_x, y=value_y, data=data_toshow,
+                     palette="hls")
+    plot.set_title(title, fontsize=18)
+    plot.set_xlabel(label_x, fontsize=18)
+    plot.set_ylabel(label_y, fontsize=18)
+    return plot
+
+
+# In[3]:
+
+
+def get_hist(serie, title="", xlabel="", ylabel="", bins=50, size=(12, 6)):
+    plt.subplots(figsize=size)
+    plot = serie.plot.hist(bins=bins, color='lightblue')
+    plot.set_title(title, fontsize=18)
+    plot.set_xlabel(xlabel,fontsize=18)
+    plot.set_ylabel(ylabel, fontsize=18)
     return plot
 
 
