@@ -152,7 +152,7 @@ queretaro = estados.loc[estados["NAME_1"]=="Querétaro"].plot(figsize=(18,9),col
 plot = geoDF.plot(ax=queretaro, cmap="Greens_r")
 
 
-# In[303]:
+# In[305]:
 
 
 def plot_mexico(df, geometry, columna, titulo):
@@ -165,7 +165,7 @@ def plot_mexico(df, geometry, columna, titulo):
     
 con_centroide = zonas_ok.loc[(~zonas_ok["centroid"].isna())]
 en_mexico = con_centroide.loc[con_centroide["centroid"].map(esta_en_mexico)]
-publicaciones_minimas = en_mexico["id_count"].mean() + 2* en_mexico["id_count"].std()
+publicaciones_minimas = en_mexico["id_count"].mean() + en_mexico["id_count"].std()
 en_mexico = en_mexico.loc[en_mexico["id_count"] > publicaciones_minimas]
 
 msg_minimo = " ({} zonas con más de {} publicaciones)".format(en_mexico.shape[0], int(publicaciones_minimas))
@@ -180,4 +180,18 @@ precio_metro_total_mean = plot_mexico(en_mexico, "centroid", "precio_metro_total
 
 cantidad_publicaciones_por_zona = sns.violinplot(en_mexico["id_count"], orient="v")
 en_mexico["id_count"].describe()
+
+
+# ### Correlaciones
+
+# In[319]:
+
+
+en_mexico[["id_count","precio_metro_total_mean","precio_metro_cubierto_mean","antiguedad_mean","lat_mean"]].corr()
+
+
+# In[308]:
+
+
+en_mexico.columns
 
