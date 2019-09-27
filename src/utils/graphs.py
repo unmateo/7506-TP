@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[3]:
 
 
 import pandas as pd
@@ -10,6 +10,7 @@ import matplotlib as mtl
 import seaborn as sns
 import numpy as np
 from pywaffle import Waffle
+from wordcloud import WordCloud
 plt.rc("font",family="monospace")
 
 
@@ -112,8 +113,15 @@ def get_waffleplot(series, title=" ", precision=10, boolean=False):
     return plot
 
 
-# In[ ]:
+# In[4]:
 
 
-
+def get_wordcloud(frecuencias):
+    """
+    
+    """
+    wc = WordCloud(max_font_size=60, max_words=100, background_color="white", width=800, height=400).generate_from_frequencies(frecuencias)
+    plot = plt.imshow(wc, interpolation='bilinear')
+    plt.axis("off")
+    return wc
 

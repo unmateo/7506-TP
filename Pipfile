@@ -15,6 +15,8 @@ numpy = "*"
 nltk = "*"
 unidecode = "*"
 pywaffle = "*"
+pandas-profiling = "*"
+wordcloud = "*"
 
 [requires]
 python_version = "3.7"

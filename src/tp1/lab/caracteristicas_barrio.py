@@ -29,7 +29,7 @@
 # - Distancia al centro de la zona (¿promedio de latitud-longitud u otra medida?)
 # 
 
-# In[281]:
+# In[ ]:
 
 
 import seaborn as sns
@@ -39,7 +39,7 @@ from shapely.geometry import Point, Polygon
 import numpy
 
 
-# In[302]:
+# In[ ]:
 
 
 # importo las funciones para levantar los dataframes
@@ -48,7 +48,7 @@ get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
 
 
-# In[283]:
+# In[ ]:
 
 
 # cargo el dataset
@@ -56,7 +56,7 @@ df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
 df.columns
 
 
-# In[284]:
+# In[ ]:
 
 
 def agg_polygon(point_series):
@@ -72,7 +72,7 @@ def agg_polygon(point_series):
 
 # ## Armo un Dataframe donde las filas son las zonas
 
-# In[285]:
+# In[ ]:
 
 
 calculations = ["mean","std","max","min"]
@@ -82,40 +82,40 @@ zonas.columns = [x+"_"+y for x,y in zonas.columns]
 zonas.rename({"gps_agg_polygon": "polygon"}, axis="columns", inplace=True)
 
 
-# In[286]:
+# In[ ]:
 
 
 zonas["lat_dif"] = zonas["lat_max"] - zonas["lat_min"]
 zonas["lng_dif"] = zonas["lng_max"] - zonas["lng_min"]
 
 
-# In[287]:
+# In[ ]:
 
 
 zonas.shape
 
 
-# In[288]:
+# In[ ]:
 
 
 zonas[["lat_dif","lng_dif"]].describe()
 
 
-# In[289]:
+# In[ ]:
 
 
 zonas_ok = zonas.loc[(zonas["lat_dif"] < zonas["lat_dif"].mean()) & (zonas["lng_dif"] < zonas["lng_dif"].mean())]
 zonas_ok.shape
 
 
-# In[290]:
+# In[ ]:
 
 
 pais = geopandas.read_file("./MEX_adm/MEX_adm0.shp")
 estados = geopandas.read_file("./MEX_adm/MEX_adm1.shp")
 
 
-# In[291]:
+# In[ ]:
 
 
 con_polygon = zonas_ok.loc[~zonas["polygon"].isna()]
@@ -125,26 +125,26 @@ estados_plot = estados.plot(ax=base, color="white")
 plot = geoDF.plot(ax=estados_plot, cmap="Greens_r")
 
 
-# In[292]:
+# In[ ]:
 
 
 zonas_ok.loc[:,"centroid"] = con_polygon["polygon"].map(lambda x: x.buffer(0).representative_point())
 
 
-# In[293]:
+# In[ ]:
 
 
 zonas_ok.sort_values(by="id_count", ascending=False).head(5)
 
 
-# In[294]:
+# In[ ]:
 
 
 publicaciones_84028 = df.loc[df["idzona"]==84028.0] 
 publicaciones_84028.head(1)
 
 
-# In[295]:
+# In[ ]:
 
 
 geoDF = geopandas.GeoDataFrame(publicaciones_84028, geometry="gps")
@@ -152,7 +152,7 @@ queretaro = estados.loc[estados["NAME_1"]=="Querétaro"].plot(figsize=(18,9),col
 plot = geoDF.plot(ax=queretaro, cmap="Greens_r")
 
 
-# In[305]:
+# In[ ]:
 
 
 def plot_mexico(df, geometry, columna, titulo):
@@ -175,7 +175,7 @@ precio_metro_cubierto_mean = plot_mexico(en_mexico, "centroid", "precio_metro_cu
 precio_metro_total_mean = plot_mexico(en_mexico, "centroid", "precio_metro_total_mean", "Promedio de precio por metro total en cada zona"+msg_minimo)
 
 
-# In[188]:
+# In[ ]:
 
 
 cantidad_publicaciones_por_zona = sns.violinplot(en_mexico["id_count"], orient="v")
@@ -184,13 +184,13 @@ en_mexico["id_count"].describe()
 
 # ### Correlaciones
 
-# In[319]:
+# In[ ]:
 
 
 en_mexico[["id_count","precio_metro_total_mean","precio_metro_cubierto_mean","antiguedad_mean","lat_mean"]].corr()
 
 
-# In[308]:
+# In[ ]:
 
 
 en_mexico.columns
