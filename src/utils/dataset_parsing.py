@@ -62,7 +62,7 @@ def agregar_columnas_precio(df):
     df["precio_metro_total"] = df["precio"] / df["metrostotales"]
 
 
-# In[1]:
+# In[2]:
 
 
 def agregar_columnas_gps(df):
@@ -70,7 +70,7 @@ def agregar_columnas_gps(df):
         Creo los puntos para todas las filas que tengan latitud/longitud.
         Anulo los puntos que estén fuera de México (pongo NaN).
     """
-    filter_mexico = lambda x: x if x is not numpy.NaN and esta_en_mexico(x) else numpy.NaN
+    filter_mexico = lambda x: x if x is not numpy.NaN and not x.is_empty and esta_en_mexico(x) else numpy.NaN
     df.loc[:,"gps"] = df.loc[~ df["lng"].isna()].apply(lambda x: Point(x["lng"],x["lat"]), axis=1)
     df.loc[:,"gps"] = df.loc[~ df["gps"].isna()]["gps"].map(filter_mexico)
 
@@ -83,6 +83,7 @@ def esta_en_mexico(point: Point) -> bool:
         Recibe un punto (lat,lng) y devuelve (muy aproximadamente) True si está dentro de Mexico, False si no.
         Hacerlo con ```df["coord"].map(lambda x: mexico_polygon.contains(x))``` sería muy lento.
     """
+    if point.is_empty: return False
     MEX_MIN_LNG, MEX_MAX_LNG = (-120, -85)
     MEX_MIN_LAT, MEX_MAX_LAT = (14,33)
     return (MEX_MIN_LNG < point.x < MEX_MAX_LNG) and (MEX_MIN_LAT < point.y < MEX_MAX_LAT)
