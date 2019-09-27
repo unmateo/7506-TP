@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[9]:
+# In[2]:
 
 
 import pandas as pd
+from shapely.geometry import Point
 
 DATASET_RELATIVE_PATH = "enunciado/data/train.csv"
 
@@ -41,4 +42,17 @@ def levantar_datos(csv_file: str = "../"+DATASET_RELATIVE_PATH, optimizar: bool 
     df["ano"] = df["fecha"].dt.year
     df["dia"] = df["fecha"].dt.day
     return df
+
+
+# In[3]:
+
+
+def esta_en_mexico(point: Point) -> bool:
+    """ 
+        Recibe un punto (lat,lng) y devuelve (muy aproximadamente) True si está dentro de Mexico, False si no.
+        Hacerlo con ```df["coord"].map(lambda x: mexico_polygon.contains(x))``` sería muy lento.
+    """
+    MEX_MIN_LNG, MEX_MAX_LNG = (-120, -85)
+    MEX_MIN_LAT, MEX_MAX_LAT = (14,33)
+    return (MEX_MIN_LNG < point.x < MEX_MAX_LNG) and (MEX_MIN_LAT < point.y < MEX_MAX_LAT)
 
