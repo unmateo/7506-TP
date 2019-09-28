@@ -118,9 +118,16 @@ def get_waffleplot(series, title=" ", precision=10, boolean=False):
 
 def get_wordcloud(frecuencias):
     """
-    
+        Recibe un Counter (o diccionario de frecuencias) y devuelve un wordcloud de esos términos.
     """
-    wc = WordCloud(max_font_size=60, max_words=100, background_color="white", width=800, height=400).generate_from_frequencies(frecuencias)
+    cantidad = len(frecuencias)
+    if 0 < cantidad < 51:
+        width, height = 400, 200
+    elif 50 < cantidad < 101:
+        width, height = 600, 300
+    else:
+        width, height = 800, 400
+    wc = WordCloud(max_font_size=60, max_words=80, background_color="white", width=width, height=height).generate_from_frequencies(frecuencias)
     plot = plt.imshow(wc, interpolation='bilinear')
     plt.axis("off")
     return wc

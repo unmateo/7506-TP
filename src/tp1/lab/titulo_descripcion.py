@@ -23,13 +23,18 @@
 # - la correlacion entre longitud de descripcion y precio es bastante baja (0.1)
 # - la correlacion entre la cantidad de palabras positivas en la descripcion y el precio es bastante alta (0.3) [tener en cuenta que metrostotales tiene correlacion 0.5]
 
-# In[1]:
+# In[40]:
 
 
 #importo las funciones para levantar los dataframes
 get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 #importo las funciones para graficar
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
+
+
+# In[ ]:
+
+
 df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
 df.columns
 pd.set_option("display.max_colwidth", -1)
@@ -137,14 +142,14 @@ descripcion_palabras = get_word_counter(df["descripcion_limpia"])
 print(len(titulo_palabras),len(descripcion_palabras))
 
 
-# In[10]:
+# In[41]:
 
 
 wc = get_wordcloud(titulo_palabras)
 wc.to_file("../graficos/wordcloud_titulo.png")
 
 
-# In[11]:
+# In[42]:
 
 
 wc = get_wordcloud(descripcion_palabras)
@@ -186,14 +191,14 @@ df["cantidad_palabras_negativas_descripcion"] = df["palabras_negativas_descripci
 df[["cantidad_palabras_negativas_descripcion","precio"]].corr()
 
 
-# In[25]:
+# In[43]:
 
 
 counter_positivas = get_word_counter(df["palabras_positivas_descripcion"])
 wc_positivas = get_wordcloud(counter_positivas)
 
 
-# In[24]:
+# In[44]:
 
 
 counter_negativas = get_word_counter(df["palabras_negativas_descripcion"])
