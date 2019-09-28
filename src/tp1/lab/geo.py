@@ -142,3 +142,97 @@ def choropleth_estados(estados, serie, nombre, titulo=""):
 
 plot = choropleth_estados(estados, publicaciones_por_estado["estado"], "publicaciones", "Cantidad de publicaciones por estado")
 
+
+# # Presento un análisis del valor del metro cuadrado en relacion a la ciudad
+# ### Primero realizo una limpieza de los datos. Selecciono las ciudades con mayor cantidad de publicaciones
+
+# In[35]:
+
+
+mas_publicadas = df.groupby("ciudad").agg({"id":"count"})
+mas_publicadas.columns = ["total"]
+mas_publicadas=mas_publicadas.sort_values("total", ascending=False).head(100)
+mas_publicadas.reset_index(inplace=True)
+print(mas_publicadas)
+
+
+# In[36]:
+
+
+lista_de_ciudades = mas_publicadas.ciudad
+lista_de_ciudades = lista_de_ciudades.to_list()
+lista_de_ciudades
+df=df[df["ciudad"].isin(lista_de_ciudades)]
+df
+
+
+# In[37]:
+
+
+#Realizo un calculo del promedio del valor del metro cuadrado por 
+por_ciudad=df.groupby("ciudad").agg({"metrostotales":"sum"})
+por_ciudad=por_ciudad.loc[por_ciudad.metrostotales != 0.0]
+por_ciudad["precios"] = df.groupby("ciudad").agg({"precio":"sum"})
+por_ciudad["valormetrocuadrado"] = por_ciudad["precios"] / por_ciudad["metrostotales"]
+por_ciudad.reset_index(inplace=True)
+
+
+# ### Limpio el dataset de valores nulos en metrostotales y/o precios
+
+# In[38]:
+
+
+por_ciudad=por_ciudad.loc[(por_ciudad.metrostotales != 0.0)]
+por_ciudad=por_ciudad.loc[(por_ciudad.precios != 0.0)]
+por_ciudad
+
+
+# # Busco las ciudades extremo, la más cara y la más barata
+
+# In[39]:
+
+
+por_ciudad = por_ciudad.sort_values("valormetrocuadrado")
+por_ciudad.reset_index(drop=True,inplace=True)
+por_ciudad
+
+
+# ### Ahora armo un dataframe con las 20 ciudades más caras y las 20 más baratas.
+
+# In[40]:
+
+
+top_20_ciudades_mas_caras = por_ciudad.tail(20)
+top_20_ciudades_mas_caras.reset_index(drop=True, inplace=True)
+top_20_ciudades_mas_caras
+
+
+# In[41]:
+
+
+top_20_ciudades_mas_baratas = por_ciudad.head(20)
+top_20_ciudades_mas_baratas.reset_index(inplace=True)
+top_20_ciudades_mas_baratas
+
+
+# In[42]:
+
+
+ciudad_mas_barata = (top_20_ciudades_mas_baratas.loc[0,:].ciudad,top_20_ciudades_mas_baratas.loc[0,:].valormetrocuadrado)
+print("Ciudad mas barata {}".format(ciudad_mas_barata))
+ciudad_mas_cara = (top_20_ciudades_mas_caras.loc[0,:].ciudad,top_20_ciudades_mas_caras.loc[0,:].valormetrocuadrado)
+print("Ciudad mas cara {}".format(ciudad_mas_cara))
+amplitud = ciudad_mas_cara[1] - ciudad_mas_barata[1]
+print("Amplitud de precio {}".format(amplitud))
+
+
+# In[43]:
+
+
+ciudades_punta= pd.DataFrame([ciudad_mas_barata, ciudad_mas_cara])
+ciudades_punta.columns = ["ciudad","valormetrocuadrado"]
+ciudades_punta = ciudades_punta.reset_index(drop=True)
+ciudades_punta.reset_index(inplace=True)
+#ciudades_punta.plot.bar(x='ciudad', y='valormetrocuadrado', rot=0)
+bar_plot(ciudades_punta,x='ciudad', y='valormetrocuadrado') 
+
