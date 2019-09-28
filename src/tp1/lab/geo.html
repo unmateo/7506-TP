@@ -13383,6 +13383,1227 @@ Name: en_mexico, dtype: int64</pre>
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Presento-un-an&#225;lisis-del-valor-del-metro-cuadrado-en-relacion-a-la-ciudad">Presento un an&#225;lisis del valor del metro cuadrado en relacion a la ciudad<a class="anchor-link" href="#Presento-un-an&#225;lisis-del-valor-del-metro-cuadrado-en-relacion-a-la-ciudad">&#182;</a></h1><h3 id="Primero-realizo-una-limpieza-de-los-datos.-Selecciono-las-ciudades-con-mayor-cantidad-de-publicaciones">Primero realizo una limpieza de los datos. Selecciono las ciudades con mayor cantidad de publicaciones<a class="anchor-link" href="#Primero-realizo-una-limpieza-de-los-datos.-Selecciono-las-ciudades-con-mayor-cantidad-de-publicaciones">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span>  <span class="n">mas_publicadas</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;ciudad&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span><span class="s2">&quot;count&quot;</span><span class="p">})</span>
+  <span class="n">mas_publicadas</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span>
+  <span class="n">mas_publicadas</span><span class="o">=</span><span class="n">mas_publicadas</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;total&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+  <span class="n">mas_publicadas</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">mas_publicadas</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>             ciudad  total
+0         Querétaro  12646
+1     Benito Juárez  11014
+2           Zapopan  10360
+3   San Luis Potosí   7925
+4            Mérida   7162
+..              ...    ...
+95         Tlaxcala    369
+96           Colima    351
+97          Cuautla    340
+98   Valle de Bravo    329
+99       Manzanillo    307
+
+[100 rows x 2 columns]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lista_de_ciudades</span> <span class="o">=</span> <span class="n">mas_publicadas</span><span class="o">.</span><span class="n">ciudad</span>
+<span class="n">lista_de_ciudades</span> <span class="o">=</span> <span class="n">lista_de_ciudades</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+<span class="n">lista_de_ciudades</span>
+<span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ciudad&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">lista_de_ciudades</span><span class="p">)]</span>
+<span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[36]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>titulo</th>
+      <th>descripcion</th>
+      <th>tipodepropiedad</th>
+      <th>direccion</th>
+      <th>ciudad</th>
+      <th>provincia</th>
+      <th>antiguedad</th>
+      <th>habitaciones</th>
+      <th>garages</th>
+      <th>...</th>
+      <th>piscina</th>
+      <th>escuelascercanas</th>
+      <th>centroscomercialescercanos</th>
+      <th>precio</th>
+      <th>mes</th>
+      <th>ano</th>
+      <th>dia</th>
+      <th>precio_metro_cubierto</th>
+      <th>precio_metro_total</th>
+      <th>gps</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>254099</td>
+      <td>depto. tipo a-402</td>
+      <td>depto. interior de 80.15m2, consta de sala com...</td>
+      <td>Apartamento</td>
+      <td>Avenida Division del Norte 2005</td>
+      <td>Benito Juárez</td>
+      <td>Distrito Federal</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>2273000.0</td>
+      <td>8</td>
+      <td>2015</td>
+      <td>23</td>
+      <td>28412.500000</td>
+      <td>28412.500000</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>53461</td>
+      <td>condominio horizontal en venta</td>
+      <td>&lt;p&gt;entre sonora y guerrero, atr&amp;aacute;s del h...</td>
+      <td>Casa en condominio</td>
+      <td>AV. MEXICO</td>
+      <td>La Magdalena Contreras</td>
+      <td>Distrito Federal</td>
+      <td>10.0</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>3600000.0</td>
+      <td>6</td>
+      <td>2013</td>
+      <td>28</td>
+      <td>13432.835821</td>
+      <td>20000.000000</td>
+      <td>POINT (-99.2276548 19.3102045)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>247984</td>
+      <td>casa en venta urbi 3 recamaras tonala</td>
+      <td>descripcion \nla mejor ubicacion residencial e...</td>
+      <td>Casa</td>
+      <td>Urbi Tonala</td>
+      <td>Tonalá</td>
+      <td>Jalisco</td>
+      <td>5.0</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>1200000.0</td>
+      <td>10</td>
+      <td>2015</td>
+      <td>17</td>
+      <td>8333.333333</td>
+      <td>7228.915663</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>185997</td>
+      <td>paseos del sol</td>
+      <td>bonito departamento en excelentes condiciones ...</td>
+      <td>Apartamento</td>
+      <td>PASEOS DEL SOL</td>
+      <td>Zapopan</td>
+      <td>Jalisco</td>
+      <td>10.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>1150000.0</td>
+      <td>6</td>
+      <td>2016</td>
+      <td>7</td>
+      <td>12105.263158</td>
+      <td>12105.263158</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>126147</td>
+      <td>departamento en venta taxqueña</td>
+      <td>amplio departamento, estancia de sala y comedo...</td>
+      <td>Apartamento</td>
+      <td>Condominio Tlalpan 2B</td>
+      <td>Coyoacán</td>
+      <td>Distrito Federal</td>
+      <td>5.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>1100000.0</td>
+      <td>3</td>
+      <td>2014</td>
+      <td>18</td>
+      <td>14666.666667</td>
+      <td>12222.222222</td>
+      <td>POINT (-99.14847480000005 19.300612)</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>239994</td>
+      <td>110268</td>
+      <td>hermosa casa en villa de los belenes</td>
+      <td>&lt;p&gt;moderna casa 3 pisos, muro llor&amp;oacute;n , ...</td>
+      <td>Casa</td>
+      <td>MANUEL AMAYA,ENTRE SEBASTIAN ALLENDE Y AMADO A...</td>
+      <td>Zapopan</td>
+      <td>Jalisco</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>1350000.0</td>
+      <td>7</td>
+      <td>2013</td>
+      <td>31</td>
+      <td>8437.500000</td>
+      <td>15000.000000</td>
+      <td>POINT (-103.4500492 20.6044844)</td>
+    </tr>
+    <tr>
+      <td>239996</td>
+      <td>259178</td>
+      <td>casa en condominio a 10 min. del centro de toluca</td>
+      <td>casa con un jardin amplio, un cuarto de servic...</td>
+      <td>Casa</td>
+      <td>Filiberto Navas 325</td>
+      <td>Toluca</td>
+      <td>Edo. de México</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>1940000.0</td>
+      <td>7</td>
+      <td>2014</td>
+      <td>10</td>
+      <td>9700.000000</td>
+      <td>7760.000000</td>
+      <td>POINT (-99.69291563596799 19.29466452567907)</td>
+    </tr>
+    <tr>
+      <td>239997</td>
+      <td>131932</td>
+      <td>nicolas san juan</td>
+      <td>departamento con excelente ubicación, muy cerc...</td>
+      <td>Apartamento</td>
+      <td>Nicolas San Juan</td>
+      <td>Benito Juárez</td>
+      <td>Distrito Federal</td>
+      <td>20.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>3400000.0</td>
+      <td>3</td>
+      <td>2015</td>
+      <td>3</td>
+      <td>24637.681159</td>
+      <td>24637.681159</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>239998</td>
+      <td>146867</td>
+      <td>casa sola. javier rojo gomez.</td>
+      <td>casa sola, dividida en cuatro departamentos de...</td>
+      <td>Casa</td>
+      <td>Javier Rojo Gomez 120</td>
+      <td>Iztapalapa</td>
+      <td>Distrito Federal</td>
+      <td>20.0</td>
+      <td>4.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>2890000.0</td>
+      <td>12</td>
+      <td>2014</td>
+      <td>26</td>
+      <td>12297.872340</td>
+      <td>21094.890511</td>
+      <td>POINT (-99.0822457 19.3666511)</td>
+    </tr>
+    <tr>
+      <td>239999</td>
+      <td>121958</td>
+      <td>departamento en bosques de las lomas  / av. st...</td>
+      <td>id:19816, muy bonito e iluminado departamento,...</td>
+      <td>Apartamento</td>
+      <td>AVE. STIM</td>
+      <td>Cuajimalpa de Morelos</td>
+      <td>Distrito Federal</td>
+      <td>1.0</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>3650000.0</td>
+      <td>6</td>
+      <td>2015</td>
+      <td>19</td>
+      <td>24496.644295</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>224414 rows × 29 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Realizo un calculo del promedio del valor del metro cuadrado por </span>
+<span class="n">por_ciudad</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;ciudad&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s2">&quot;metrostotales&quot;</span><span class="p">:</span><span class="s2">&quot;sum&quot;</span><span class="p">})</span>
+<span class="n">por_ciudad</span><span class="o">=</span><span class="n">por_ciudad</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">por_ciudad</span><span class="o">.</span><span class="n">metrostotales</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="n">por_ciudad</span><span class="p">[</span><span class="s2">&quot;precios&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;ciudad&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s2">&quot;precio&quot;</span><span class="p">:</span><span class="s2">&quot;sum&quot;</span><span class="p">})</span>
+<span class="n">por_ciudad</span><span class="p">[</span><span class="s2">&quot;valormetrocuadrado&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">por_ciudad</span><span class="p">[</span><span class="s2">&quot;precios&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">por_ciudad</span><span class="p">[</span><span class="s2">&quot;metrostotales&quot;</span><span class="p">]</span>
+<span class="n">por_ciudad</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Limpio-el-dataset-de-valores-nulos-en-metrostotales-y/o-precios">Limpio el dataset de valores nulos en metrostotales y/o precios<a class="anchor-link" href="#Limpio-el-dataset-de-valores-nulos-en-metrostotales-y/o-precios">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">por_ciudad</span><span class="o">=</span><span class="n">por_ciudad</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">por_ciudad</span><span class="o">.</span><span class="n">metrostotales</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">)]</span>
+<span class="n">por_ciudad</span><span class="o">=</span><span class="n">por_ciudad</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">por_ciudad</span><span class="o">.</span><span class="n">precios</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">)]</span>
+<span class="n">por_ciudad</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[38]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ciudad</th>
+      <th>metrostotales</th>
+      <th>precios</th>
+      <th>valormetrocuadrado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>Acapulco de Juárez</td>
+      <td>215112.0</td>
+      <td>6.345586e+09</td>
+      <td>29498.984273</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Aguascalientes</td>
+      <td>234577.0</td>
+      <td>2.244675e+09</td>
+      <td>9569.032480</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Alvarado</td>
+      <td>175231.0</td>
+      <td>2.334752e+09</td>
+      <td>13323.849690</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Alvaro Obregón</td>
+      <td>787577.0</td>
+      <td>2.964769e+10</td>
+      <td>37644.178642</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Apodaca</td>
+      <td>136968.0</td>
+      <td>1.069685e+09</td>
+      <td>7809.745656</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>95</td>
+      <td>Villahermosa</td>
+      <td>58798.0</td>
+      <td>1.025294e+09</td>
+      <td>17437.559220</td>
+    </tr>
+    <tr>
+      <td>96</td>
+      <td>Xalapa</td>
+      <td>196232.0</td>
+      <td>2.456251e+09</td>
+      <td>12517.077363</td>
+    </tr>
+    <tr>
+      <td>97</td>
+      <td>Xochimilco</td>
+      <td>198368.0</td>
+      <td>3.710373e+09</td>
+      <td>18704.493094</td>
+    </tr>
+    <tr>
+      <td>98</td>
+      <td>Yautepec</td>
+      <td>79426.0</td>
+      <td>1.034098e+09</td>
+      <td>13019.641050</td>
+    </tr>
+    <tr>
+      <td>99</td>
+      <td>Zapopan</td>
+      <td>1573316.0</td>
+      <td>2.848664e+10</td>
+      <td>18106.112710</td>
+    </tr>
+  </tbody>
+</table>
+<p>100 rows × 4 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Busco-las-ciudades-extremo,-la-m&#225;s-cara-y-la-m&#225;s-barata">Busco las ciudades extremo, la m&#225;s cara y la m&#225;s barata<a class="anchor-link" href="#Busco-las-ciudades-extremo,-la-m&#225;s-cara-y-la-m&#225;s-barata">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">por_ciudad</span> <span class="o">=</span> <span class="n">por_ciudad</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;valormetrocuadrado&quot;</span><span class="p">)</span>
+<span class="n">por_ciudad</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">por_ciudad</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[39]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ciudad</th>
+      <th>metrostotales</th>
+      <th>precios</th>
+      <th>valormetrocuadrado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>Juárez</td>
+      <td>134633.0</td>
+      <td>8.444726e+08</td>
+      <td>6272.404113</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Tijuana</td>
+      <td>325388.0</td>
+      <td>2.083139e+09</td>
+      <td>6402.014048</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Huehuetoca</td>
+      <td>27844.0</td>
+      <td>1.935853e+08</td>
+      <td>6952.495295</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Soledad de Graciano Sánchez</td>
+      <td>40108.0</td>
+      <td>2.824004e+08</td>
+      <td>7040.999626</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Durango</td>
+      <td>352948.0</td>
+      <td>2.502042e+09</td>
+      <td>7088.982139</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>95</td>
+      <td>Cuauhtémoc</td>
+      <td>526021.0</td>
+      <td>2.241594e+10</td>
+      <td>42614.154081</td>
+    </tr>
+    <tr>
+      <td>96</td>
+      <td>Cuajimalpa de Morelos</td>
+      <td>326328.0</td>
+      <td>1.426106e+10</td>
+      <td>43701.611967</td>
+    </tr>
+    <tr>
+      <td>97</td>
+      <td>San Pedro Garza García</td>
+      <td>211194.0</td>
+      <td>1.001757e+10</td>
+      <td>47433.020095</td>
+    </tr>
+    <tr>
+      <td>98</td>
+      <td>Valle de Bravo</td>
+      <td>27467.0</td>
+      <td>1.503251e+09</td>
+      <td>54729.340445</td>
+    </tr>
+    <tr>
+      <td>99</td>
+      <td>Miguel Hidalgo</td>
+      <td>470113.0</td>
+      <td>2.605737e+10</td>
+      <td>55427.878217</td>
+    </tr>
+  </tbody>
+</table>
+<p>100 rows × 4 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Ahora-armo-un-dataframe-con-las-20-ciudades-m&#225;s-caras-y-las-20-m&#225;s-baratas.">Ahora armo un dataframe con las 20 ciudades m&#225;s caras y las 20 m&#225;s baratas.<a class="anchor-link" href="#Ahora-armo-un-dataframe-con-las-20-ciudades-m&#225;s-caras-y-las-20-m&#225;s-baratas.">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">top_20_ciudades_mas_caras</span> <span class="o">=</span> <span class="n">por_ciudad</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">top_20_ciudades_mas_caras</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">top_20_ciudades_mas_caras</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[40]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ciudad</th>
+      <th>metrostotales</th>
+      <th>precios</th>
+      <th>valormetrocuadrado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>Venustiano Carranza</td>
+      <td>146872.0</td>
+      <td>2.833401e+09</td>
+      <td>19291.636234</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Gustavo A. Madero</td>
+      <td>401043.0</td>
+      <td>8.145237e+09</td>
+      <td>20310.135043</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Lerma</td>
+      <td>52831.0</td>
+      <td>1.075411e+09</td>
+      <td>20355.681797</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Iztacalco</td>
+      <td>126238.0</td>
+      <td>2.604569e+09</td>
+      <td>20632.212171</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Azcapotzalco</td>
+      <td>183353.0</td>
+      <td>3.877933e+09</td>
+      <td>21150.092979</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Naucalpan de Juárez</td>
+      <td>1251166.0</td>
+      <td>2.662000e+10</td>
+      <td>21276.155348</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Santiago</td>
+      <td>62329.0</td>
+      <td>1.404003e+09</td>
+      <td>22525.680935</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Atizapán de Zaragoza</td>
+      <td>827829.0</td>
+      <td>1.875306e+10</td>
+      <td>22653.303395</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Tlalpan</td>
+      <td>758911.0</td>
+      <td>2.042320e+10</td>
+      <td>26911.197085</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>Coyoacán</td>
+      <td>661173.0</td>
+      <td>1.803330e+10</td>
+      <td>27274.706382</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>La Magdalena Contreras</td>
+      <td>310515.0</td>
+      <td>8.774180e+09</td>
+      <td>28256.862992</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>Acapulco de Juárez</td>
+      <td>215112.0</td>
+      <td>6.345586e+09</td>
+      <td>29498.984273</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>Huixquilucan</td>
+      <td>923196.0</td>
+      <td>3.130818e+10</td>
+      <td>33912.822754</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>Alvaro Obregón</td>
+      <td>787577.0</td>
+      <td>2.964769e+10</td>
+      <td>37644.178642</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>Benito Juárez</td>
+      <td>921791.0</td>
+      <td>3.727864e+10</td>
+      <td>40441.531396</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>Cuauhtémoc</td>
+      <td>526021.0</td>
+      <td>2.241594e+10</td>
+      <td>42614.154081</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>Cuajimalpa de Morelos</td>
+      <td>326328.0</td>
+      <td>1.426106e+10</td>
+      <td>43701.611967</td>
+    </tr>
+    <tr>
+      <td>17</td>
+      <td>San Pedro Garza García</td>
+      <td>211194.0</td>
+      <td>1.001757e+10</td>
+      <td>47433.020095</td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td>Valle de Bravo</td>
+      <td>27467.0</td>
+      <td>1.503251e+09</td>
+      <td>54729.340445</td>
+    </tr>
+    <tr>
+      <td>19</td>
+      <td>Miguel Hidalgo</td>
+      <td>470113.0</td>
+      <td>2.605737e+10</td>
+      <td>55427.878217</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">top_20_ciudades_mas_baratas</span> <span class="o">=</span> <span class="n">por_ciudad</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">top_20_ciudades_mas_baratas</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">top_20_ciudades_mas_baratas</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[41]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>index</th>
+      <th>ciudad</th>
+      <th>metrostotales</th>
+      <th>precios</th>
+      <th>valormetrocuadrado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>Juárez</td>
+      <td>134633.0</td>
+      <td>8.444726e+08</td>
+      <td>6272.404113</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>Tijuana</td>
+      <td>325388.0</td>
+      <td>2.083139e+09</td>
+      <td>6402.014048</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2</td>
+      <td>Huehuetoca</td>
+      <td>27844.0</td>
+      <td>1.935853e+08</td>
+      <td>6952.495295</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>3</td>
+      <td>Soledad de Graciano Sánchez</td>
+      <td>40108.0</td>
+      <td>2.824004e+08</td>
+      <td>7040.999626</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>4</td>
+      <td>Durango</td>
+      <td>352948.0</td>
+      <td>2.502042e+09</td>
+      <td>7088.982139</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>5</td>
+      <td>Torreón</td>
+      <td>280591.0</td>
+      <td>2.056099e+09</td>
+      <td>7327.745573</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>6</td>
+      <td>Los Cabos</td>
+      <td>104581.0</td>
+      <td>7.910483e+08</td>
+      <td>7563.976755</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>7</td>
+      <td>La Paz</td>
+      <td>179201.0</td>
+      <td>1.361818e+09</td>
+      <td>7599.389574</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>8</td>
+      <td>Apodaca</td>
+      <td>136968.0</td>
+      <td>1.069685e+09</td>
+      <td>7809.745656</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>9</td>
+      <td>Mineral de la Reforma</td>
+      <td>53248.0</td>
+      <td>4.282192e+08</td>
+      <td>8041.977145</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>10</td>
+      <td>Tepic</td>
+      <td>81717.0</td>
+      <td>6.712568e+08</td>
+      <td>8214.408813</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>11</td>
+      <td>Colima</td>
+      <td>64879.0</td>
+      <td>5.611559e+08</td>
+      <td>8649.268192</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>12</td>
+      <td>Hermosillo</td>
+      <td>460970.0</td>
+      <td>3.987496e+09</td>
+      <td>8650.229477</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>13</td>
+      <td>Tlaxcala</td>
+      <td>46150.0</td>
+      <td>4.075678e+08</td>
+      <td>8831.372026</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>14</td>
+      <td>Saltillo</td>
+      <td>340418.0</td>
+      <td>3.025135e+09</td>
+      <td>8886.531840</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>15</td>
+      <td>Tonalá</td>
+      <td>78254.0</td>
+      <td>7.034001e+08</td>
+      <td>8988.679147</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>16</td>
+      <td>Gral. Escobedo</td>
+      <td>66117.0</td>
+      <td>6.126230e+08</td>
+      <td>9265.740309</td>
+    </tr>
+    <tr>
+      <td>17</td>
+      <td>17</td>
+      <td>Aguascalientes</td>
+      <td>234577.0</td>
+      <td>2.244675e+09</td>
+      <td>9569.032480</td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td>18</td>
+      <td>Tultitlán</td>
+      <td>97873.0</td>
+      <td>9.412657e+08</td>
+      <td>9617.214737</td>
+    </tr>
+    <tr>
+      <td>19</td>
+      <td>19</td>
+      <td>Ixtapaluca</td>
+      <td>43897.0</td>
+      <td>4.339234e+08</td>
+      <td>9885.034945</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ciudad_mas_barata</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_20_ciudades_mas_baratas</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">ciudad</span><span class="p">,</span><span class="n">top_20_ciudades_mas_baratas</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">valormetrocuadrado</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ciudad mas barata </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ciudad_mas_barata</span><span class="p">))</span>
+<span class="n">ciudad_mas_cara</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_20_ciudades_mas_caras</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">ciudad</span><span class="p">,</span><span class="n">top_20_ciudades_mas_caras</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">valormetrocuadrado</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ciudad mas cara </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ciudad_mas_cara</span><span class="p">))</span>
+<span class="n">amplitud</span> <span class="o">=</span> <span class="n">ciudad_mas_cara</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ciudad_mas_barata</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Amplitud de precio </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amplitud</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Ciudad mas barata (&#39;Juárez&#39;, 6272.404113404589)
+Ciudad mas cara (&#39;Venustiano Carranza&#39;, 19291.63623427202)
+Amplitud de precio 13019.232120867431
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ciudades_punta</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">ciudad_mas_barata</span><span class="p">,</span> <span class="n">ciudad_mas_cara</span><span class="p">])</span>
+<span class="n">ciudades_punta</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ciudad&quot;</span><span class="p">,</span><span class="s2">&quot;valormetrocuadrado&quot;</span><span class="p">]</span>
+<span class="n">ciudades_punta</span> <span class="o">=</span> <span class="n">ciudades_punta</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ciudades_punta</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1">#ciudades_punta.plot.bar(x=&#39;ciudad&#39;, y=&#39;valormetrocuadrado&#39;, rot=0)</span>
+<span class="n">bar_plot</span><span class="p">(</span><span class="n">ciudades_punta</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;ciudad&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;valormetrocuadrado&#39;</span><span class="p">)</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-43-263f20c5471b&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> ciudades_punta<span class="ansi-blue-fg">.</span>reset_index<span class="ansi-blue-fg">(</span>inplace<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-red-fg">#ciudades_punta.plot.bar(x=&#39;ciudad&#39;, y=&#39;valormetrocuadrado&#39;, rot=0)</span>
+<span class="ansi-green-fg">----&gt; 6</span><span class="ansi-red-fg"> </span>bar_plot<span class="ansi-blue-fg">(</span>ciudades_punta<span class="ansi-blue-fg">,</span>x<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;ciudad&#39;</span><span class="ansi-blue-fg">,</span> y<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;valormetrocuadrado&#39;</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;bar_plot&#39; is not defined</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
     </div>
   </div>
 </body>
