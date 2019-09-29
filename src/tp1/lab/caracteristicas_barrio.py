@@ -48,6 +48,14 @@ get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
 
 
+# In[126]:
+
+
+pd.set_option("display.max_colwidth", -1)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
+
+
 # In[22]:
 
 
@@ -203,7 +211,13 @@ queretaro = estados.loc[estados["NAME_1"]=="Querétaro"].plot(figsize=(18,9),col
 plot = geoDF.plot(ax=queretaro, cmap="Greens_r")
 
 
-# In[16]:
+# In[130]:
+
+
+df.loc[(df.idzona.isna()) & (~df.lat.isna())].shape
+
+
+# In[132]:
 
 
 def plot_mexico(df, geometry, columna, titulo):
@@ -211,7 +225,9 @@ def plot_mexico(df, geometry, columna, titulo):
     base = pais.plot(figsize=(24,12))
     estados_plot = estados.plot(ax=base, color="white")
     plot = geoDF.plot(ax=estados_plot, cmap="viridis_r",legend=True, column=columna)
-    plot.set_title(titulo)
+    plot.set_title(titulo, fontdict={"fontsize": 18})
+    plot.set_xlabel("Longitud", fontdict={"fontsize": 18})
+    plot.set_ylabel("Latitud", fontdict={"fontsize": 18})
     return plot
     
 con_centroide = zonas_ok.loc[(~zonas_ok["centroid"].isna())]
@@ -222,8 +238,9 @@ en_mexico = en_mexico.loc[en_mexico["id_count"] > publicaciones_minimas]
 msg_minimo = " ({} zonas con más de {} publicaciones)".format(en_mexico.shape[0], int(publicaciones_minimas))
 
 id_count = plot_mexico(en_mexico, "centroid", "id_count", "Cantidad de publicaciones por cada zona"+msg_minimo)
-precio_metro_cubierto_mean = plot_mexico(en_mexico, "centroid", "precio_metro_cubierto_mean", "Promedio de precio por metro cubierto en cada zona"+msg_minimo)
-precio_metro_total_mean = plot_mexico(en_mexico, "centroid", "precio_metro_total_mean", "Promedio de precio por metro total en cada zona"+msg_minimo)
+id_count.figure.savefig("../graficos/map_zonas_mas_publicaciones.png")
+# precio_metro_cubierto_mean = plot_mexico(en_mexico, "centroid", "precio_metro_cubierto_mean", "Promedio de precio por metro cubierto en cada zona"+msg_minimo)
+# precio_metro_total_mean = plot_mexico(en_mexico, "centroid", "precio_metro_total_mean", "Promedio de precio por metro total en cada zona"+msg_minimo)
 
 
 # In[17]:
