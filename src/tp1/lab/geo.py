@@ -38,7 +38,7 @@ get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
 
 
-# In[3]:
+# In[92]:
 
 
 pais = geopandas.read_file("./MEX_adm/MEX_adm0.shp")
@@ -86,7 +86,7 @@ def dibujar_mexico(puntos):
     puntos.plot(ax=grafico, color="green")
 
 
-# In[11]:
+# In[9]:
 
 
 def fix_provincias(df, provincias) -> bool:
@@ -100,13 +100,13 @@ def fix_provincias(df, provincias) -> bool:
     return set(df["provincia"].dropna().unique()) == set(provincias["NAME_1"]) #verifico
 
 
-# In[12]:
+# In[10]:
 
 
 fix_provincias(geoDF, estados)
 
 
-# In[13]:
+# In[11]:
 
 
 def buscar_provincia(punto: Point, provincias):
@@ -121,32 +121,72 @@ def buscar_provincia(punto: Point, provincias):
 geoDF.loc[geoDF["estado"].isna(), "estado"] = geoDF.loc[geoDF["estado"].isna()]["coord"].map(lambda x: buscar_provincia(x, estados))
 
 
-# In[14]:
+# In[12]:
 
 
 publicaciones_por_estado = geoDF.loc[~geoDF["estado"].isna()].groupby(["estado"]).agg({"estado":"count"})
+publicaciones_por_estado.columns = ["publicaciones"]
 
 
-# In[15]:
+# In[ ]:
+
+
+# agrego datos de población al df de estados
+df_poblacion = pd.read_csv("./poblacion_por_estado.csv", index_col="NAME_1")
+estados = estados.merge(on="NAME_1", right=df_poblacion)
+
+
+# In[116]:
+
+
+# agrego datos de publicaciones al df de estados
+estados = estados.merge(left_on="NAME_1", right_on="estado", right=publicaciones_por_estado)
+
+
+# In[32]:
 
 
 def choropleth_estados(estados, serie, nombre, titulo=""):
     estados[nombre] = estados["NAME_1"].map(serie)
-    plot = estados.plot(column=nombre, legend=True, figsize=(24,8))    
-    plot.set_title(titulo)
+    plot = estados.plot(column=nombre, legend=True, figsize=(24,8), cmap="Greens")    
+    plot.set_title(titulo, fontdict={"fontsize": 18})
+    plot.set_xlabel("Longitud")
+    plot.set_ylabel("Latitud")
     return plot
 
 
-# In[16]:
+# In[33]:
 
 
-plot = choropleth_estados(estados, publicaciones_por_estado["estado"], "publicaciones", "Cantidad de publicaciones por estado")
+plot = choropleth_estados(estados, publicaciones_por_estado["publicaciones"], "publicaciones", "Cantidad de publicaciones por estado")
+plot.figure.savefig("../graficos/map_publicaciones_por_estado.png")
+
+
+# In[105]:
+
+
+plot = estados.plot(column="poblacion", legend=True, figsize=(24,8), cmap="Greens")    
+plot.set_title("Población de México por estado", fontdict={"fontsize": 18})
+plot.set_xlabel("Longitud")
+plot.set_ylabel("Latitud")
+plot.figure.savefig("../graficos/map_poblacion_por_estado.png")
+
+
+# In[119]:
+
+
+estados["publicaciones_poblacion"] = estados["publicaciones"] / estados["poblacion"]
+plot = estados.plot(column="publicaciones_poblacion", legend=True, figsize=(24,8), cmap="Greens")    
+plot.set_title("Publicaciones por habitante en cada estado", fontdict={"fontsize": 18})
+plot.set_xlabel("Longitud")
+plot.set_ylabel("Latitud")
+plot.figure.savefig("../graficos/map_publicaciones_por_habitante.png")
 
 
 # # Presento un análisis del valor del metro cuadrado en relacion a la ciudad
 # ### Primero realizo una limpieza de los datos. Selecciono las ciudades con mayor cantidad de publicaciones
 
-# In[35]:
+# In[15]:
 
 
 mas_publicadas = df.groupby("ciudad").agg({"id":"count"})
@@ -156,7 +196,7 @@ mas_publicadas.reset_index(inplace=True)
 print(mas_publicadas)
 
 
-# In[36]:
+# In[16]:
 
 
 lista_de_ciudades = mas_publicadas.ciudad
@@ -166,7 +206,7 @@ df=df[df["ciudad"].isin(lista_de_ciudades)]
 df
 
 
-# In[37]:
+# In[17]:
 
 
 #Realizo un calculo del promedio del valor del metro cuadrado por 
@@ -179,7 +219,7 @@ por_ciudad.reset_index(inplace=True)
 
 # ### Limpio el dataset de valores nulos en metrostotales y/o precios
 
-# In[38]:
+# In[18]:
 
 
 por_ciudad=por_ciudad.loc[(por_ciudad.metrostotales != 0.0)]
@@ -189,7 +229,7 @@ por_ciudad
 
 # # Busco las ciudades extremo, la más cara y la más barata
 
-# In[39]:
+# In[19]:
 
 
 por_ciudad = por_ciudad.sort_values("valormetrocuadrado")
@@ -199,7 +239,7 @@ por_ciudad
 
 # ### Ahora armo un dataframe con las 20 ciudades más caras y las 20 más baratas.
 
-# In[40]:
+# In[20]:
 
 
 top_20_ciudades_mas_caras = por_ciudad.tail(20)
@@ -207,7 +247,7 @@ top_20_ciudades_mas_caras.reset_index(drop=True, inplace=True)
 top_20_ciudades_mas_caras
 
 
-# In[41]:
+# In[21]:
 
 
 top_20_ciudades_mas_baratas = por_ciudad.head(20)
@@ -215,7 +255,7 @@ top_20_ciudades_mas_baratas.reset_index(inplace=True)
 top_20_ciudades_mas_baratas
 
 
-# In[42]:
+# In[22]:
 
 
 ciudad_mas_barata = (top_20_ciudades_mas_baratas.loc[0,:].ciudad,top_20_ciudades_mas_baratas.loc[0,:].valormetrocuadrado)
@@ -226,7 +266,7 @@ amplitud = ciudad_mas_cara[1] - ciudad_mas_barata[1]
 print("Amplitud de precio {}".format(amplitud))
 
 
-# In[43]:
+# In[23]:
 
 
 ciudades_punta= pd.DataFrame([ciudad_mas_barata, ciudad_mas_cara])
