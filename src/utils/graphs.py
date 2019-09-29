@@ -71,7 +71,7 @@ def get_boxplot(data_toshow, value_x, value_y, size, title="", label_x="", label
 
 def get_hist(serie, title="", xlabel="", ylabel="", bins=50, size=(12, 6)):
     plt.subplots(figsize=size)
-    plot = serie.plot.hist(bins=bins, color='lightblue')
+    plot = serie.plot.hist(bins=bins, cmap='summer')
     plot.set_title(title, fontsize=18)
     plot.set_xlabel(xlabel,fontsize=18)
     plot.set_ylabel(ylabel, fontsize=18)
