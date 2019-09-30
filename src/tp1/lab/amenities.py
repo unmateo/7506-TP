@@ -36,7 +36,7 @@ get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
 df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
 
 
-# In[79]:
+# In[4]:
 
 
 df['tiene_amenities'] = (df["gimnasio"] + df["usosmultiples"] + df["piscina"]) > 0
@@ -44,20 +44,20 @@ df['tiene_cercanias'] = (df["centroscomercialescercanos"] + df["escuelascercanas
 df.columns
 
 
-# In[80]:
+# In[5]:
 
 
 ameneties=df.groupby(["tiene_amenities"]).agg({"id":"count"})
 ameneties=ameneties.rename(columns={"id":"cantidad"})
 
 
-# In[12]:
+# In[6]:
 
 
 get_barplot(ameneties["cantidad"], title="¿Tiene amenities?", y_label="Cantidad de publicaciones")
 
 
-# In[81]:
+# In[7]:
 
 
 amenities_por_tipo = df.groupby(["tipodepropiedad","tiene_amenities"]).agg({"id":"count"}).unstack(fill_value=0)
@@ -71,19 +71,20 @@ plot.set_ylabel("Tipo de propiedad")
 plt.tight_layout()
 
 
-# In[82]:
+# In[8]:
 
 
 df.columns
 
 
-# In[93]:
+# In[16]:
 
 
 tipos_con_amenities = amenities_por_tipo.loc[amenities_por_tipo["No"] < 100].index.values
+tipos_con_cercanias = cercanias_por_tipo.loc[cercanias_por_tipo["No"] < 100].index.values
 
 
-# In[114]:
+# In[10]:
 
 
 precio_amenities_por_tipo = df.loc[df["tipodepropiedad"].isin(tipos_con_amenities)].groupby(["tipodepropiedad","tiene_amenities"]).agg({"precio_metro_cubierto":"mean"}).dropna().unstack()
@@ -94,17 +95,48 @@ plot.set_ylabel("Tipo de propiedad")
 plot.set_title("Precio de las publicaciones con y sin amenities por tipo de propiedad", fontdict={"fontsize": 18})
 
 
-# In[9]:
+# In[11]:
 
 
 cercanias = df.groupby(["tiene_cercanias"]).agg({"id":"count"})
 cercanias = cercanias.rename(columns={"id":"cantidad"})
 
 
-# In[10]:
+# In[12]:
 
 
 get_barplot(cercanias["cantidad"], title="¿Tiene alguna cercanía?", y_label="Cantidad de publicaciones")
+
+
+# In[15]:
+
+
+cercanias_por_tipo = df.groupby(["tipodepropiedad","tiene_cercanias"]).agg({"id":"count"}).unstack(fill_value=0)
+cercanias_por_tipo.columns = ["No", "Sí"]
+cercanias_por_tipo = (cercanias_por_tipo.div(cercanias_por_tipo.sum(axis=1), axis=0) * 100).apply(lambda x: round(x,0)).sort_values(by="Sí", ascending=True)
+plot = cercanias_por_tipo.plot(kind = 'barh', stacked=True, figsize=(10,10))
+plot.legend(labels=["Sin amenities", "Con amenities"],loc='center left', bbox_to_anchor=(1, 0.5))
+plot.set_title("Porcentaje de publicaciones con cercanías por tipo de propiedad", fontdict={"fontsize": 18})
+plot.set_xlabel("Porcentaje")
+plot.set_ylabel("Tipo de propiedad")
+plt.tight_layout()  
+
+
+# In[17]:
+
+
+precio_cercanias_por_tipo = df.loc[df["tipodepropiedad"].isin(tipos_con_cercanias)].groupby(["tipodepropiedad","tiene_amenities"]).agg({"precio_metro_cubierto":"mean"}).dropna().unstack()
+precio_cercanias_por_tipo.columns = ["Sin carcanias", "Con cercanias"]
+plot = precio_cercanias_por_tipo.plot(kind = 'barh', stacked=False, figsize=(10,10), title="Precio de las publicaciones con y sin cercanias por tipo de propiedad")
+plot.set_xlabel("Precio metro_cubierto")
+plot.set_ylabel("Tipo de propiedad")
+plot.set_title("Precio de las publicaciones con y sin cercanias por tipo de propiedad", fontdict={"fontsize": 18})
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
