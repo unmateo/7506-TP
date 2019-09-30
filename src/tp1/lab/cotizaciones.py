@@ -27,7 +27,7 @@ cotizaciones_por_mes = cotizaciones_por_mes.reset_index()
 cotizaciones_por_mes
 
 
-# In[ ]:
+# In[6]:
 
 
 #Se carga el df de publicaciones
@@ -36,7 +36,7 @@ get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 publicaciones = levantar_datos("../../" + DATASET_RELATIVE_PATH)
 
 
-# In[ ]:
+# In[7]:
 
 
 #Se agrega la columna mes_anio tanto en el df de cotizaciones como en el df de publicaciones para poder joinear
@@ -44,7 +44,7 @@ cotizaciones_por_mes['anio_mes'] = cotizaciones_por_mes['anio'].astype('str') + 
 publicaciones['anio_mes'] = publicaciones['ano'].astype('str') + publicaciones['mes'].astype('str').str.zfill(width=2)
 
 
-# In[ ]:
+# In[8]:
 
 
 #Se joinea y se calcula el precio_en_dolares de las propiedades
@@ -53,40 +53,46 @@ publicaciones['precio_en_dolares'] = publicaciones['precio'] / publicaciones['co
 publicaciones[['precio', 'precio_en_dolares', 'cotizacion']]
 
 
-# In[ ]:
+# In[9]:
 
 
 precio_promedio_en_dolares = publicaciones.groupby(['ano','mes_x']).agg({'precio_en_dolares':'mean'})
 
 
-# In[ ]:
+# In[24]:
 
 
-precio_promedio_en_dolares.plot(figsize=(18,12))
+ax = precio_promedio_en_dolares.plot(figsize=(18,12), title="Variación de precios en dólares")
+ax.set_xlabel("Año y mes")
+ax.set_ylabel("Precio (Dólares)")
 
 
-# In[ ]:
+# In[11]:
 
 
 precio_promedio_en_pesos_mexicanos = publicaciones.groupby(['ano','mes_x']).agg({'precio':'mean'})
 
 
-# In[ ]:
+# In[22]:
 
 
-precio_promedio_en_pesos_mexicanos.plot(figsize=(18,12))
+ax = precio_promedio_en_pesos_mexicanos.plot(figsize=(18,12), title="Variación de precios en el tiempo")
+ax.set_xlabel("Año y mes")
+ax.set_ylabel("Precio (Pesos Mexicanos)")
 
 
-# In[ ]:
+# In[13]:
 
 
 cotizaciones_por_anio_mes = cotizaciones_por_mes.set_index(['anio', 'mes'])['cotizacion']
 
 
-# In[ ]:
+# In[21]:
 
 
-cotizaciones_por_anio_mes.plot(figsize=(15,15))
+ax = cotizaciones_por_anio_mes.plot(figsize=(15,10), title="Variación de cotización del dólar en el tiempo")
+ax.set_xlabel("Año y mes")
+ax.set_ylabel("Cotización (Pesos Mexicanos/Dólar)")
 
 
 # En los últimos dos gráficos se observa que tanto la cotización del dólar como el valor de los inmuebles fue aumentando en el tiempo.
