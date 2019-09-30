@@ -6,8 +6,10 @@
 # Se buscó información de las cotizaciones del peso mexicano respecto del dolar en el período que se corresponse a los datos de las publicaciones.
 # El objetivo es analizar si los precios de los inmuebles en dólares se mantienen constantes o si aumentan a medida que avanza el tiempo.
 
-# In[56]:
+# In[4]:
 
+
+import pandas as pd
 
 #Se carga el df de cotizaciones
 cotizaciones = pd.read_csv("../../enunciado/data/cotizacion.csv", dtype={'cotizacion':'float'}, parse_dates=["fecha"])
@@ -16,7 +18,7 @@ cotizaciones['mes'] = cotizaciones['fecha'].dt.month
 cotizaciones['anio'] = cotizaciones['fecha'].dt.year
 
 
-# In[57]:
+# In[5]:
 
 
 #Se calcula cotización promedio por mes
@@ -25,7 +27,7 @@ cotizaciones_por_mes = cotizaciones_por_mes.reset_index()
 cotizaciones_por_mes
 
 
-# In[58]:
+# In[ ]:
 
 
 #Se carga el df de publicaciones
@@ -34,7 +36,7 @@ get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 publicaciones = levantar_datos("../../" + DATASET_RELATIVE_PATH)
 
 
-# In[59]:
+# In[ ]:
 
 
 #Se agrega la columna mes_anio tanto en el df de cotizaciones como en el df de publicaciones para poder joinear
@@ -42,7 +44,7 @@ cotizaciones_por_mes['anio_mes'] = cotizaciones_por_mes['anio'].astype('str') + 
 publicaciones['anio_mes'] = publicaciones['ano'].astype('str') + publicaciones['mes'].astype('str').str.zfill(width=2)
 
 
-# In[60]:
+# In[ ]:
 
 
 #Se joinea y se calcula el precio_en_dolares de las propiedades
@@ -51,40 +53,40 @@ publicaciones['precio_en_dolares'] = publicaciones['precio'] / publicaciones['co
 publicaciones[['precio', 'precio_en_dolares', 'cotizacion']]
 
 
-# In[93]:
+# In[ ]:
 
 
 precio_promedio_en_dolares = publicaciones.groupby(['ano','mes_x']).agg({'precio_en_dolares':'mean'})
 
 
-# In[95]:
+# In[ ]:
 
 
 precio_promedio_en_dolares.plot(figsize=(18,12))
 
 
-# In[97]:
+# In[ ]:
 
 
 precio_promedio_en_pesos_mexicanos = publicaciones.groupby(['ano','mes_x']).agg({'precio':'mean'})
 
 
-# In[98]:
+# In[ ]:
 
 
 precio_promedio_en_pesos_mexicanos.plot(figsize=(18,12))
 
 
-# In[103]:
+# In[ ]:
 
 
 cotizaciones_por_anio_mes = cotizaciones_por_mes.set_index(['anio', 'mes'])['cotizacion']
 
 
-# In[104]:
+# In[ ]:
 
 
-cotizaciones_por_anio_mes.plot()
+cotizaciones_por_anio_mes.plot(figsize=(15,15))
 
 
 # En los últimos dos gráficos se observa que tanto la cotización del dólar como el valor de los inmuebles fue aumentando en el tiempo.
