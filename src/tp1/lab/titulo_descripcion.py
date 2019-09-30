@@ -23,7 +23,7 @@
 # - la correlacion entre longitud de descripcion y precio es bastante baja (0.1)
 # - la correlacion entre la cantidad de palabras positivas en la descripcion y el precio es bastante alta (0.3) [tener en cuenta que metrostotales tiene correlacion 0.5]
 
-# In[40]:
+# In[1]:
 
 
 #importo las funciones para levantar los dataframes
@@ -32,7 +32,7 @@ get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
 
 
-# In[ ]:
+# In[2]:
 
 
 df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
@@ -42,7 +42,7 @@ pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 
 
-# In[2]:
+# In[3]:
 
 
 import nltk  
@@ -50,7 +50,7 @@ from nltk.corpus import stopwords
 from string import punctuation  
 
 
-# In[3]:
+# In[4]:
 
 
 spanish_stopwords = set(stopwords.words('spanish'))
@@ -59,7 +59,14 @@ non_words.update({'¿', '¡'})
 non_words.update(map(str,range(10)))
 
 
-# In[4]:
+# In[5]:
+
+
+# agrego palabras comunes que detecte y no son relevantes
+stopwords_extra = {"fracc", "cada", "mas", "ntilde", "consta", "tres", "dos", "solo", "cuenta", "areas", "tipo", "nbsp", "oacute", "hrs", "aacute", "palapa", "easybroker", "tarja", "cuatro", "uacute", "cancel", "asi", "hace", "tan", "dia", "ningun" }
+
+
+# In[6]:
 
 
 import re
@@ -95,66 +102,66 @@ def limpiar_campo(field: str) -> str:
     return meaningful
 
 
-# In[5]:
+# In[7]:
 
 
 df["descripcion_limpia"] = df["descripcion"].map(limpiar_campo)
 df["len_descripcion"] = df["descripcion_limpia"].map(lambda x: len(x.split()))
 
 
-# In[6]:
+# In[8]:
 
 
 df["titulo_limpio"] = df["titulo"].map(limpiar_campo)
 df["len_titulo"] = df["titulo_limpio"].map(lambda x: len(x.split()))
 
 
-# In[54]:
+# In[9]:
 
 
 df.columns
 
 
-# In[135]:
+# In[10]:
 
 
 # Busco la correlacion entre longitud de descripción y precio
-df[["len_descripcion"," "]].corr()
+df[["len_descripcion","precio_metro_cubierto"]].corr()
 
 
-# In[53]:
+# In[11]:
 
 
 # Para comparar, busco la correlación entre metrostotales y precio
 df[["metrostotales","precio"]].corr()
 
 
-# In[137]:
+# In[12]:
 
 
 df.corr()["precio_metro_total"]
 
 
-# In[138]:
+# In[13]:
 
 
 df.corr()["precio_metro_cubierto"]
 
 
-# In[61]:
+# In[14]:
 
 
 plot = get_barplot(df["len_descripcion"].value_counts().sort_index(), title="Palabras en descripcion", x_label="Cantidad de palabras en descripcion", y_label="Cantidad de publicaciones")
 plot.figure.savefig("../graficos/barplot_palabras_descripcion.png")
 
 
-# In[105]:
+# In[15]:
 
 
 serie = df["len_descripcion"]
 
 
-# In[134]:
+# In[16]:
 
 
 plot = serie.plot(kind="hist",figsize=(24,12),xticks=range(0,500,20), bins=25, logy=True, cmap="summer")
@@ -165,14 +172,14 @@ plot.set_ylabel("Cantidad de publicaciones", fontdict=fontdict)
 plot.figure.savefig("../graficos/hist_palabras_descripcion")
 
 
-# In[ ]:
+# In[17]:
 
 
 plot = get_barplot(df["len_titulo"].value_counts().sort_index(), title="Palabras en título", x_label="Cantidad de palabras en título", y_label="Cantidad de publicaciones")
 plot.figure.savefig("../graficos/barplot_palabras_titulo.png")
 
 
-# In[7]:
+# In[18]:
 
 
 from collections import Counter
@@ -187,69 +194,69 @@ def get_word_counter(series):
     return counter
 
 
-# In[8]:
+# In[19]:
 
 
 titulo_palabras = get_word_counter(df["titulo_limpio"])
 descripcion_palabras = get_word_counter(df["descripcion_limpia"])
 
 
-# In[9]:
+# In[20]:
 
 
 print(len(titulo_palabras),len(descripcion_palabras))
 
 
-# In[41]:
+# In[21]:
 
 
 wc = get_wordcloud(titulo_palabras)
 wc.to_file("../graficos/wordcloud_titulo.png")
 
 
-# In[42]:
+# In[22]:
 
 
 wc = get_wordcloud(descripcion_palabras)
 wc.to_file("../graficos/wordcloud_descripcion.png")
 
 
-# In[ ]:
+# In[23]:
 
 
 # titulo_palabras.most_common(10)
 
 
-# In[ ]:
+# In[24]:
 
 
 # descripcion_palabras.most_common(10)
 
 
-# In[14]:
+# In[25]:
 
 
-palabras_positivas = {"conservacion","tenis","balcon","panoramica","exclusivos","golf","canchas","remodelada","acondicionado","lujo","jacuzzi","diseno","exclusiva","magnifica","exclusivo","country","precioso","estilo","seguridad","verdes","juegos","servicio","excelente","terraza","jardin","hermosa","vista","bonita","renta", "granito"}
-palabras_negativas = {"oportunidad","remato","oferta","remodelar"}
+palabras_positivas = {"vigilancia","hermosa","diseño","vistas","playa","conservacion","tenis","balcon","panoramica","exclusivos","golf","canchas","remodelada","acondicionado","lujo","jacuzzi","diseno","exclusiva","magnifica","exclusivo","country","precioso","estilo","seguridad","verdes","juegos","servicio","excelente","terraza","jardin","hermosa","vista","bonita","renta", "granito","porcelanato","mejores"}
+palabras_negativas = {"oportunidad","remato","oferta","remodelar", "inversion"}
 
 
-# In[18]:
+# In[45]:
 
 
 df["palabras_positivas_descripcion"] = df["descripcion_limpia"].map(lambda x: " ".join([y for y in x.split() if y in palabras_positivas]))
 df["cantidad_palabras_positivas_descripcion"] = df["palabras_positivas_descripcion"].map(lambda x: len(x.split()))
-df[["cantidad_palabras_positivas_descripcion","precio"]].corr()
+df[["cantidad_palabras_positivas_descripcion","precio_metro_total"]].corr()
 
 
-# In[20]:
+# In[46]:
 
 
 df["palabras_negativas_descripcion"] = df["descripcion_limpia"].map(lambda x: " ".join([y for y in x.split() if y in palabras_negativas]))
 df["cantidad_palabras_negativas_descripcion"] = df["palabras_negativas_descripcion"].map(lambda x: len(x.split()))
-df[["cantidad_palabras_negativas_descripcion","precio"]].corr()
+df[["cantidad_palabras_negativas_descripcion","precio_metro_total"]].corr()
 
 
-# In[50]:
+# In[28]:
 
 
 counter_positivas = get_word_counter(df["palabras_positivas_descripcion"])
@@ -257,7 +264,13 @@ wc_positivas = get_wordcloud(counter_positivas)
 wc_positivas.to_file("../graficos/wordcloud_positivas.png")
 
 
-# In[49]:
+# In[44]:
+
+
+counter_positivas.most_common(10)
+
+
+# In[29]:
 
 
 counter_negativas = get_word_counter(df["palabras_negativas_descripcion"])
@@ -265,21 +278,21 @@ wc_negativas = get_wordcloud(counter_negativas)
 wc_negativas.to_file("../graficos/wordcloud_negativas.png")
 
 
-# In[ ]:
+# In[36]:
 
 
-plot = get_barplot(df.palabras_negativas_descripcion.value_counts().sort_index(), title="Palabras negativas en descripción", x_label="Cantidad de palabras negativas en descripción", y_label="Cantidad de publicaciones")
+plot = get_barplot(df.cantidad_palabras_negativas_descripcion.value_counts(), title="Palabras negativas en descripción", x_label="Cantidad de palabras negativas en descripción", y_label="Cantidad de publicaciones")
 plot.figure.savefig("../graficos/barplot_palabras_negativas_descripcion.png")
 
 
-# In[ ]:
+# In[37]:
 
 
-plot = get_barplot(df.palabras_positivas_descripcion.value_counts().sort_index(), title="Palabras positivas en descripción", x_label="Cantidad de palabras positivas en descripción", y_label="Cantidad de publicaciones")
+plot = get_barplot(df.cantidad_palabras_positivas_descripcion.value_counts().sort_index(), title="Palabras positivas en descripción", x_label="Cantidad de palabras positivas en descripción", y_label="Cantidad de publicaciones")
 plot.figure.savefig("../graficos/barplot_palabras_positivas_descripcion.png")
 
 
-# In[ ]:
+# In[38]:
 
 
 df_corr_positivas = df[["descripcion_limpia","precio"]]
@@ -288,7 +301,7 @@ for palabra in palabras_positivas:
 df_corr_positivas.corr()["precio"].sort_values(ascending=False)
 
 
-# In[ ]:
+# In[39]:
 
 
 df_corr_negativas = df[["descripcion_limpia","precio"]]
@@ -297,7 +310,7 @@ for palabra in palabras_negativas:
 df_corr_negativas.corr()["precio"].sort_values(ascending=True)
 
 
-# In[ ]:
+# In[40]:
 
 
 test = df[["descripcion_limpia","precio","metrostotales"]]
@@ -305,13 +318,13 @@ for palabra in palabras_positivas:
     test[palabra] = test["descripcion_limpia"].map(lambda x: int(palabra in x))
 
 
-# In[ ]:
+# In[41]:
 
 
 top = list(set(test.corr()["metrostotales"].sort_values(ascending=False).head(8).index).union(set(test.corr()["precio"].sort_values(ascending=False).head(8).index)))
 
 
-# In[ ]:
+# In[42]:
 
 
 test_corr = test[top].corr()
@@ -319,7 +332,7 @@ test_corr["dif"] = test_corr["precio"] - test_corr["metrostotales"]
 test_corr["dif"] = abs(test_corr["dif"])
 
 
-# In[ ]:
+# In[43]:
 
 
 test_corr["dif"].sort_values(ascending=False)
