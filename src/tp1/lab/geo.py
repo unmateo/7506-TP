@@ -131,22 +131,62 @@ geoDF.loc[geoDF["estado"].isna(), "estado"] = geoDF.loc[geoDF["estado"].isna()][
 
 
 publicaciones_por_estado = geoDF.loc[~geoDF["estado"].isna()].groupby(["estado"]).agg({"estado":"count"})
+publicaciones_por_estado.columns = ["publicaciones"]
 
 
 # In[27]:
 
 
+# agrego datos de población al df de estados
+df_poblacion = pd.read_csv("./poblacion_por_estado.csv", index_col="NAME_1")
+estados = estados.merge(on="NAME_1", right=df_poblacion)
+
+
+# In[116]:
+
+
+# agrego datos de publicaciones al df de estados
+estados = estados.merge(left_on="NAME_1", right_on="estado", right=publicaciones_por_estado)
+
+
+# In[32]:
+
+
 def choropleth_estados(estados, serie, nombre, titulo=""):
     estados[nombre] = estados["NAME_1"].map(serie)
-    plot = estados.plot(column=nombre, legend=True, figsize=(24,8))    
-    plot.set_title(titulo)
+    plot = estados.plot(column=nombre, legend=True, figsize=(24,8), cmap="Greens")    
+    plot.set_title(titulo, fontdict={"fontsize": 18})
+    plot.set_xlabel("Longitud")
+    plot.set_ylabel("Latitud")
     return plot
 
 
 # In[28]:
 
 
-plot = choropleth_estados(estados, publicaciones_por_estado["estado"], "publicaciones", "Cantidad de publicaciones por estado")
+plot = choropleth_estados(estados, publicaciones_por_estado["publicaciones"], "publicaciones", "Cantidad de publicaciones por estado")
+plot.figure.savefig("../graficos/map_publicaciones_por_estado.png")
+
+
+# In[105]:
+
+
+plot = estados.plot(column="poblacion", legend=True, figsize=(24,8), cmap="Greens")    
+plot.set_title("Población de México por estado", fontdict={"fontsize": 18})
+plot.set_xlabel("Longitud")
+plot.set_ylabel("Latitud")
+plot.figure.savefig("../graficos/map_poblacion_por_estado.png")
+
+
+# In[119]:
+
+
+estados["publicaciones_poblacion"] = estados["publicaciones"] / estados["poblacion"]
+plot = estados.plot(column="publicaciones_poblacion", legend=True, figsize=(24,8), cmap="Greens")    
+plot.set_title("Publicaciones por habitante en cada estado", fontdict={"fontsize": 18})
+plot.set_xlabel("Longitud")
+plot.set_ylabel("Latitud")
+plot.figure.savefig("../graficos/map_publicaciones_por_habitante.png")
 
 
 # # Presento un análisis del valor del metro cuadrado en relacion a la ciudad
