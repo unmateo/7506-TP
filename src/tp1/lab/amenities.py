@@ -12,7 +12,7 @@
 # 
 # 
 
-# In[83]:
+# In[1]:
 
 
 import pandas as pd
@@ -21,7 +21,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# In[31]:
+# In[2]:
 
 
 #importo las funciones para levantar los dataframes
@@ -30,62 +30,78 @@ get_ipython().run_line_magic('run', '"../../utils/dataset_parsing.ipynb"')
 get_ipython().run_line_magic('run', '"../../utils/graphs.ipynb"')
 
 
-# In[41]:
+# In[3]:
 
 
 df = levantar_datos("../../"+DATASET_RELATIVE_PATH)
 
 
-# In[42]:
+# In[79]:
 
 
-df['tiene_ameneties'] = (df["gimnasio"] + df["usosmultiples"] + df["piscina"]) > 0
+df['tiene_amenities'] = (df["gimnasio"] + df["usosmultiples"] + df["piscina"]) > 0
 df['tiene_cercanias'] = (df["centroscomercialescercanos"] + df["escuelascercanas"]) > 0
 df.columns
 
 
-# In[85]:
+# In[80]:
 
 
-ameneties=df.groupby(["tiene_ameneties"]).agg({"id":"count"})
+ameneties=df.groupby(["tiene_amenities"]).agg({"id":"count"})
 ameneties=ameneties.rename(columns={"id":"cantidad"})
 
 
-# In[47]:
+# In[12]:
 
 
-get_barplot(ameneties["cantidad"], title="¿Tiene algún amenitie?", y_label="Cantidad de publicaciones")
+get_barplot(ameneties["cantidad"], title="¿Tiene amenities?", y_label="Cantidad de publicaciones")
 
 
-# In[135]:
+# In[81]:
 
 
-amenities_por_tipo = df.groupby(["tipodepropiedad","tiene_ameneties"]).agg({"id":"count"})
-amenities_por_tipo.reset_index(inplace=True)
-amenities_por_tipo = amenities_por_tipo.rename(columns={'id':'cantidad'})
-amenities_por_tipo["cantidad"] = np.log(amenities_por_tipo['cantidad'])
-amenities_por_tipo = amenities_por_tipo.pivot(index='tipodepropiedad', columns='tiene_ameneties', values='cantidad')
-amenities_por_tipo.plot(kind = 'bar', stacked=True, figsize=(10,10), title="Publicaciones con y sin amenities por tipo de propiedad")
+amenities_por_tipo = df.groupby(["tipodepropiedad","tiene_amenities"]).agg({"id":"count"}).unstack(fill_value=0)
+amenities_por_tipo.columns = ["No", "Sí"]
+amenities_por_tipo = (amenities_por_tipo.div(amenities_por_tipo.sum(axis=1), axis=0) * 100).apply(lambda x: round(x,0)).sort_values(by="Sí", ascending=True)
+plot = amenities_por_tipo.plot(kind = 'barh', stacked=True, figsize=(10,10))
+plot.legend(labels=["Sin amenities", "Con amenities"],loc='center left', bbox_to_anchor=(1, 0.5))
+plot.set_title("Porcentaje de publicaciones con amenities por tipo de propiedad", fontdict={"fontsize": 18})
+plot.set_xlabel("Porcentaje")
+plot.set_ylabel("Tipo de propiedad")
+plt.tight_layout()
 
 
-# In[141]:
+# In[82]:
 
 
-amenities_por_tipo = df.groupby(["tipodepropiedad","tiene_ameneties"]).agg({"precio":"mean"})
-amenities_por_tipo.reset_index(inplace=True)
-#amenities_por_tipo["cantidad"] = np.log(amenities_por_tipo['cantidad'])
-amenities_por_tipo = amenities_por_tipo.pivot(index='tipodepropiedad', columns='tiene_ameneties', values='precio')
-amenities_por_tipo.plot(kind = 'bar', stacked=True, figsize=(10,10), title="Precio de las publicaciones con y sin amenities por tipo de propiedad")
+df.columns
 
 
-# In[48]:
+# In[93]:
+
+
+tipos_con_amenities = amenities_por_tipo.loc[amenities_por_tipo["No"] < 100].index.values
+
+
+# In[114]:
+
+
+precio_amenities_por_tipo = df.loc[df["tipodepropiedad"].isin(tipos_con_amenities)].groupby(["tipodepropiedad","tiene_amenities"]).agg({"precio_metro_cubierto":"mean"}).dropna().unstack()
+precio_amenities_por_tipo.columns = ["Sin amenities", "Con amenities"]
+plot = precio_amenities_por_tipo.plot(kind = 'barh', stacked=False, figsize=(10,10), title="Precio de las publicaciones con y sin amenities por tipo de propiedad")
+plot.set_xlabel("Precio metro_cubierto")
+plot.set_ylabel("Tipo de propiedad")
+plot.set_title("Precio de las publicaciones con y sin amenities por tipo de propiedad", fontdict={"fontsize": 18})
+
+
+# In[9]:
 
 
 cercanias = df.groupby(["tiene_cercanias"]).agg({"id":"count"})
 cercanias = cercanias.rename(columns={"id":"cantidad"})
 
 
-# In[52]:
+# In[10]:
 
 
 get_barplot(cercanias["cantidad"], title="¿Tiene alguna cercanía?", y_label="Cantidad de publicaciones")
