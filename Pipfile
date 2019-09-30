@@ -15,7 +15,6 @@ numpy = "*"
 nltk = "*"
 unidecode = "*"
 pywaffle = "*"
-pandas-profiling = "*"
 wordcloud = "*"
 
 [requires]

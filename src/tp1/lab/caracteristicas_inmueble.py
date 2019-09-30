@@ -205,60 +205,66 @@ plt.ylabel('Metros totales (m2)', size=18);
 
 # ### Baños y habitaciones
 
-# In[47]:
+# In[29]:
 
 
 convert_dict={'banos':'int'}
-publicaciones_viviendas_con_bano = publicaciones_viviendas.loc[~publicaciones_viviendas['banos'].isnull(), ['banos','metrostotales']].astype(convert_dict)
-ax = publicaciones_viviendas_con_bano.pivot(columns='banos')['metrostotales'].plot(kind = 'hist', stacked=True, figsize=(10,10), title="Relación cantidad de baños y metros totales")
-ax.set_xlabel("Metros totales (m2)")
+publicaciones_viviendas_con_bano = publicaciones_viviendas.loc[~publicaciones_viviendas['banos'].isnull(), ['banos','metroscubiertos']].astype(convert_dict)
+ax = publicaciones_viviendas_con_bano.pivot(columns='banos')['metroscubiertos'].plot(kind = 'hist', stacked=True, figsize=(10,10), title="Relación cantidad de baños y metros cubiertos")
+ax.set_xlabel("Metros cubiertos (m2)")
 
 
-# In[48]:
+# In[28]:
+
+
+publicaciones_viviendas.columns
+
+
+# In[30]:
 
 
 convert_dict={'habitaciones':'int'}
-publicaciones_viviendas_con_habitaciones = publicaciones_viviendas.loc[~publicaciones_viviendas['habitaciones'].isnull(), ['habitaciones','metrostotales']].astype(convert_dict)
-ax = publicaciones_viviendas_con_habitaciones.pivot(columns='habitaciones')['metrostotales'].plot(kind = 'hist', stacked=True, figsize=(10,10), title="Relación cantidad de habitaciones y metros totales")
-ax.set_xlabel("Metros totales (m2)")
+publicaciones_viviendas_con_habitaciones = publicaciones_viviendas.loc[~publicaciones_viviendas['habitaciones'].isnull(), ['habitaciones','metroscubiertos']].astype(convert_dict)
+ax = publicaciones_viviendas_con_habitaciones.pivot(columns='habitaciones')['metroscubiertos'].plot(kind = 'hist', stacked=True, figsize=(10,10), title="Relación cantidad de habitaciones y metros cubiertos")
+ax.set_xlabel("Metros cubiertos (m2)")
 
 
-# In[51]:
+# In[20]:
 
 
 precio_viviendas_con_bano_90_a_100 = publicaciones_viviendas.loc[(~publicaciones_viviendas['banos'].isnull()) & (publicaciones_viviendas['metrostotales'] >= 90) & (publicaciones_viviendas['metrostotales'] <= 100)]
 get_boxplot(precio_viviendas_con_bano_90_a_100, 'banos', 'precio', (15,5), title="Precio según cantidad de baños", label_x="Cantidad de baños", label_y="Precio")
 
 
-# In[52]:
+# In[21]:
 
 
 precio_viviendas_con_bano_80_a_90 = publicaciones_viviendas.loc[(~publicaciones_viviendas['banos'].isnull()) & (publicaciones_viviendas['metrostotales'] >= 80) & (publicaciones_viviendas['metrostotales'] <= 90)]
 get_boxplot(precio_viviendas_con_bano_80_a_90, 'banos', 'precio', (15,5), title="Precio según cantidad de baños", label_x="Cantidad de baños", label_y="Precio")
 
 
-# In[54]:
+# In[22]:
 
 
 precio_viviendas_con_bano_70_a_80 = publicaciones_viviendas.loc[(~publicaciones_viviendas['banos'].isnull()) & (publicaciones_viviendas['metrostotales'] >= 70) & (publicaciones_viviendas['metrostotales'] <= 80)]
 get_boxplot(precio_viviendas_con_bano_70_a_80, 'banos', 'precio', (15,5), title="Precio según cantidad de baños", label_x="Cantidad de baños", label_y="Precio")
 
 
-# In[55]:
+# In[23]:
 
 
 precio_viviendas_con_bano_60_a_70 = publicaciones_viviendas.loc[(~publicaciones_viviendas['banos'].isnull()) & (publicaciones_viviendas['metrostotales'] >= 60) & (publicaciones_viviendas['metrostotales'] <= 70)]
 get_boxplot(precio_viviendas_con_bano_60_a_70, 'banos', 'precio', (15,5), title="Precio según cantidad de baños", label_x="Cantidad de baños", label_y="Precio")
 
 
-# In[56]:
+# In[24]:
 
 
 precio_viviendas_con_bano_50_a_60 = publicaciones_viviendas.loc[(~publicaciones_viviendas['banos'].isnull()) & (publicaciones_viviendas['metrostotales'] >= 50) & (publicaciones_viviendas['metrostotales'] <= 60)]
 get_boxplot(precio_viviendas_con_bano_50_a_60, 'banos', 'precio', (15,5), title="Precio según cantidad de baños", label_x="Cantidad de baños", label_y="Precio")
 
 
-# In[73]:
+# In[25]:
 
 
 publicaciones_1_bano = publicaciones_viviendas.loc[(~publicaciones_viviendas['banos'].isnull()) & (publicaciones_viviendas['banos'] == 1)]
@@ -279,7 +285,7 @@ plt.xlabel('Metros total (m2)', size=18)
 plt.ylabel('Precio (Pesos Mexicanos)', size=18);
 
 
-# In[76]:
+# In[26]:
 
 
 publicaciones_1_habitacion = publicaciones_viviendas.loc[(~publicaciones_viviendas['habitaciones'].isnull()) & (publicaciones_viviendas['habitaciones'] == 1)]
