@@ -250,9 +250,9 @@ plot = get_barplot(df.cantidad_palabras_positivas_descripcion.value_counts().sor
 plot.figure.savefig("./graficos/barplot_palabras_positivas_descripcion.png")
 
 
-# ## Información geográfica
+# # Información geográfica
 
-# In[46]:
+# In[96]:
 
 
 # creo los geodataframes con información geográfica de México
@@ -260,7 +260,7 @@ pais = geopandas.read_file("lab/MEX_adm/MEX_adm0.shp")
 estados = geopandas.read_file("lab/MEX_adm/MEX_adm1.shp")
 
 
-# In[44]:
+# In[97]:
 
 
 # le cambio los nombres a las siguientes provincias, para que coincidan con mi info geografica 
@@ -330,4 +330,98 @@ plot.figure.savefig("graficos/map_publicaciones_por_estado.png")
 
 estados["publicaciones_poblacion"] = estados["publicaciones"] / estados["poblacion"]
 plot = choropleth_estados(estados, "publicaciones_poblacion", "Publicaciones por habitante en cada estado")
+
+
+# ## Características de zona
+
+# In[101]:
+
+
+def agg_polygon(point_series):
+    """
+        Recibe un pd.Series de geometry.Point
+        Devuelve un Polygon de los puntos de la serie, o NaN si
+        no tiene suficientes puntos (3).
+    """
+    values = point_series.loc[~point_series.isna()].values
+    if len(values) < 3: return numpy.NaN
+    return Polygon([[p.x, p.y] for p in values])
+
+
+# In[105]:
+
+
+calculations = ["mean","std","max","min"]
+aggregations = {"id": "count",                "precio_metro_total": calculations,                "precio_metro_cubierto": calculations,                "antiguedad": calculations,                "habitaciones": calculations,                "metroscubiertos": calculations,                "metrostotales": calculations,                "lat": calculations,                "lng": calculations,                "precio": calculations,                "habitaciones": calculations,                "garages": calculations,                "banos": calculations,                "gps": agg_polygon               }
+zonas = df.groupby(["idzona"]).agg(aggregations)
+zonas.columns = [x+"_"+y for x,y in zonas.columns]
+zonas.rename({"gps_agg_polygon": "polygon"}, axis="columns", inplace=True)
+zonas["lat_dif"] = zonas["lat_max"] - zonas["lat_min"]
+zonas["lng_dif"] = zonas["lng_max"] - zonas["lng_min"]
+
+
+# In[86]:
+
+
+# analizo precios promedio por zona
+minima_cantidad_publicaciones = zonas["id_count"].mean() + zonas["id_count"].std()
+zonas_con_mas_publicaciones = zonas.loc[zonas["id_count"] > minima_cantidad_publicaciones ]
+titulo = "Precio promedio de metros totales en las {} zonas con más de {} publicaciones".format(zonas_con_mas_publicaciones.shape[0], int(minima_cantidad_publicaciones))
+plot = get_hist(zonas_con_mas_publicaciones["precio_metro_total_mean"], title=titulo, size=(24,12), xlabel="Precio promedio", ylabel="Cantidad de zonas")
+plot.figure.savefig("graficos/hist_precios_zonas")
+
+
+# In[87]:
+
+
+titulo = "Desvío estándar de Precio promedio de metros totales en las {} zonas con más de {} publicaciones".format(zonas_con_mas_publicaciones.shape[0], int(minima_cantidad_publicaciones))
+plot = get_hist(zonas_con_mas_publicaciones["precio_metro_total_std"], title=titulo, size=(24,12), xlabel="Desvío estándar", ylabel="Cantidad de zonas")
+plot.figure.savefig("graficos/hist_desvio_precios_zonas")
+
+
+# In[98]:
+
+
+# agrego info de zonas a df estados
+zonas_por_estado = df.groupby(["provincia"]).agg({"idzona":"nunique"})
+zonas_por_estado.columns = ["cantidad_zonas"]
+estados = estados.merge(left_on="NAME_1", right_on="provincia", right=zonas_por_estado, how="left")
+estados["cantidad_zonas"] = estados["cantidad_zonas"].fillna(0).astype(int)
+
+
+# In[99]:
+
+
+plot = estados.plot(column="cantidad_zonas", legend=True, figsize=(24,8), cmap="Greens")    
+plot.set_title("Cantidad de zonas por estado", fontdict={"fontsize": 18})
+plot.set_xlabel("Longitud")
+plot.set_ylabel("Latitud")
+plot.figure.savefig("graficos/map_zonas_por_estado.png")
+
+
+# In[112]:
+
+
+def plot_mexico(df, geometry, columna, titulo):
+    geoDF = geopandas.GeoDataFrame(df, geometry=geometry)
+    base = pais.plot(figsize=(24,12))
+    estados_plot = estados.plot(ax=base, color="white")
+    plot = geoDF.plot(ax=estados_plot, cmap="viridis_r",legend=True, column=columna)
+    plot.set_title(titulo, fontdict={"fontsize": 18})
+    plot.set_xlabel("Longitud", fontdict={"fontsize": 18})
+    plot.set_ylabel("Latitud", fontdict={"fontsize": 18})
+    return plot
+
+
+zonas_ok = zonas.loc[(zonas["lat_dif"] < zonas["lat_dif"].mean()) & (zonas["lng_dif"] < zonas["lng_dif"].mean())]
+zonas_ok.loc[:,"centroid"] = zonas_ok.loc[~zonas["polygon"].isna()]["polygon"].map(lambda x: x.buffer(0).representative_point())
+con_centroide = zonas_ok.loc[(~zonas_ok["centroid"].isna())]
+en_mexico = con_centroide.loc[con_centroide["centroid"].map(esta_en_mexico)]
+publicaciones_minimas = en_mexico["id_count"].mean() + en_mexico["id_count"].std()
+en_mexico = en_mexico.loc[en_mexico["id_count"] > publicaciones_minimas]
+
+msg_minimo = " ({} zonas con más de {} publicaciones)".format(en_mexico.shape[0], int(publicaciones_minimas))
+
+id_count = plot_mexico(en_mexico, "centroid", "id_count", "Cantidad de publicaciones por cada zona"+msg_minimo)
+id_count.figure.savefig("graficos/map_zonas_mas_publicaciones.png")
 
