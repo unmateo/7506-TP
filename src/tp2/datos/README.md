@@ -1,0 +1,1 @@
+En este directorio deben estar los archivos train.csv y test.csv

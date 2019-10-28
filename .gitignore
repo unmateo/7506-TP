@@ -4,3 +4,6 @@
 .vscode
 *train.csv
 __pycache__
+.env
+test.csv
+train.csv
