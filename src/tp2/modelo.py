@@ -43,6 +43,8 @@ class Modelo:
         self.validado = False
         self.presentado = False
         self.modelo = self.__class__.__name__
+        self.resultado_validacion = None
+        self.resultado_kaggle = None
         self.tiempos = {}
 
     def cargar_datos(self):
@@ -154,6 +156,6 @@ class Modelo:
                 descripcion
             )
         with open(self.LOG_RESULTADOS, "a") as log:
-            log.write(",".join(registro))
+            log.write(",".join(registro) + "\n")
         return True
 
