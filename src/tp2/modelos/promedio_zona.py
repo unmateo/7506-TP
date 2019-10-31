@@ -15,16 +15,14 @@ from modelo import Modelo
 # In[2]:
 
 
-descripcion = """
-    Calculamos el precio promedio por metro cubierto y metro total
-    para cada zona. Asignamos ese precio en caso de tener zona, o
-    el promedio general en caso de no tenerlo.
-"""
-
 class PromedioZona(Modelo):
+    """
+        Calculamos el precio promedio por metro cubierto y metro total
+        para cada zona. Asignamos ese precio en caso de tener zona, o
+        el promedio general en caso de no tenerlo.
+    """
     
-    
-    
+    @Modelo.cronometrar()
     def entrenar(self):
         super().entrenar()
         grouped = modelo.train_data.groupby(["idzona"]).agg({"id": "count", "precio_metro_cubierto":"mean", "precio_metro_total":"mean"})
@@ -37,6 +35,7 @@ class PromedioZona(Modelo):
         metros_general = self.train_data["metroscubiertos"].mean()
         self.prediccion_default = metros_general * promedio_general
     
+    @Modelo.cronometrar()
     def predecir(self, datos):
         prediccion = lambda publicacion: self.predecir_publicacion(publicacion)
         datos["target"] = datos.apply(prediccion, axis="columns")
@@ -81,8 +80,15 @@ class PromedioZona(Modelo):
 # In[3]:
 
 
-modelo = PromedioZona(descripcion)
+modelo = PromedioZona()
 modelo.entrenar()
 modelo.validar()
-# modelo.presentar()
+predicciones = modelo.predecir(modelo.submit_data)
+# modelo.presentar(predicciones)
+
+
+# In[7]:
+
+
+modelo.tiempos
 

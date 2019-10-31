@@ -13097,16 +13097,14 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">descripcion</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    Calculamos el precio promedio por metro cubierto y metro total</span>
-<span class="s2">    para cada zona. Asignamos ese precio en caso de tener zona, o</span>
-<span class="s2">    el promedio general en caso de no tenerlo.</span>
-<span class="s2">&quot;&quot;&quot;</span>
-
-<span class="k">class</span> <span class="nc">PromedioZona</span><span class="p">(</span><span class="n">Modelo</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">PromedioZona</span><span class="p">(</span><span class="n">Modelo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculamos el precio promedio por metro cubierto y metro total</span>
+<span class="sd">        para cada zona. Asignamos ese precio en caso de tener zona, o</span>
+<span class="sd">        el promedio general en caso de no tenerlo.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     
-    
-    
+    <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">entrenar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
         <span class="n">grouped</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">train_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;idzona&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="s2">&quot;precio_metro_cubierto&quot;</span><span class="p">:</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;precio_metro_total&quot;</span><span class="p">:</span><span class="s2">&quot;mean&quot;</span><span class="p">})</span>
@@ -13119,6 +13117,7 @@ div#notebook {
         <span class="n">metros_general</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">[</span><span class="s2">&quot;metroscubiertos&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prediccion_default</span> <span class="o">=</span> <span class="n">metros_general</span> <span class="o">*</span> <span class="n">promedio_general</span>
     
+    <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">predecir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datos</span><span class="p">):</span>
         <span class="n">prediccion</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">publicacion</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">predecir_publicacion</span><span class="p">(</span><span class="n">publicacion</span><span class="p">)</span>
         <span class="n">datos</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datos</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">prediccion</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
@@ -13170,10 +13169,11 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span> <span class="o">=</span> <span class="n">PromedioZona</span><span class="p">(</span><span class="n">descripcion</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span> <span class="o">=</span> <span class="n">PromedioZona</span><span class="p">()</span>
 <span class="n">modelo</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
 <span class="n">modelo</span><span class="o">.</span><span class="n">validar</span><span class="p">()</span>
-<span class="c1"># modelo.presentar()</span>
+<span class="n">predicciones</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">submit_data</span><span class="p">)</span>
+<span class="c1"># modelo.presentar(predicciones)</span>
 </pre></div>
 
     </div>
@@ -13186,13 +13186,55 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[3]:</div>
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>instanciar demoro 22.3 segundos
+entrenar demoro 0.0 segundos
+entrenar demoro 0.05 segundos
+predecir demoro 6.5 segundos
+puntuar demoro 0.0 segundos
+validar demoro 6.5 segundos
+predecir demoro 6.48 segundos
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">tiempos</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[7]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>907975.8304731217</pre>
+<pre>{&#39;instanciar&#39;: 22.3,
+ &#39;entrenar&#39;: 0.05,
+ &#39;predecir&#39;: 12.98,
+ &#39;puntuar&#39;: 0.0,
+ &#39;validar&#39;: 6.5,
+ &#39;guardar&#39;: 0.17}</pre>
 </div>
 
 </div>

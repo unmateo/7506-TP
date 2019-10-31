@@ -1,7 +1,10 @@
+import functools
+import time
 from datetime import datetime
 from sklearn.metrics import mean_absolute_error
 from datos import levantar_datos
 from kaggle import api
+
 
 class Modelo:
 
@@ -11,25 +14,36 @@ class Modelo:
     DIR_PREDICCIONES = "predicciones/"
     COMPETENCIA = "Inmuebles24"
 
-    def __init__(self, descripcion):
+    
+    def cronometrar(nombre=None):
+        """ 
+            Mide y registra el tiempo de ejecucion de la funcion que envuelve.
+            Si no recibe nombre, usa el de la funcion que envuelve.
         """
-        
-        Arguments:
-            descripcion {str}:
-                Describe en qué se basa el modelo.
-                Debe tener al menos 80 caracteres.
-        """
-        if not isinstance(descripcion, str) or \
-                    len(descripcion) < self.LEN_DESCRIPCION:
-            raise Exception("La descripcion debe "\
-                "ser un string de al menos 80 caracteres")
-
-        self.descripcion = descripcion
+        def afuera(function):
+            @functools.wraps(function)
+            def adentro(self, *args, **kwargs):
+                inicio = time.perf_counter()
+                resultado = function(self, *args, **kwargs)
+                fin = time.perf_counter()
+                tiempo = round(fin - inicio,2)
+                clave = nombre if nombre else function.__name__
+                print("{} demoro {} segundos".format(clave, tiempo))
+                self.tiempos[clave] = self.tiempos.get(clave, 0) + tiempo
+                return resultado
+            return adentro
+        return afuera   
+    
+    
+    @cronometrar("instanciar")
+    def __init__(self):
+        """ """
         self.cargado = self.cargar_datos()
         self.entrenado = False
         self.validado = False
         self.presentado = False
         self.modelo = self.__class__.__name__
+        self.tiempos = {}
 
     def cargar_datos(self):
         """ Carga los datos que se usarán para entrenar y predecir. """
@@ -39,6 +53,7 @@ class Modelo:
         self.submit_data = submit
         return True
 
+    @cronometrar()
     def entrenar(self):
         """ Entrena el modelo. Sobreescribir si es necesario """
         if not self.cargado:
@@ -46,6 +61,7 @@ class Modelo:
         self.entrenado = True
         return True
     
+    @cronometrar()
     def predecir(self, data):
         """ Este método debe sobreescribirse.
             Debe recibir un DataFrame con el formato del
@@ -53,6 +69,7 @@ class Modelo:
         """
         raise NotImplementedError()
 
+    @cronometrar()
     def validar(self):
         """ Valida el modelo localmente."""
         if not self.entrenado:
@@ -63,6 +80,7 @@ class Modelo:
         self.resultado_validacion = score
         return score
     
+    @cronometrar()
     def puntuar(self, real, prediccion):
         """
             Recibe un array con valores reales y otro con predicciones.
@@ -70,7 +88,8 @@ class Modelo:
         """
         return mean_absolute_error(real, prediccion)
 
-    def guardar_prediccion(self, predicciones):
+    @cronometrar()
+    def guardar(self, predicciones):
         """
             Recibe una DataFrame con predicciones y
             lo guarda en un archivo csv con el formato
@@ -83,7 +102,8 @@ class Modelo:
         predicciones.to_csv(self.target, columns=columnas, index=False)
         return self.target
     
-    def submit_target(self, descripcion):
+    @cronometrar()
+    def submit(self, descripcion):
         """
             Hace el submit en la competencia.
             Busca el puntaje.
@@ -94,9 +114,7 @@ class Modelo:
         return self.buscar_score(descripcion)
     
     def buscar_score(self, descripcion):
-        """
-            Busca el score de un submit por su descripcion.
-        """
+        """ Busca el score de un submit por su descripcion. """
         submits = api.competitions_submissions_list(self.COMPETENCIA, page=1)
         candidatos = [ a for a in submits if a.get("description")==descripcion ]
         if not candidatos:
@@ -106,10 +124,10 @@ class Modelo:
         if submit.get("status") == "error":
             raise Exception(submit.get("errorDescription"))
         return submit.get("publicScore")
-        
-    def presentar(self, descripcion=""):
+    
+    @cronometrar()
+    def presentar(self, predicciones, descripcion=""):
         """ 
-            Predice el set de test.
             Hace el submit en la competencia.
             Registra los resultados.
         """
@@ -118,16 +136,15 @@ class Modelo:
         if len(descripcion) < 10:
             descripcion = "Resultado local: {}".format(self.resultado_validacion)
             print(descripcion)
-        predicciones = self.predecir(self.submit_data)
-        filename = self.guardar_prediccion(predicciones)
-        self.resultado_kaggle = self.submit_target(descripcion)
+        filename = self.guardar(predicciones)
+        self.resultado_kaggle = self.submit(descripcion)
         self.registrar_resultado(descripcion)
         return self.resultado_kaggle
 
     def registrar_resultado(self, descripcion):
         """ Registra el resultado en el log de resultados.
-        El formato a utilizar es:
-            (timestamp, modelo, validacion, kaggle, comentario)
+            El formato a utilizar es:
+                (timestamp, modelo, validacion, kaggle, comentario)
         """
         registro = (
                 datetime.now().strftime(self.DATETIME_FORMAT),
@@ -139,3 +156,4 @@ class Modelo:
         with open(self.LOG_RESULTADOS, "a") as log:
             log.write(",".join(registro))
         return True
+
