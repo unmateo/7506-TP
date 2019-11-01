@@ -8,10 +8,10 @@ from kaggle import api
 
 class Modelo:
 
-    LOG_RESULTADOS = "../resultados.csv"
+    LOG_RESULTADOS = "../../resultados.csv"
     LEN_DESCRIPCION = 80
     DATETIME_FORMAT = "%Y-%m-%d_%H:%M:%S"
-    DIR_PREDICCIONES = "predicciones/"
+    DIR_PREDICCIONES = "../../predicciones/"
     COMPETENCIA = "Inmuebles24"
 
     

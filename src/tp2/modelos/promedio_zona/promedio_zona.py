@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 
 import os
@@ -12,7 +12,13 @@ if not path in sys.path: sys.path.append(path)
 from modelo import Modelo
 
 
-# In[2]:
+# In[ ]:
+
+
+os.getcwd()
+
+
+# In[ ]:
 
 
 class PromedioZona(Modelo):
@@ -107,33 +113,33 @@ class PromedioZona(Modelo):
             
 
 
-# In[3]:
+# In[ ]:
 
 
 modelo = PromedioZona()
 
 
-# In[4]:
+# In[ ]:
 
 
 modelo.entrenar()
 
 
-# In[5]:
+# In[ ]:
 
 
 modelo.validar()
 
 
-# In[10]:
+# In[ ]:
 
 
 comentario = "Despues de usar datos de ciudad y provincia"
-modelo.presentar(predicciones, comentario)
+#modelo.presentar(predicciones, comentario)
 
 
 # In[ ]:
 
 
-modelo.buscar_score(comentario)
+#modelo.buscar_score(comentario)
 

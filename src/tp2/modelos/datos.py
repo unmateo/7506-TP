@@ -3,8 +3,8 @@ import pandas as pd
 from shapely.geometry import Point
 from sklearn.model_selection import train_test_split
 
-TRAIN_CSV = "../datos/train.csv"
-TEST_CSV = "../datos/test.csv"
+TRAIN_CSV = "../../datos/train.csv"
+TEST_CSV = "../../datos/test.csv"
 
 def levantar_datos(train_file=TRAIN_CSV, test_file=TEST_CSV):
     """
