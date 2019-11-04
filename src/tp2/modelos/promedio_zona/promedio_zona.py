@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 import os
@@ -12,7 +12,7 @@ if not path in sys.path: sys.path.append(path)
 from modelo import Modelo
 
 
-# In[ ]:
+# In[2]:
 
 
 class PromedioZona(Modelo):
@@ -107,7 +107,7 @@ class PromedioZona(Modelo):
             
 
 
-# In[ ]:
+# In[3]:
 
 
 modelo = PromedioZona()
