@@ -15,12 +15,6 @@ from modelo import Modelo
 # In[ ]:
 
 
-os.getcwd()
-
-
-# In[ ]:
-
-
 class PromedioZona(Modelo):
     """
         Calculamos el precio promedio por metro cubierto y metro total
@@ -80,12 +74,12 @@ class PromedioZona(Modelo):
             Devuelve los resultados en un diccionario.
         """
         calculos = {
-            "id": "count",
+            "fecha": "count",
             "precio_metro_cubierto": "mean",
             "precio_metro_total": "mean",
         }
         por_feature = df.groupby([feature]).agg(calculos)
-        suficientes_datos = por_feature.loc[por_feature["id"] > minimas_apariciones].drop(columns=["id"])
+        suficientes_datos = por_feature.loc[por_feature["fecha"] > minimas_apariciones].drop(columns=["fecha"])
         return suficientes_datos.to_dict(orient="index")
     
     def _predecir_por_feature(self, predicciones, totales, cubiertos):
@@ -129,6 +123,12 @@ modelo.entrenar()
 
 
 modelo.validar()
+
+
+# In[ ]:
+
+
+predicciones = modelo.predecir(modelo.submit_data)
 
 
 # In[ ]:

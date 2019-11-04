@@ -42,7 +42,7 @@ def read_csv(csv_file, optimizar: bool = True) -> pd.DataFrame:
         "metroscubiertos": "float32",
         "metrostotales": "float32",
     }
-    df = pd.read_csv(csv_file, dtype=dtypes, parse_dates=["fecha"])
+    df = pd.read_csv(csv_file, dtype=dtypes, parse_dates=["fecha"], index_col='id')
     agregar_columnas_tiempo(df)
     agregar_columnas_precio(df)
     agregar_columnas_gps(df)

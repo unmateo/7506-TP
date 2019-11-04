@@ -97,11 +97,11 @@ class Modelo:
             lo guarda en un archivo csv con el formato
             requerido por la competencia.
         """
-        columnas = ["id", "target"]
+        columnas = ["target"]
         timestamp = datetime.now().strftime(self.DATETIME_FORMAT)
         nombre_archivo = "{}_{}.csv".format(self.modelo, timestamp)
         self.target = self.DIR_PREDICCIONES + nombre_archivo
-        predicciones.to_csv(self.target, columns=columnas, index=False)
+        predicciones.to_csv(self.target, columns=columnas, index=True)
         return self.target
     
     @cronometrar()
