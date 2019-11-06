@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[5]:
 
 
 import os
@@ -12,7 +12,7 @@ if not path in sys.path: sys.path.append(path)
 from modelo import Modelo
 
 
-# In[2]:
+# In[14]:
 
 
 class PromedioZona(Modelo):
@@ -21,6 +21,16 @@ class PromedioZona(Modelo):
         para cada zona. Asignamos ese precio en caso de tener zona, o
         el promedio general en caso de no tenerlo.
     """
+    
+    def cargar_datos(self):
+        """
+        """
+        features = {
+            "idzona", "ciudad", "provincia",
+            "precio_metro_cubierto", "precio_metro_total",
+            "metroscubiertos", "precio", "metrostotales"
+        }
+        super().cargar_datos(features)
     
     @Modelo.cronometrar()
     def entrenar(self):
@@ -74,12 +84,12 @@ class PromedioZona(Modelo):
             Devuelve los resultados en un diccionario.
         """
         calculos = {
-            "fecha": "count",
+            "idzona": "count",
             "precio_metro_cubierto": "mean",
             "precio_metro_total": "mean",
         }
         por_feature = df.groupby([feature]).agg(calculos)
-        suficientes_datos = por_feature.loc[por_feature["fecha"] > minimas_apariciones].drop(columns=["fecha"])
+        suficientes_datos = por_feature.loc[por_feature["idzona"] > minimas_apariciones].drop(columns=["idzona"])
         return suficientes_datos.to_dict(orient="index")
     
     def _predecir_por_feature(self, predicciones, totales, cubiertos):
@@ -107,19 +117,25 @@ class PromedioZona(Modelo):
             
 
 
-# In[3]:
+# In[15]:
 
 
 modelo = PromedioZona()
 
 
-# In[ ]:
+# In[16]:
+
+
+modelo.cargar_datos()
+
+
+# In[17]:
 
 
 modelo.entrenar()
 
 
-# In[ ]:
+# In[18]:
 
 
 modelo.validar()

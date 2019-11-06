@@ -6,7 +6,18 @@ from sklearn.model_selection import train_test_split
 TRAIN_CSV = "../../datos/train.csv"
 TEST_CSV = "../../datos/test.csv"
 
-def levantar_datos(train_file=TRAIN_CSV, test_file=TEST_CSV):
+
+FEATURES_DISPONIBLES = {
+    "piscina", "usosmultiples", "gimnasio", "garages",
+    "escuelascercanas", "centroscomercialescercanos",
+    "banos", "habitaciones", "metroscubiertos", "metrostotales",
+    "antiguedad", "tipodepropiedad",
+    "idzona", "ciudad", "provincia", "gps",
+    "fecha", "ano", "mes", "dia",
+    "precio", "precio_metro_cubierto", "precio_metro_total"
+}
+
+def levantar_datos(train_file=TRAIN_CSV, test_file=TEST_CSV, features=None):
     """
         Levanta los datos  de la competencia.
         Limpia y agrega columnas basicas.
@@ -14,19 +25,20 @@ def levantar_datos(train_file=TRAIN_CSV, test_file=TEST_CSV):
         Devuelve una tupla:
             train, test, submit
     """
-    train, test = train_test_split(read_csv(train_file))
-    submit = read_csv(test_file)
+    if not features:
+        features = FEATURES_DISPONIBLES
+    train, test = train_test_split(read_csv(train_file, features))
+    submit = read_csv(test_file, features-{"precio"})
     return train, test, submit
 
-def read_csv(csv_file, optimizar: bool = True) -> pd.DataFrame:
+def read_csv(csv_file, features) -> pd.DataFrame:
     """
         Recibe un .csv que debe tener el formato de columnas específico del tp.
         Si optimizar = True, asigna mejores tipos y agrega columnas útiles.
         Devuelve un Dataframe con esa información.
     """
-    if not optimizar:
-        return pd.read_csv(csv_file)
-    dtypes = {
+
+    types = {
         "piscina": "bool",
         "escuelascercanas": "bool",
         "centroscomercialescercanos": "bool",
@@ -41,22 +53,35 @@ def read_csv(csv_file, optimizar: bool = True) -> pd.DataFrame:
         "habitaciones": "float16",
         "metroscubiertos": "float32",
         "metrostotales": "float32",
+        "idzona": "category",
+        "precio": "float32"
     }
-    df = pd.read_csv(csv_file, dtype=dtypes, parse_dates=["fecha"], index_col='id')
-    agregar_columnas_tiempo(df)
-    agregar_columnas_precio(df)
-    agregar_columnas_gps(df)
+    columns = [col for col in types.keys() if col in features] + ["fecha", "id"]
+    dtypes ={col:dtype for col,dtype in types.items() if col in features}
+    df = pd.read_csv(csv_file,
+                     usecols=columns,
+                     dtype=dtypes,
+                     parse_dates=["fecha"],
+                     index_col='id')
+
+    if "ano" in features:
+        df["ano"] = df["fecha"].dt.year
+    if "mes" in features:
+        df["mes"] = df["fecha"].dt.month
+    if "dia" in features:
+        df["dia"] = df["fecha"].dt.day
+
+    if "precio" in features:
+        if "metroscubiertos" in features and "precio_metro_cubierto" in features:
+            df["precio_metro_cubierto"] = df["precio"] / df["metroscubiertos"]
+        if "metrostotales" in features and "precio_metro_total" in features:
+            df["precio_metro_total"] = df["precio"] / df["metrostotales"]
+    
+    if {"gps","lng","lat"}.issubset(features):
+        agregar_columnas_gps(df)
+
     return df
 
-def agregar_columnas_tiempo(df):
-    df["mes"] = df["fecha"].dt.month
-    df["ano"] = df["fecha"].dt.year
-    df["dia"] = df["fecha"].dt.day
-
-def agregar_columnas_precio(df):
-    if "precio" in df.columns:
-        df["precio_metro_cubierto"] = df["precio"] / df["metroscubiertos"]
-        df["precio_metro_total"] = df["precio"] / df["metrostotales"]
 
 def agregar_columnas_gps(df):
     """

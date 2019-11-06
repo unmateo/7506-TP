@@ -4,6 +4,7 @@ from datetime import datetime
 from sklearn.metrics import mean_absolute_error
 from datos import levantar_datos
 from kaggle import api
+import pandas as pd
 
 
 class Modelo:
@@ -34,11 +35,10 @@ class Modelo:
             return adentro
         return afuera   
     
-    
     @cronometrar("instanciar")
     def __init__(self):
         """ """
-        self.cargado = self.cargar_datos()
+        self.cargado = False
         self.entrenado = False
         self.validado = False
         self.presentado = False
@@ -47,12 +47,14 @@ class Modelo:
         self.resultado_kaggle = None
         self.tiempos = {}
 
-    def cargar_datos(self):
+    @cronometrar("cargar")
+    def cargar_datos(self, features=None):
         """ Carga los datos que se usarán para entrenar y predecir. """
-        train, test, submit = levantar_datos()
+        train, test, submit = levantar_datos(features=features)
         self.train_data = train
         self.test_data = test
         self.submit_data = submit
+        self.cargado = True
         return True
 
     @cronometrar()
@@ -159,3 +161,15 @@ class Modelo:
             log.write(",".join(registro) + "\n")
         return True
 
+
+    def one_hot_encode(self, df, categoricas):
+        """
+            Recibe un DataFrame y una lista de sus columnas categóricas.
+            Aplica one hot encoding a cada una, agregandolas al DataFrame
+            y eliminando la columna categórica.
+            
+            Devuelve el DataFrame con estas modificaciones.
+        """
+        
+        return pd.get_dummies(df, prefix=categoricas, columns=categoricas, dtype='bool')
+        

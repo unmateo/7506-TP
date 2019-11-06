@@ -13098,6 +13098,9 @@ div#notebook {
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LinearRegression</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.float_format&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13107,7 +13110,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">RegresionLineal</span><span class="p">(</span><span class="n">Modelo</span><span class="p">):</span>
@@ -13115,48 +13118,61 @@ div#notebook {
 
 <span class="sd">    &quot;&quot;&quot;</span>
     
+    <span class="k">def</span> <span class="nf">cargar_datos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;piscina&quot;</span><span class="p">,</span> <span class="s2">&quot;usosmultiples&quot;</span><span class="p">,</span> <span class="s2">&quot;gimnasio&quot;</span><span class="p">,</span> <span class="s2">&quot;garages&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;escuelascercanas&quot;</span><span class="p">,</span> <span class="s2">&quot;centroscomercialescercanos&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;banos&quot;</span><span class="p">,</span> <span class="s2">&quot;habitaciones&quot;</span><span class="p">,</span> <span class="s2">&quot;metroscubiertos&quot;</span><span class="p">,</span> <span class="s2">&quot;metrostotales&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;antiguedad&quot;</span><span class="p">,</span> <span class="s2">&quot;ano&quot;</span><span class="p">,</span> <span class="s2">&quot;precio&quot;</span>
+        <span class="p">}</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
     
     <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">entrenar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
-        <span class="c1"># no puedo usar estas columnas porque no las  voy a tener para predecir</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">excluir</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;precio_metro_total&#39;</span><span class="p">,</span> <span class="s1">&#39;precio_metro_cubierto&#39;</span><span class="p">}</span>
-        <span class="n">datos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtrar_numericas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">excluir</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span> <span class="o">=</span> <span class="n">datos</span>
-        <span class="n">train_label</span> <span class="o">=</span> <span class="n">datos</span><span class="p">[</span><span class="s2">&quot;precio&quot;</span><span class="p">]</span>
-        <span class="n">train_data</span> <span class="o">=</span> <span class="n">datos</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">datos</span><span class="o">.</span><span class="n">columns</span> <span class="o">!=</span> <span class="s1">&#39;precio&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span><span class="p">)</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtrar_numericas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">excluir</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">excluir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">excluir</span><span class="o">.</span><span class="n">union</span><span class="p">({</span><span class="s1">&#39;precio&#39;</span><span class="p">})</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">submit_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtrar_numericas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">excluir</span><span class="p">)</span>
-        
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preparar_datos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">)</span>
+        <span class="n">train_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="o">.</span><span class="n">columns</span> <span class="o">!=</span> <span class="s1">&#39;precio&#39;</span><span class="p">]</span>
+        <span class="n">train_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">[</span><span class="s2">&quot;precio&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preparar_datos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preparar_datos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_data</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span>
     
-    <span class="k">def</span> <span class="nf">filtrar_numericas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">excluir</span><span class="o">=</span><span class="p">{}):</span>
-        <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">            Recibe un set de datos y se queda sólo con las columnas numéricas.</span>
-<span class="sd">            Excluye de la respuesta las keys que vengan en excluir.</span>
-<span class="sd">            Llena los NaN con el promedio de esa columna.</span>
+    <span class="k">def</span> <span class="nf">preparar_datos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">columnas_numericas</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;antiguedad&#39;</span><span class="p">,</span> <span class="s1">&#39;habitaciones&#39;</span><span class="p">,</span> <span class="s1">&#39;garages&#39;</span><span class="p">,</span> <span class="s1">&#39;banos&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;metroscubiertos&#39;</span><span class="p">,</span> <span class="s1">&#39;metrostotales&#39;</span><span class="p">,</span> <span class="s1">&#39;gimnasio&#39;</span><span class="p">,</span> <span class="s1">&#39;usosmultiples&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;piscina&#39;</span><span class="p">,</span> <span class="s1">&#39;escuelascercanas&#39;</span><span class="p">,</span> <span class="s1">&#39;centroscomercialescercanos&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;precio_metro_cubierto&#39;</span><span class="p">,</span> <span class="s1">&#39;precio_metro_total&#39;</span><span class="p">,</span> <span class="s1">&#39;ano&#39;</span><span class="p">,</span> <span class="s1">&#39;mes&#39;</span><span class="p">,</span> <span class="s1">&#39;dia&#39;</span><span class="p">,</span> <span class="s1">&#39;precio&#39;</span>
-        <span class="p">}</span>
-        <span class="n">columnas_numericas</span><span class="o">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">excluir</span><span class="p">)</span>
-        <span class="n">datos</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">columnas_numericas</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">datos</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">datos</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="c1">#encodeadas = self.encodear_categoricas(df)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fecha&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">rellenas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rellenar_vacios</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rellenas</span>
     
+    <span class="k">def</span> <span class="nf">encodear_categoricas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Recibe un set de datos y le aplica one hot encoding a sus</span>
+<span class="sd">            variables categoricas.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">categoricas</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tipodepropiedad&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">one_hot_encode</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">categoricas</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">rellenar_vacios</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Rellena los valores vacíos del df con el promedio de esa columna.</span>
+<span class="sd">            Devuelve el DataFrame modificado.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
     <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">predecir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">columnas</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">datos</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-        <span class="n">columnas</span><span class="o">.</span><span class="n">difference_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">excluir</span><span class="p">)</span>
-        <span class="n">a_predecir</span> <span class="o">=</span> <span class="n">datos</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">columnas</span><span class="p">]</span>
+<span class="c1">#        columnas = set(datos.columns)</span>
+        <span class="n">a_predecir</span> <span class="o">=</span> <span class="n">datos</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="o">.</span><span class="n">columns</span> <span class="o">!=</span> <span class="s1">&#39;precio&#39;</span><span class="p">]</span>
         <span class="n">datos</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regression</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">a_predecir</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">datos</span>
             
@@ -13169,7 +13185,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span> <span class="o">=</span> <span class="n">RegresionLineal</span><span class="p">()</span>
@@ -13189,7 +13205,7 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>instanciar demoro 23.14 segundos
+<pre>instanciar demoro 0.0 segundos
 </pre>
 </div>
 </div>
@@ -13200,7 +13216,38 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>cargar demoro 1.23 segundos
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
@@ -13221,14 +13268,14 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>entrenar demoro 0.0 segundos
-entrenar demoro 0.66 segundos
+entrenar demoro 0.5 segundos
 </pre>
 </div>
 </div>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[8]:</div>
+    <div class="prompt output_prompt">Out[29]:</div>
 
 
 
@@ -13245,7 +13292,7 @@ entrenar demoro 0.66 segundos
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">validar</span><span class="p">()</span>
@@ -13274,13 +13321,13 @@ validar demoro 0.07 segundos
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[9]:</div>
+    <div class="prompt output_prompt">Out[30]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>1096428.2554070135</pre>
+<pre>1099954.5085142558</pre>
 </div>
 
 </div>
@@ -13291,7 +13338,7 @@ validar demoro 0.07 segundos
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predicciones</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">submit_data</span><span class="p">)</span>
@@ -13301,28 +13348,10 @@ validar demoro 0.07 segundos
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>predecir demoro 0.06 segundos
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">comentario</span> <span class="o">=</span> <span class="s1">&#39;Primer intento con regresor lineal&#39;</span>
@@ -13333,44 +13362,18 @@ validar demoro 0.07 segundos
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>guardar demoro 0.16 segundos
-</pre>
 </div>
-</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">()</span>
+</pre></div>
 
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|██████████| 1.43M/1.43M [00:05&lt;00:00, 265kB/s]
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>submit demoro 7.17 segundos
-presentar demoro 7.33 segundos
-</pre>
-</div>
-</div>
-
+    </div>
 </div>
 </div>
 

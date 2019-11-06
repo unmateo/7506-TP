@@ -16,9 +16,12 @@ from modelo import Modelo
 
 
 from sklearn.linear_model import LinearRegression
+import pandas as pd
+pd.set_option('display.max_columns', 100)
+pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
-# In[3]:
+# In[26]:
 
 
 class RegresionLineal(Modelo):
@@ -26,80 +29,107 @@ class RegresionLineal(Modelo):
 
     """
     
+    def cargar_datos(self):
+        """
+        
+        """
+        features = {
+            "piscina", "usosmultiples", "gimnasio", "garages",
+            "escuelascercanas", "centroscomercialescercanos",
+            "banos", "habitaciones", "metroscubiertos", "metrostotales",
+            "antiguedad", "ano", "precio"
+        }
+        super().cargar_datos(features)
     
     @Modelo.cronometrar()
     def entrenar(self):
         super().entrenar()
-        # no puedo usar estas columnas porque no las  voy a tener para predecir
-        self.excluir = {'precio_metro_total', 'precio_metro_cubierto'}
-        datos = self.filtrar_numericas(self.train_data, self.excluir)
-        self.train_data = datos
-        train_label = datos["precio"]
-        train_data = datos.loc[:, datos.columns != 'precio']
-        self.regression = LinearRegression().fit(train_data, train_label)
-        
-        self.test_data = self.filtrar_numericas(self.test_data, self.excluir)
-        self.excluir = self.excluir.union({'precio'})
-        self.submit_data = self.filtrar_numericas(self.submit_data, self.excluir)
-        
-
+        self.train_data = self.preparar_datos(self.train_data)
+        train_data = self.train_data.loc[:, self.train_data.columns != 'precio']
+        train_label = self.train_data["precio"]
+        self.regression = LinearRegression(normalize=True).fit(train_data, train_label)
+        self.test_data = self.preparar_datos(self.test_data)
+        self.submit_data = self.preparar_datos(self.submit_data)
         return True
     
-    def filtrar_numericas(self, df, excluir={}):
-        """ 
-            Recibe un set de datos y se queda sólo con las columnas numéricas.
-            Excluye de la respuesta las keys que vengan en excluir.
-            Llena los NaN con el promedio de esa columna.
+    def preparar_datos(self, df):
         """
-        columnas_numericas = {'antiguedad', 'habitaciones', 'garages', 'banos',
-            'metroscubiertos', 'metrostotales', 'gimnasio', 'usosmultiples',
-            'piscina', 'escuelascercanas', 'centroscomercialescercanos',
-            'precio_metro_cubierto', 'precio_metro_total', 'ano', 'mes', 'dia', 'precio'
-        }
-        columnas_numericas.difference_update(excluir)
-        datos = df.loc[:, columnas_numericas]
-        return datos.fillna(datos.mean())
+        
+        """
+        #encodeadas = self.encodear_categoricas(df)
+        df.drop(columns=["fecha"], inplace=True)
+        rellenas = self.rellenar_vacios(df)
+        return rellenas
     
+    def encodear_categoricas(self, df):
+        """
+            Recibe un set de datos y le aplica one hot encoding a sus
+            variables categoricas.
+        """
+        
+        categoricas = ["tipodepropiedad"]
+        return self.one_hot_encode(df, categoricas)
+    
+    def rellenar_vacios(self, df):
+        """
+            Rellena los valores vacíos del df con el promedio de esa columna.
+            Devuelve el DataFrame modificado.
+        """
+        return df.fillna(df.mean())
+
     @Modelo.cronometrar()
     def predecir(self, datos):
         """
 
         """
-        columnas = set(datos.columns)
-        columnas.difference_update(self.excluir)
-        a_predecir = datos.loc[:, columnas]
+#        columnas = set(datos.columns)
+        a_predecir = datos.loc[:, self.train_data.columns != 'precio']
         datos['target'] = self.regression.predict(a_predecir)
         return datos
             
 
 
-# In[4]:
+# In[27]:
 
 
 modelo = RegresionLineal()
 
 
-# In[8]:
+# In[28]:
+
+
+modelo.cargar_datos()
+
+
+# In[29]:
 
 
 modelo.entrenar()
 
 
-# In[9]:
+# In[30]:
 
 
 modelo.validar()
 
 
-# In[10]:
+# In[ ]:
 
 
 predicciones = modelo.predecir(modelo.submit_data)
 
 
-# In[12]:
+# In[ ]:
 
 
 comentario = 'Primer intento con regresor lineal'
 #modelo.presentar(predicciones, comentario)
+
+
+# In[13]:
+
+
+import pandas as pd
+df = pd.DataFrame()
+df.drop()
 
