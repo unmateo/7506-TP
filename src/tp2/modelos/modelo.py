@@ -14,7 +14,6 @@ class Modelo:
     DATETIME_FORMAT = "%Y-%m-%d_%H:%M:%S"
     DIR_PREDICCIONES = "../../predicciones/"
     COMPETENCIA = "Inmuebles24"
-
     
     def cronometrar(nombre=None):
         """ 

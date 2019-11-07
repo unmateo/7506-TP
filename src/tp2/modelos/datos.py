@@ -12,7 +12,7 @@ FEATURES_DISPONIBLES = {
     "escuelascercanas", "centroscomercialescercanos",
     "banos", "habitaciones", "metroscubiertos", "metrostotales",
     "antiguedad", "tipodepropiedad",
-    "idzona", "ciudad", "provincia", "gps",
+    "idzona", "ciudad", "provincia", "gps", "lng", "lat"
     "fecha", "ano", "mes", "dia",
     "precio", "precio_metro_cubierto", "precio_metro_total"
 }
