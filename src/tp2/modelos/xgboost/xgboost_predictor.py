@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[11]:
+# In[3]:
 
 
 import os
@@ -10,26 +10,22 @@ this = os.getcwd()
 path = this[:this.rfind("/")]
 if not path in sys.path: sys.path.append(path)
 
+import pandas as pd
+import matplotlib
 from datos import FEATURES_DISPONIBLES
 from modelo import Modelo
-import pandas as pd
+
 pd.set_option('display.max_columns', 100)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
-# In[10]:
-
-
-
-
-
-# In[5]:
+# In[4]:
 
 
 import xgboost as xgb
 
 
-# In[17]:
+# In[5]:
 
 
 class XGBoost(Modelo):
@@ -55,66 +51,63 @@ class XGBoost(Modelo):
         
 
 
-# In[18]:
+# In[24]:
 
 
 modelo = XGBoost()
 modelo.cargar_datos()
 
 
-# In[16]:
+# In[13]:
 
 
-modelo.train_data.head()
+def split_data_label(df, label):
+    data = df.loc[:, df.columns != label]
+    label = df[label].values
+    return data, label
 
 
-# In[27]:
+# In[25]:
 
 
 label = 'gimnasio'
-dtrain = xgb.DMatrix(modelo.train_data, label=modelo.train_data[label].values)
-dtest = xgb.DMatrix(modelo.test_data, label=modelo.test_data[label].values)
+train_data, train_label = split_data_label(modelo.train_data, label)
+test_data, test_label = split_data_label(modelo.test_data, label)
+
+dtrain = xgb.DMatrix(train_data, label=train_label)
+dtest = xgb.DMatrix(test_data, label=test_label)
 
 
-# In[28]:
+# In[26]:
 
 
 params = {'max_depth': 2, 'eta': 1, 'objective': 'binary:logistic', 'nthread': 4, 'eval_metric': 'auc'}
 booster = xgb.train(params, dtrain)
 
 
-# In[46]:
+# In[27]:
 
 
-modelo.test_data['pred'] = booster.predict(dtest)
+predictions = booster.predict(dtest)
 
 
-# In[47]:
+# In[41]:
 
 
-pred = modelo.test_data[[label, 'pred']]
+result = pd.DataFrame([modelo.test_data[label].values, predictions]).T
+result.columns = ["real", "pred"]
+result["label"] = result["pred"].map(lambda x: x > 0.5)
+result["ok"] = (result["real"] == result["label"])
 
 
-# In[48]:
+# In[42]:
 
 
-pred["pred"].hist()
+result["ok"].value_counts()
 
 
-# In[49]:
+# In[44]:
 
 
-pred["label"] = pred["pred"].map(lambda x: x > 0.5)
-
-
-# In[57]:
-
-
-pred["dif"] = ~(pred[label] == pred["label"])
-
-
-# In[58]:
-
-
-pred["dif"].value_counts()
+plot = xgb.plot_importance(booster)
 
