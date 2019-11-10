@@ -35,7 +35,7 @@ class Modelo:
         return afuera   
     
     @cronometrar("instanciar")
-    def __init__(self):
+    def __init__(self, feature="precio"):
         """ """
         self.cargado = False
         self.entrenado = False
@@ -45,6 +45,7 @@ class Modelo:
         self.resultado_validacion = None
         self.resultado_kaggle = None
         self.tiempos = {}
+        self.feature = feature
 
     @cronometrar("cargar")
     def cargar_datos(self, features=None):
@@ -79,7 +80,7 @@ class Modelo:
             raise Exception("No se ha entrenado.")
         self.validado = True
         predicciones = self.predecir(self.test_data)
-        score = self.puntuar(predicciones["precio"], predicciones["target"])
+        score = self.puntuar(predicciones[self.feature], predicciones["target"])
         self.resultado_validacion = score
         return score
     
