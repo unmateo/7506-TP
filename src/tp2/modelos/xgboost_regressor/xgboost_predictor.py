@@ -28,7 +28,7 @@ from operator import concat
 from functools import reduce
 
 
-# In[143]:
+# In[149]:
 
 
 class XGBoostRegressor(Modelo):
@@ -42,7 +42,7 @@ class XGBoostRegressor(Modelo):
         """
         """
         excluir = {
-            "ciudad", "idzona", "fecha",
+            "idzona", "fecha",
             "precio_metro_cubierto", "precio_metro_total"
         }
         features = FEATURES_DISPONIBLES - excluir
@@ -57,7 +57,7 @@ class XGBoostRegressor(Modelo):
         """
         """
         df = df.drop(columns="fecha")   
-        categoricas = {"tipodepropiedad", "provincia"}
+        categoricas = {"tipodepropiedad", "provincia", "ciudad"}
         return self.one_hot_encode(df, categoricas)
     
     def agregar_columnas_faltantes(self):
@@ -104,34 +104,34 @@ class XGBoostRegressor(Modelo):
         return data
 
 
-# In[144]:
+# In[150]:
 
 
 modelo = XGBoostRegressor()
 modelo.cargar_datos()
 
 
-# In[145]:
+# In[151]:
 
 
 modelo.entrenar()
 
 
-# In[146]:
+# In[152]:
 
 
 modelo.validar()
 
 
-# In[147]:
+# In[153]:
 
 
 predicciones = modelo.predecir(modelo.submit_data)
 
 
-# In[148]:
+# In[154]:
 
 
-comentario = "xgboost regressor con one hot encoding para tipodepropiedad y provincia - puntaje local 769896.8"
+comentario = "xgboost regressor con one hot encoding para tipodepropiedad,provincia y ciudad - puntaje local 738739.3"
 modelo.presentar(predicciones, comentario)
 
