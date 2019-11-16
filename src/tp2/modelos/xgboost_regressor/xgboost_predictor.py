@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 
 import os
@@ -19,7 +19,7 @@ pd.set_option('display.max_columns', 100)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
-# In[10]:
+# In[ ]:
 
 
 import xgboost as xgb
@@ -28,7 +28,7 @@ from operator import concat
 from functools import reduce
 
 
-# In[149]:
+# In[ ]:
 
 
 class XGBoostRegressor(Modelo):
@@ -72,7 +72,6 @@ class XGBoostRegressor(Modelo):
             faltantes = list(columnas_todas - {'precio'} - set(df.columns.values))
             for faltante in faltantes:
                 df[faltante] = False
-            print(faltantes)
             return df.reindex(columnas_todas, axis='columns')
         self.train_data = agregar_faltantes(self.train_data)
         self.test_data = agregar_faltantes(self.test_data)
@@ -88,7 +87,7 @@ class XGBoostRegressor(Modelo):
     def entrenar(self, params=None):
         """
         """
-        train_data, train_label = self._split_data_label(modelo.train_data, self.feature)
+        train_data, train_label = self._split_data_label(self.train_data, self.feature)
         self.model = xgb.XGBRegressor()
         self.model.fit(train_data, train_label)
         super().entrenar()
@@ -104,34 +103,15 @@ class XGBoostRegressor(Modelo):
         return data
 
 
-# In[150]:
+# In[ ]:
 
 
-modelo = XGBoostRegressor()
-modelo.cargar_datos()
-
-
-# In[151]:
-
-
-modelo.entrenar()
-
-
-# In[152]:
-
-
-modelo.validar()
-
-
-# In[153]:
-
-
-predicciones = modelo.predecir(modelo.submit_data)
-
-
-# In[154]:
-
-
-comentario = "xgboost regressor con one hot encoding para tipodepropiedad,provincia y ciudad - puntaje local 738739.3"
-modelo.presentar(predicciones, comentario)
+def test():
+    modelo = XGBoostRegressor()
+    modelo.cargar_datos()
+    modelo.entrenar()
+    modelo.validar()
+    predicciones = modelo.predecir(modelo.submit_data)
+    comentario = "xgboost regressor con one hot encoding para tipodepropiedad, provincia y ciudad - puntaje local 738739.3"
+    modelo.presentar(predicciones, comentario)
 

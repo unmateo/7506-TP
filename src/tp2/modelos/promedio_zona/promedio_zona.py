@@ -117,45 +117,15 @@ class PromedioZona(Modelo):
             
 
 
-# In[15]:
-
-
-modelo = PromedioZona()
-
-
-# In[16]:
-
-
-modelo.cargar_datos()
-
-
-# In[17]:
-
-
-modelo.entrenar()
-
-
-# In[18]:
-
-
-modelo.validar()
-
-
 # In[ ]:
 
 
-predicciones = modelo.predecir(modelo.submit_data)
-
-
-# In[ ]:
-
-
-comentario = "Despues de usar datos de ciudad y provincia"
-#modelo.presentar(predicciones, comentario)
-
-
-# In[ ]:
-
-
-#modelo.buscar_score(comentario)
+def test():
+    modelo = PromedioZona()
+    modelo.cargar_datos()
+    modelo.entrenar()
+    modelo.validar()
+    predicciones = modelo.predecir(modelo.submit_data)
+    comentario = "Despues de usar datos de ciudad y provincia"
+    #modelo.presentar(predicciones, comentario)
 

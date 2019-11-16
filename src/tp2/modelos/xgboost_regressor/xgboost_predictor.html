@@ -13076,7 +13076,7 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -13101,7 +13101,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
@@ -13117,7 +13117,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[149]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">XGBoostRegressor</span><span class="p">(</span><span class="n">Modelo</span><span class="p">):</span>
@@ -13161,7 +13161,6 @@ div#notebook {
             <span class="n">faltantes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">columnas_todas</span> <span class="o">-</span> <span class="p">{</span><span class="s1">&#39;precio&#39;</span><span class="p">}</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">faltante</span> <span class="ow">in</span> <span class="n">faltantes</span><span class="p">:</span>
                 <span class="n">df</span><span class="p">[</span><span class="n">faltante</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">faltantes</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columnas_todas</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span> <span class="o">=</span> <span class="n">agregar_faltantes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_data</span> <span class="o">=</span> <span class="n">agregar_faltantes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_data</span><span class="p">)</span>
@@ -13177,7 +13176,7 @@ div#notebook {
     <span class="k">def</span> <span class="nf">entrenar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_data_label</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">train_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">)</span>
+        <span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_data_label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBRegressor</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
@@ -13200,227 +13199,20 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[150]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span> <span class="o">=</span> <span class="n">XGBoostRegressor</span><span class="p">()</span>
-<span class="n">modelo</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="n">modelo</span> <span class="o">=</span> <span class="n">XGBoostRegressor</span><span class="p">()</span>
+    <span class="n">modelo</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
+    <span class="n">modelo</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
+    <span class="n">modelo</span><span class="o">.</span><span class="n">validar</span><span class="p">()</span>
+    <span class="n">predicciones</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">submit_data</span><span class="p">)</span>
+    <span class="n">comentario</span> <span class="o">=</span> <span class="s2">&quot;xgboost regressor con one hot encoding para tipodepropiedad, provincia y ciudad - puntaje local 738739.3&quot;</span>
+    <span class="n">modelo</span><span class="o">.</span><span class="n">presentar</span><span class="p">(</span><span class="n">predicciones</span><span class="p">,</span> <span class="n">comentario</span><span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>instanciar demoro 0.0 segundos
-cargar demoro 1.66 segundos
-[&#39;ciudad_Calotmul&#39;, &#39;ciudad_Aquila&#39;, &#39;ciudad_Nochistlán de Mejía&#39;, &#39;ciudad_Hueyotlipan&#39;, &#39;ciudad_China&#39;, &#39;ciudad_Muna&#39;, &#39;ciudad_Tetiz&#39;, &#39;ciudad_Balleza&#39;, &#39;ciudad_Tixmehuac&#39;, &#39;ciudad_Tetlatlahuca&#39;, &#39;ciudad_Alto Lucero de Gutiérrez Barrios&#39;, &#39;ciudad_Tlanalapa&#39;, &#39;ciudad_Jala&#39;, &#39;ciudad_Cuquío&#39;, &#39;ciudad_Ures&#39;, &#39;ciudad_Indaparapeo&#39;, &#39;ciudad_Cantamayec&#39;, &#39;ciudad_Chahuites&#39;, &#39;ciudad_Temascalcingo&#39;, &#39;ciudad_Guerrero&#39;, &#39;ciudad_Iturbide&#39;, &#39;ciudad_Tizapán el Alto&#39;, &#39;ciudad_Tenamaxtlán&#39;, &#39;ciudad_Las Choapas&#39;, &#39;ciudad_Atoyatempan&#39;, &#39;ciudad_Epitacio Huerta&#39;, &#39;ciudad_Santiago Tuxtla&#39;, &#39;ciudad_Molango de Escamilla&#39;, &#39;ciudad_Ciudad del Maíz&#39;, &#39;ciudad_San Felipe del Progreso&#39;, &#39;ciudad_Namiquipa&#39;, &#39;ciudad_Ascensión&#39;, &#39;ciudad_Comonfort&#39;, &#39;ciudad_Acuamanala de Miguel Hidalgo&#39;, &#39;ciudad_El Grullo&#39;, &#39;ciudad_San José de Gracia&#39;, &#39;ciudad_Jungapeo&#39;, &#39;ciudad_Miahuatlán de Porfirio Díaz&#39;, &#39;ciudad_Mainero&#39;, &#39;ciudad_Rayón&#39;, &#39;ciudad_San Sebastián del Oeste&#39;, &#39;ciudad_Sultepec&#39;, &#39;ciudad_Tamazula de Gordiano&#39;, &#39;ciudad_San Felipe Teotlalcingo&#39;, &#39;ciudad_San Pedro de la Cueva&#39;, &#39;ciudad_Catazajá&#39;]
-[&#39;ciudad_Calotmul&#39;, &#39;ciudad_Aquila&#39;, &#39;ciudad_Nochistlán de Mejía&#39;, &#39;ciudad_Hueyotlipan&#39;, &#39;ciudad_China&#39;, &#39;ciudad_Muna&#39;, &#39;ciudad_Tetiz&#39;, &#39;ciudad_Balleza&#39;, &#39;ciudad_Tixmehuac&#39;, &#39;ciudad_Tetlatlahuca&#39;, &#39;ciudad_Alto Lucero de Gutiérrez Barrios&#39;, &#39;ciudad_Tlanalapa&#39;, &#39;ciudad_Jala&#39;, &#39;ciudad_Cuquío&#39;, &#39;ciudad_Ures&#39;, &#39;ciudad_Indaparapeo&#39;, &#39;ciudad_Cantamayec&#39;, &#39;ciudad_Chahuites&#39;, &#39;ciudad_Temascalcingo&#39;, &#39;ciudad_Guerrero&#39;, &#39;ciudad_Iturbide&#39;, &#39;ciudad_Tizapán el Alto&#39;, &#39;ciudad_Tenamaxtlán&#39;, &#39;ciudad_Las Choapas&#39;, &#39;ciudad_Atoyatempan&#39;, &#39;ciudad_Epitacio Huerta&#39;, &#39;ciudad_Santiago Tuxtla&#39;, &#39;ciudad_Molango de Escamilla&#39;, &#39;ciudad_Ciudad del Maíz&#39;, &#39;ciudad_San Felipe del Progreso&#39;, &#39;ciudad_Namiquipa&#39;, &#39;ciudad_Ascensión&#39;, &#39;ciudad_Comonfort&#39;, &#39;ciudad_Acuamanala de Miguel Hidalgo&#39;, &#39;ciudad_El Grullo&#39;, &#39;ciudad_San José de Gracia&#39;, &#39;ciudad_Jungapeo&#39;, &#39;ciudad_Miahuatlán de Porfirio Díaz&#39;, &#39;ciudad_Mainero&#39;, &#39;ciudad_Rayón&#39;, &#39;ciudad_San Sebastián del Oeste&#39;, &#39;ciudad_Sultepec&#39;, &#39;ciudad_Tamazula de Gordiano&#39;, &#39;ciudad_San Felipe Teotlalcingo&#39;, &#39;ciudad_San Pedro de la Cueva&#39;, &#39;ciudad_Catazajá&#39;]
-[&#39;ciudad_Tinum&#39;, &#39;ciudad_Cuitzeo&#39;, &#39;ciudad_Sabinas&#39;, &#39;ciudad_Suchiapa&#39;, &#39;ciudad_San Pablo del Monte&#39;, &#39;ciudad_Izamal&#39;, &#39;ciudad_Tlacolula de Matamoros&#39;, &#39;ciudad_Rafael Lara Grajales&#39;, &#39;ciudad_Sinaloa&#39;, &#39;ciudad_Nanchital de Lázaro Cárdenas del Río&#39;, &#39;ciudad_Reyes Etla&#39;, &#39;ciudad_Moctezuma&#39;, &#39;ciudad_Casas Grandes&#39;, &#39;ciudad_Ocotlán de Morelos&#39;, &#39;ciudad_Taxco de Alarcón&#39;, &#39;ciudad_Tetepango&#39;, &#39;ciudad_Tonanitla&#39;, &#39;ciudad_Ahuacatlán&#39;, &#39;ciudad_Pánuco de Coronado&#39;, &#39;ciudad_Alamo Temapache&#39;, &#39;ciudad_Almoloya de Alquisiras&#39;, &#39;ciudad_Atempan&#39;, &#39;ciudad_Tamiahua&#39;, &#39;ciudad_Sudzal&#39;, &#39;ciudad_Lerdo de Tejada&#39;, &#39;ciudad_Cihuatlán&#39;, &#39;ciudad_Zaragoza&#39;, &#39;ciudad_Actopan&#39;, &#39;ciudad_Yaxcabá&#39;, &#39;ciudad_El Espinal&#39;, &#39;ciudad_Higueras&#39;, &#39;ciudad_Tlaquiltenango&#39;, &#39;ciudad_Tuxtla Chico&#39;, &#39;ciudad_Jalcomulco&#39;, &#39;ciudad_Encarnación de Díaz&#39;, &#39;ciudad_Yuriria&#39;, &#39;ciudad_Angostura&#39;, &#39;ciudad_San Miguel Xoxtla&#39;, &#39;ciudad_Huandacareo&#39;, &#39;ciudad_Zimapán&#39;, &#39;ciudad_Nanacamilpa de Mariano Arista&#39;, &#39;ciudad_Jiménez&#39;, &#39;ciudad_Tepechitlán&#39;, &#39;ciudad_San Salvador el Verde&#39;, &#39;ciudad_Uayma&#39;, &#39;ciudad_Xalatlaco&#39;, &#39;ciudad_Atoyac de Alvarez&#39;, &#39;ciudad_Cuautitlán de García Barragán&#39;, &#39;ciudad_Los Ramones&#39;, &#39;ciudad_San Raymundo Jalpan&#39;, &#39;ciudad_Miahuatlán&#39;, &#39;ciudad_Copala&#39;, &#39;ciudad_Ocuilan&#39;, &#39;ciudad_Chalchicomula de Sesma&#39;, &#39;ciudad_General Cepeda&#39;, &#39;ciudad_Acuña&#39;, &#39;ciudad_Paso de Ovejas&#39;, &#39;ciudad_Tlalixcoyan&#39;, &#39;ciudad_Totoltepec de Guerrero&#39;, &#39;ciudad_Comapa&#39;, &#39;ciudad_San Andrés Tuxtla&#39;, &#39;ciudad_Macuspana&#39;, &#39;ciudad_Contepec&#39;, &#39;ciudad_San Gregorio Atzompa&#39;, &#39;ciudad_Cedral&#39;, &#39;ciudad_Pinotepa de Don Luis&#39;, &#39;ciudad_Naranjos Amatlán&#39;, &#39;ciudad_Tepeyanco&#39;, &#39;ciudad_Teocelo&#39;, &#39;ciudad_Jonacatepec&#39;, &#39;ciudad_Huajicori&#39;, &#39;ciudad_Yaxkukul&#39;, &#39;ciudad_Chignahuapan&#39;, &#39;ciudad_Sayula&#39;, &#39;ciudad_ácatlán&#39;, &#39;ciudad_Tecolotlán&#39;, &#39;ciudad_Jamapa&#39;, &#39;ciudad_Concordia&#39;, &#39;ciudad_Almoloya&#39;, &#39;ciudad_Santa Ana&#39;, &#39;ciudad_Zacualpan&#39;, &#39;ciudad_Panindícuaro&#39;, &#39;ciudad_Villa Guerrero&#39;, &#39;ciudad_Tepetitla de Lardizábal&#39;, &#39;ciudad_Cocotitlán&#39;, &#39;ciudad_Ecatzingo&#39;, &#39;ciudad_Mariano Escobedo&#39;, &#39;ciudad_Empalme&#39;, &#39;ciudad_Nautla&#39;, &#39;ciudad_Paracho&#39;, &#39;ciudad_Villa de Arriaga&#39;, &#39;ciudad_Quintana Roo&#39;, &#39;ciudad_Dzitás&#39;, &#39;ciudad_Santiago Suchilquitongo&#39;, &#39;ciudad_San Gabriel&#39;, &#39;ciudad_Tihuatlán&#39;, &#39;ciudad_Villaflores&#39;, &#39;ciudad_Camarón de Tejeda&#39;, &#39;ciudad_Tepeaca&#39;, &#39;ciudad_Jáltipan&#39;, &#39;ciudad_Opichén&#39;, &#39;ciudad_Ixtaczoquitlán&#39;, &#39;ciudad_Santa Isabel Xiloxoxtla&#39;, &#39;ciudad_Huautla de Jiménez&#39;, &#39;ciudad_Gómez Farías&#39;, &#39;ciudad_Natívitas&#39;, &#39;ciudad_Tarimoro&#39;, &#39;ciudad_Sabinas Hidalgo&#39;, &#39;ciudad_Quitupan&#39;, &#39;ciudad_Chilchotla&#39;, &#39;ciudad_Unión de San Antonio&#39;, &#39;ciudad_Ayapango&#39;, &#39;ciudad_Coahuayana&#39;, &#39;ciudad_Zinapécuaro&#39;, &#39;ciudad_Puente de Ixtla&#39;, &#39;ciudad_Teuchitlán&#39;, &#39;ciudad_Cuetzalan del Progreso&#39;, &#39;ciudad_Atengo&#39;, &#39;ciudad_Chetumal&#39;, &#39;ciudad_San Felipe&#39;, &#39;ciudad_Gral. Treviño&#39;, &#39;ciudad_Nadadores&#39;, &#39;ciudad_Saucillo&#39;, &#39;ciudad_Sanctórum de Lázaro Cárdenas&#39;, &#39;ciudad_Huehuetlán&#39;, &#39;ciudad_Ecuandureo&#39;, &#39;ciudad_Tecozautla&#39;, &#39;ciudad_Asunción Ixtaltepec&#39;, &#39;ciudad_Atemajac de Brizuela&#39;, &#39;ciudad_Reforma&#39;, &#39;ciudad_Colotlán&#39;, &#39;ciudad_San Rafael&#39;, &#39;ciudad_Texcaltitlán&#39;, &#39;ciudad_Santiago Papasquiaro&#39;, &#39;ciudad_Ciénega de Zimatlán&#39;, &#39;ciudad_San Juan Guelavía&#39;, &#39;ciudad_Cintalapa&#39;, &#39;ciudad_Purísima del Rincón&#39;, &#39;ciudad_San Mateo Río Hondo&#39;, &#39;ciudad_Mina&#39;, &#39;ciudad_Cosío&#39;, &#39;ciudad_Magdalena&#39;, &#39;ciudad_Jalpan de Serra&#39;, &#39;ciudad_áyotlán&#39;, &#39;ciudad_Aconchi&#39;, &#39;ciudad_Santiago Miahuatlán&#39;, &#39;ciudad_Ahualulco de Mercado&#39;, &#39;ciudad_Ixtapan del Oro&#39;, &#39;ciudad_Pedro Escobedo&#39;, &#39;ciudad_Santa Cruz Acatepec&#39;, &#39;ciudad_Otumba&#39;, &#39;ciudad_Tlalpujahua&#39;, &#39;ciudad_Santa María Apazco&#39;, &#39;ciudad_Umán&#39;, &#39;ciudad_El Mante&#39;, &#39;ciudad_Guadalupe Victoria&#39;, &#39;ciudad_Soto la Marina&#39;, &#39;ciudad_Rosario&#39;, &#39;ciudad_Marqués de Comillas&#39;, &#39;ciudad_Jalapa&#39;, &#39;ciudad_San Martín de las Pirámides&#39;, &#39;tipodepropiedad_Garage&#39;, &#39;ciudad_Omealca&#39;, &#39;ciudad_áutlán de Navarro&#39;, &#39;ciudad_Poanas&#39;, &#39;ciudad_Tahmek&#39;, &#39;ciudad_Amanalco&#39;, &#39;ciudad_El Fuerte&#39;, &#39;ciudad_Villa Purificación&#39;, &#39;ciudad_Casas&#39;, &#39;ciudad_Perote&#39;, &#39;ciudad_Tepetitlán&#39;, &#39;ciudad_Calcahualco&#39;, &#39;ciudad_Tecolutla&#39;, &#39;ciudad_Celestún&#39;, &#39;ciudad_Tetecala&#39;, &#39;ciudad_Bocoyna&#39;, &#39;ciudad_Axapusco&#39;, &#39;ciudad_Aramberri&#39;, &#39;ciudad_Chignautla&#39;, &#39;ciudad_Nopaltepec&#39;, &#39;ciudad_ácámbaro&#39;, &#39;ciudad_Ajacuba&#39;, &#39;ciudad_Asunción Cacalotepec&#39;, &#39;ciudad_Temax&#39;, &#39;ciudad_Chavinda&#39;, &#39;ciudad_San Pedro&#39;, &#39;ciudad_Mazatepec&#39;, &#39;ciudad_Tlacotalpan&#39;, &#39;ciudad_Villaldama&#39;, &#39;ciudad_Villagrán&#39;, &#39;ciudad_Ocampo&#39;, &#39;ciudad_La Trinitaria&#39;, &#39;ciudad_Mayapán&#39;, &#39;ciudad_Santa Isabel&#39;, &#39;ciudad_Tixtla de Guerrero&#39;, &#39;ciudad_Jaral del Progreso&#39;, &#39;ciudad_Juanacatlán&#39;, &#39;ciudad_Tempoal&#39;, &#39;ciudad_Río Grande&#39;, &#39;ciudad_Colón&#39;, &#39;ciudad_Villa de Cos&#39;, &#39;ciudad_Juárez Hidalgo&#39;, &#39;ciudad_Sombrerete&#39;, &#39;ciudad_Zimatlán de Alvarez&#39;, &#39;ciudad_Ixtlahuacán&#39;, &#39;ciudad_Misantla&#39;, &#39;ciudad_Mapastepec&#39;, &#39;ciudad_Tetela del Volcán&#39;, &#39;ciudad_Tecuala&#39;, &#39;ciudad_ZirAndaro&#39;, &#39;ciudad_San Francisco del Rincón&#39;, &#39;ciudad_Cazones de Herrera&#39;, &#39;ciudad_Marín&#39;, &#39;ciudad_Apatzingán&#39;, &#39;ciudad_San Felipe Orizatlán&#39;, &#39;ciudad_Tenango del Aire&#39;, &#39;ciudad_Batopilas&#39;, &#39;ciudad_Quiroga&#39;, &#39;ciudad_Nuevo Ideal&#39;, &#39;ciudad_Calvillo&#39;, &#39;ciudad_Tepalcatepec&#39;, &#39;ciudad_Tlaxco&#39;, &#39;ciudad_Tzintzuntzan&#39;, &#39;ciudad_Iguala de la Independencia&#39;, &#39;ciudad_Ojinaga&#39;, &#39;ciudad_Timilpan&#39;, &#39;ciudad_Cuaxomulco&#39;, &#39;ciudad_Acatzingo&#39;, &#39;ciudad_Tizimín&#39;, &#39;ciudad_Villa Corzo&#39;, &#39;ciudad_Villa de Allende&#39;, &#39;ciudad_Ocosingo&#39;, &#39;ciudad_Donato Guerra&#39;, &#39;ciudad_Xaltocan&#39;, &#39;ciudad_Teapa&#39;, &#39;ciudad_Acayucan&#39;, &#39;ciudad_Tejupilco&#39;, &#39;ciudad_Dr. Belisario Domínguez&#39;, &#39;ciudad_Heroica Ciudad de Juchitán de Zaragoza&#39;, &#39;ciudad_Los Herreras&#39;, &#39;ciudad_Tianguismanalco&#39;, &#39;ciudad_Castaños&#39;, &#39;ciudad_Elota&#39;, &#39;ciudad_Tochtepec&#39;, &#39;ciudad_Tototlán&#39;, &#39;ciudad_Santa Ana Nopalucan&#39;, &#39;ciudad_Huatusco&#39;, &#39;ciudad_Bella Vista&#39;, &#39;ciudad_Isidro Fabela&#39;, &#39;ciudad_Valle Hermoso&#39;, &#39;tipodepropiedad_Hospedaje&#39;, &#39;ciudad_Alamos&#39;, &#39;ciudad_Asientos&#39;, &#39;ciudad_Tlalixtac de Cabrera&#39;, &#39;ciudad_Acateno&#39;, &#39;ciudad_Santa María del Oro&#39;, &#39;ciudad_Canatlán&#39;, &#39;ciudad_Río Lagartos&#39;, &#39;ciudad_PuruAndiro&#39;, &#39;ciudad_San Pablo Huitzo&#39;, &#39;ciudad_Rafael Lucio&#39;, &#39;ciudad_La Huacana&#39;, &#39;ciudad_Ixhuatlancillo&#39;, &#39;ciudad_Chilapa de Alvarez&#39;, &#39;ciudad_Santa Cruz de Juventino Rosas&#39;, &#39;ciudad_Cananea&#39;, &#39;ciudad_Ahuazotepec&#39;, &#39;ciudad_Dzidzantún&#39;, &#39;ciudad_Charo&#39;, &#39;ciudad_Pinal de Amoles&#39;, &#39;ciudad_Chiconcuac&#39;, &#39;ciudad_San Fernando&#39;, &#39;ciudad_Atoyac&#39;, &#39;ciudad_Gutiérrez Zamora&#39;, &#39;ciudad_Ruíz&#39;, &#39;ciudad_San Pablo Villa de Mitla&#39;, &#39;ciudad_Suma&#39;, &#39;ciudad_Loreto&#39;, &#39;ciudad_Jerécuaro&#39;, &#39;ciudad_Catemaco&#39;, &#39;ciudad_Ixtlán del Río&#39;, &#39;ciudad_Palizada&#39;, &#39;ciudad_Teabo&#39;, &#39;ciudad_Juchitán de Zaragoza&#39;, &#39;ciudad_San Lucas&#39;, &#39;ciudad_Pisaflores&#39;, &#39;ciudad_Chínipas&#39;, &#39;ciudad_Atotonilco el Alto&#39;, &#39;ciudad_Abalá&#39;, &#39;ciudad_Dr. González&#39;, &#39;ciudad_Matehuala&#39;, &#39;ciudad_Escuinapa&#39;, &#39;ciudad_Pijijiapan&#39;, &#39;ciudad_San José del Rincón&#39;, &#39;ciudad_San Francisco de Borja&#39;, &#39;ciudad_Moroleón&#39;, &#39;ciudad_Cacalchén&#39;, &#39;ciudad_Dzoncauich&#39;, &#39;ciudad_Gral. Bravo&#39;, &#39;ciudad_San Pedro Mixtepec -Dto. 26 -&#39;, &#39;ciudad_ácaxochitlán&#39;, &#39;ciudad_Los Reyes&#39;, &#39;ciudad_Almoloya del Río&#39;, &#39;ciudad_Sinanché&#39;, &#39;ciudad_Jocotitlán&#39;, &#39;ciudad_Tamazunchale&#39;, &#39;ciudad_Altotonga&#39;, &#39;ciudad_Villa de Tezontepec&#39;, &#39;ciudad_Teteles de Avila Castillo&#39;, &#39;ciudad_Urique&#39;, &#39;ciudad_Lamadrid&#39;, &#39;ciudad_Calkiní&#39;, &#39;ciudad_Huetamo&#39;, &#39;ciudad_Jiquilpan&#39;, &#39;ciudad_Cuerámaro&#39;, &#39;ciudad_Tezontepec de Aldama&#39;, &#39;ciudad_Ciudad Fernández&#39;, &#39;ciudad_San Jerónimo Tecuanipan&#39;, &#39;ciudad_Huimanguillo&#39;, &#39;ciudad_Balancán&#39;, &#39;ciudad_Acuitzio&#39;, &#39;ciudad_El Barrio de la Soledad&#39;, &#39;ciudad_San Sebastián Tutla&#39;, &#39;ciudad_Zináparo&#39;, &#39;ciudad_Ursulo Galván&#39;, &#39;ciudad_Mineral del Monte&#39;, &#39;ciudad_Río Blanco&#39;, &#39;ciudad_Hoctún&#39;, &#39;ciudad_Nazareno Etla&#39;, &#39;ciudad_General Plutarco Elías Calles&#39;, &#39;ciudad_Buctzotz&#39;, &#39;ciudad_La Piedad&#39;, &#39;ciudad_Yahualica de González Gallo&#39;, &#39;ciudad_Homún&#39;, &#39;ciudad_Apazapan&#39;, &#39;ciudad_Santo Tomás&#39;, &#39;ciudad_Salvatierra&#39;, &#39;ciudad_Timucuy&#39;, &#39;ciudad_Aquismón&#39;, &#39;ciudad_CopAndaro&#39;, &#39;ciudad_Papantla&#39;, &#39;ciudad_Zacatepec&#39;, &#39;ciudad_Peribán&#39;, &#39;ciudad_Villanueva&#39;, &#39;ciudad_Purépero&#39;, &#39;ciudad_Gustavo Díaz Ordaz&#39;]
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[150]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>True</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[151]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[14:24:08] WARNING: /workspace/src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.
-entrenar demoro 0.0 segundos
-entrenar demoro 278.14 segundos
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[151]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>True</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[152]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">validar</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>predecir demoro 3.01 segundos
-puntuar demoro 0.0 segundos
-validar demoro 3.02 segundos
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[152]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>738739.3</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[153]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predicciones</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">submit_data</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>predecir demoro 3.0 segundos
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[154]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">comentario</span> <span class="o">=</span> <span class="s2">&quot;xgboost regressor con one hot encoding para tipodepropiedad,provincia y ciudad - puntaje local 738739.3&quot;</span>
-<span class="n">modelo</span><span class="o">.</span><span class="n">presentar</span><span class="p">(</span><span class="n">predicciones</span><span class="p">,</span> <span class="n">comentario</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>guardar demoro 0.12 segundos
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|██████████| 969k/969k [00:05&lt;00:00, 191kB/s]  
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>submit demoro 7.87 segundos
-presentar demoro 8.0 segundos
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
