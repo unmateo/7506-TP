@@ -2,3 +2,5 @@ timestamp, modelo, validacion, kaggle, comentario
 2019-10-31_20:06:01,PromedioZona,946206.6399678161,None,Antes de usar datos de ciudad y provincia
 2019-10-31_20:39:50,PromedioZona,855428.1439526522,850645.50501,Resultado local: 855428.1439526522
 2019-11-03_21:16:02,RegresionLineal,1096428.2554070135,1098730.81087,Primer intento con regresor lineal
+2019-11-16_12:18:06,XGBoostRegressor,974263.25,973217.76851,xgboost regressor muy básico - puntaje local 974.263
+2019-11-16_14:21:00,XGBoostRegressor,769896.8,None,xgboost regressor con one hot encoding para tipodepropiedad y provincia - puntaje local 769896.8
