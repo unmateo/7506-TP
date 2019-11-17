@@ -94,9 +94,10 @@ class XGBoostRegressor(Modelo):
         return True
     
     @Modelo.cronometrar()
-    def predecir(self, data):
+    def predecir(self, df):
         """
         """
+        data = df.copy()
         predict_data, predict_label = self._split_data_label(data, self.feature)
         predictions = self.model.predict(predict_data)
         data["target"] = predictions

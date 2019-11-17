@@ -50,11 +50,14 @@ class PromedioZona(Modelo):
         self.prediccion_default = metros_general * promedio_general
     
     @Modelo.cronometrar()
-    def predecir(self, datos):
+    def predecir(self, df):
         """
-            Aplica predecir_publicacion a cada fila del df que recibe.
-            Asigna el resultado en la columna 'target'
+            Genera una copia del df.
+            Aplica predecir_publicacion a cada fila.
+            Asigna el resultado en la columna 'target'.
+            Devuelve la copia.
         """
+        datos = df.copy()
         prediccion = lambda publicacion: self.predecir_publicacion(publicacion)
         datos["target"] = datos.apply(prediccion, axis="columns")
         return datos

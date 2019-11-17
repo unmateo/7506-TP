@@ -28,7 +28,7 @@ from xgboost_regressor.xgboost_predictor import XGBoostRegressor
 from promedio_zona.promedio_zona import PromedioZona
 
 
-# In[3]:
+# In[11]:
 
 
 class EnsamblePromedioXGBoost(Modelo):
@@ -56,52 +56,65 @@ class EnsamblePromedioXGBoost(Modelo):
     
     @Modelo.cronometrar()
     def validar(self):
-        validacion_promedios = self.modelo_promedios.validar()
-        validacion_xgboost = self.modelo_xgboost.validar()
-        score = (validacion_promedios + validacion_xgboost) / 2
+        """
+        """
+        predicciones = self.predecir('test')
+        score = self.puntuar(predicciones[self.feature], predicciones["target"])
         self.resultado_validacion = score
         self.validado = True
-        
+        return score
+
     @Modelo.cronometrar()
-    def predecir_submit(self):
-        prediccion_promedios = self.modelo_promedios.predecir(self.modelo_promedios.submit_data)
-        prediccion_xgboost = self.modelo_xgboost.predecir(self.modelo_xgboost.submit_data)
-        predicciones = prediccion_promedios[['target']].join(prediccion_xgboost[['target']], lsuffix='_promedio', rsuffix='_xgboost')
-        predicciones['target'] = predicciones.mean(axis='columns')
-        return predicciones
+    def predecir(self, cual):
+        """
+            cual: {'test', 'submit'}
+        """
+        sets_disponibles  = {
+            "test": {
+                "promedios": self.modelo_promedios.test_data,
+                "xgboost": self.modelo_xgboost.test_data
+            },
+            "submit": {
+                "promedios": self.modelo_promedios.submit_data,
+                "xgboost": self.modelo_xgboost.submit_data
+            }
+        }
+        if cual not in sets_disponibles: raise Exception('No puedo predecir eso')
+        
+        columnas = [self.feature, 'target']
+        prediccion_promedios = self.modelo_promedios.predecir(sets_disponibles.get(cual).get('promedios'))[columnas]
+        prediccion_xgboost = self.modelo_xgboost.predecir(sets_disponibles.get(cual).get('xgboost'))[columnas]
+        predicciones = prediccion_promedios.join(prediccion_xgboost, lsuffix='_promedio', rsuffix='_xgboost')
+        predicciones['target'] = predicciones[['target_promedio', 'target_xgboost']].mean(axis='columns')
+        predicciones[self.feature] = predicciones[[self.feature+'_promedio', self.feature+'_xgboost']].mean(axis='columns')
+        return predicciones    
 
 
-# In[4]:
+# In[12]:
 
 
 ensamble = EnsamblePromedioXGBoost()
 
 
-# In[5]:
+# In[13]:
 
 
 ensamble.cargar_datos()
 
 
-# In[6]:
+# In[14]:
 
 
 ensamble.entrenar()
 
 
-# In[ ]:
+# In[15]:
 
 
 ensamble.validar()
 
 
 # In[ ]:
-
-
-predicciones = ensamble.predecir_submit()
-
-
-# In[22]:
 
 
 comentario = "test ensamble promedios + xgboost"

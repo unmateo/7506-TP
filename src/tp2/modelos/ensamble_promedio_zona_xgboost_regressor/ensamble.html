@@ -13117,7 +13117,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">EnsamblePromedioXGBoost</span><span class="p">(</span><span class="n">Modelo</span><span class="p">):</span>
@@ -13145,19 +13145,38 @@ div#notebook {
     
     <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">validar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">validacion_promedios</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo_promedios</span><span class="o">.</span><span class="n">validar</span><span class="p">()</span>
-        <span class="n">validacion_xgboost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo_xgboost</span><span class="o">.</span><span class="n">validar</span><span class="p">()</span>
-        <span class="n">score</span> <span class="o">=</span> <span class="p">(</span><span class="n">validacion_promedios</span> <span class="o">+</span> <span class="n">validacion_xgboost</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">predicciones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">puntuar</span><span class="p">(</span><span class="n">predicciones</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">],</span> <span class="n">predicciones</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resultado_validacion</span> <span class="o">=</span> <span class="n">score</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">validado</span> <span class="o">=</span> <span class="kc">True</span>
-        
+        <span class="k">return</span> <span class="n">score</span>
+
     <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">predecir_submit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">prediccion_promedios</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo_promedios</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modelo_promedios</span><span class="o">.</span><span class="n">submit_data</span><span class="p">)</span>
-        <span class="n">prediccion_xgboost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo_xgboost</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modelo_xgboost</span><span class="o">.</span><span class="n">submit_data</span><span class="p">)</span>
-        <span class="n">predicciones</span> <span class="o">=</span> <span class="n">prediccion_promedios</span><span class="p">[[</span><span class="s1">&#39;target&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prediccion_xgboost</span><span class="p">[[</span><span class="s1">&#39;target&#39;</span><span class="p">]],</span> <span class="n">lsuffix</span><span class="o">=</span><span class="s1">&#39;_promedio&#39;</span><span class="p">,</span> <span class="n">rsuffix</span><span class="o">=</span><span class="s1">&#39;_xgboost&#39;</span><span class="p">)</span>
-        <span class="n">predicciones</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">predicciones</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">predicciones</span>
+    <span class="k">def</span> <span class="nf">predecir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cual</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            cual: {&#39;test&#39;, &#39;submit&#39;}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sets_disponibles</span>  <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;promedios&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo_promedios</span><span class="o">.</span><span class="n">test_data</span><span class="p">,</span>
+                <span class="s2">&quot;xgboost&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo_xgboost</span><span class="o">.</span><span class="n">test_data</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;submit&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;promedios&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo_promedios</span><span class="o">.</span><span class="n">submit_data</span><span class="p">,</span>
+                <span class="s2">&quot;xgboost&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo_xgboost</span><span class="o">.</span><span class="n">submit_data</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">cual</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sets_disponibles</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;No puedo predecir eso&#39;</span><span class="p">)</span>
+        
+        <span class="n">columnas</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">]</span>
+        <span class="n">prediccion_promedios</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo_promedios</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">sets_disponibles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cual</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;promedios&#39;</span><span class="p">))[</span><span class="n">columnas</span><span class="p">]</span>
+        <span class="n">prediccion_xgboost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modelo_xgboost</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">sets_disponibles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cual</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;xgboost&#39;</span><span class="p">))[</span><span class="n">columnas</span><span class="p">]</span>
+        <span class="n">predicciones</span> <span class="o">=</span> <span class="n">prediccion_promedios</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prediccion_xgboost</span><span class="p">,</span> <span class="n">lsuffix</span><span class="o">=</span><span class="s1">&#39;_promedio&#39;</span><span class="p">,</span> <span class="n">rsuffix</span><span class="o">=</span><span class="s1">&#39;_xgboost&#39;</span><span class="p">)</span>
+        <span class="n">predicciones</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">predicciones</span><span class="p">[[</span><span class="s1">&#39;target_promedio&#39;</span><span class="p">,</span> <span class="s1">&#39;target_xgboost&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
+        <span class="n">predicciones</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">]</span> <span class="o">=</span> <span class="n">predicciones</span><span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="o">+</span><span class="s1">&#39;_promedio&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="o">+</span><span class="s1">&#39;_xgboost&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">predicciones</span>    
 </pre></div>
 
     </div>
@@ -13167,7 +13186,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">ensamble</span> <span class="o">=</span> <span class="n">EnsamblePromedioXGBoost</span><span class="p">()</span>
@@ -13201,7 +13220,7 @@ __init__ demoro 0.0 segundos
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">ensamble</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
@@ -13221,9 +13240,9 @@ __init__ demoro 0.0 segundos
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>cargar demoro 1.3 segundos
-cargar demoro 1.58 segundos
-cargar_datos demoro 6.88 segundos
+<pre>cargar demoro 1.37 segundos
+cargar demoro 1.73 segundos
+cargar_datos demoro 7.49 segundos
 </pre>
 </div>
 </div>
@@ -13234,7 +13253,7 @@ cargar_datos demoro 6.88 segundos
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">ensamble</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
@@ -13256,10 +13275,11 @@ cargar_datos demoro 6.88 segundos
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>entrenar demoro 0.0 segundos
 entrenar demoro 0.15 segundos
-[15:51:01] WARNING: /workspace/src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.
+[12:05:23] WARNING: /workspace/src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.
 entrenar demoro 0.0 segundos
-entrenar demoro 294.62 segundos
-entrenar demoro 294.77 segundos
+entrenar demoro 279.21 segundos
+entrenar demoro 0.0 segundos
+entrenar demoro 279.35 segundos
 </pre>
 </div>
 </div>
@@ -13270,37 +13290,10 @@ entrenar demoro 294.77 segundos
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">ensamble</span><span class="o">.</span><span class="n">validar</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predicciones</span> <span class="o">=</span> <span class="n">ensamble</span><span class="o">.</span><span class="n">predecir_submit</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">comentario</span> <span class="o">=</span> <span class="s2">&quot;test ensamble promedios + xgboost&quot;</span>
-<span class="n">ensamble</span><span class="o">.</span><span class="n">presentar</span><span class="p">(</span><span class="n">predicciones</span><span class="p">,</span> <span class="n">comentario</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13317,34 +13310,42 @@ entrenar demoro 294.77 segundos
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>guardar demoro 0.15 segundos
+<pre>predecir demoro 6.8 segundos
+predecir demoro 3.02 segundos
+predecir demoro 9.83 segundos
+puntuar demoro 0.0 segundos
+validar demoro 9.83 segundos
 </pre>
 </div>
 </div>
 
 <div class="output_area">
 
-    <div class="prompt"></div>
+    <div class="prompt output_prompt">Out[15]:</div>
 
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|██████████| 1.35M/1.35M [00:05&lt;00:00, 256kB/s] 
-</pre>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>702184.908644387</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>submit demoro 8.14 segundos
-presentar demoro 8.29 segundos
-</pre>
 </div>
-</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">comentario</span> <span class="o">=</span> <span class="s2">&quot;test ensamble promedios + xgboost&quot;</span>
+<span class="n">ensamble</span><span class="o">.</span><span class="n">presentar</span><span class="p">(</span><span class="n">predicciones</span><span class="p">,</span> <span class="n">comentario</span><span class="p">)</span>
+</pre></div>
 
+    </div>
 </div>
 </div>
 

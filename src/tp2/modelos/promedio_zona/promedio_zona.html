@@ -13132,11 +13132,14 @@ div#notebook {
         <span class="bp">self</span><span class="o">.</span><span class="n">prediccion_default</span> <span class="o">=</span> <span class="n">metros_general</span> <span class="o">*</span> <span class="n">promedio_general</span>
     
     <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">predecir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datos</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">predecir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Aplica predecir_publicacion a cada fila del df que recibe.</span>
-<span class="sd">            Asigna el resultado en la columna &#39;target&#39;</span>
+<span class="sd">            Genera una copia del df.</span>
+<span class="sd">            Aplica predecir_publicacion a cada fila.</span>
+<span class="sd">            Asigna el resultado en la columna &#39;target&#39;.</span>
+<span class="sd">            Devuelve la copia.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">datos</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">prediccion</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">publicacion</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">predecir_publicacion</span><span class="p">(</span><span class="n">publicacion</span><span class="p">)</span>
         <span class="n">datos</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datos</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">prediccion</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">datos</span>

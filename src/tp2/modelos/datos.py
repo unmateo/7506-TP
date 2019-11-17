@@ -17,7 +17,7 @@ FEATURES_DISPONIBLES = {
     "precio", "precio_metro_cubierto", "precio_metro_total"
 }
 
-def levantar_datos(train_file=TRAIN_CSV, test_file=TEST_CSV, features=None):
+def levantar_datos(train_file=TRAIN_CSV, test_file=TEST_CSV, features=None, seed=42):
     """
         Levanta los datos  de la competencia.
         Limpia y agrega columnas basicas.
@@ -27,7 +27,7 @@ def levantar_datos(train_file=TRAIN_CSV, test_file=TEST_CSV, features=None):
     """
     if not features:
         features = FEATURES_DISPONIBLES
-    train, test = train_test_split(read_csv(train_file, features))
+    train, test = train_test_split(read_csv(train_file, features), random_state=seed)
     submit = read_csv(test_file, features-{"precio"})
     return train, test, submit
 
