@@ -13084,9 +13084,14 @@ div#notebook {
 <span class="n">this</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 <span class="n">path</span> <span class="o">=</span> <span class="n">this</span><span class="p">[:</span><span class="n">this</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)]</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">xgboost_path</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/xgboost_regressor&quot;</span>
+<span class="n">promedios_path</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/promedio_zona&quot;</span>
 
-<span class="kn">from</span> <span class="nn">modelo</span> <span class="k">import</span> <span class="n">Modelo</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">from</span> <span class="nn">datos</span> <span class="k">import</span> <span class="n">FEATURES_DISPONIBLES</span>
+<span class="kn">from</span> <span class="nn">modelo</span> <span class="k">import</span> <span class="n">Modelo</span>
+
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.float_format&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
@@ -13099,19 +13104,6 @@ div#notebook {
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span> <span class="o">=</span> <span class="n">Modelo</span><span class="p">()</span>
@@ -13142,7 +13134,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
@@ -13162,14 +13154,14 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>cargar demoro 1.65 segundos
+<pre>cargar demoro 61.77 segundos
 </pre>
 </div>
 </div>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[4]:</div>
+    <div class="prompt output_prompt">Out[3]:</div>
 
 
 
@@ -13186,10 +13178,10 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">submit_data</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">train_data</span><span class="o">.</span><span class="n">drop</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -13202,36 +13194,292 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[6]:</div>
+    <div class="prompt output_prompt">Out[5]:</div>
 
 
 
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<div class="output_text output_subarea output_execute_result">
-<pre>metrostotales                 47345
-antiguedad                    49286
-garages                       50677
-idzona                        52821
-banos                         53446
-habitaciones                  54372
-metroscubiertos               55701
-ciudad                        59917
-provincia                     59958
-tipodepropiedad               59993
-fecha                         60000
-gimnasio                      60000
-usosmultiples                 60000
-piscina                       60000
-escuelascercanas              60000
-centroscomercialescercanos    60000
-ano                           60000
-mes                           60000
-dia                           60000
-dtype: int64</pre>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>titulo</th>
+      <th>descripcion</th>
+      <th>tipodepropiedad</th>
+      <th>ciudad</th>
+      <th>provincia</th>
+      <th>antiguedad</th>
+      <th>habitaciones</th>
+      <th>garages</th>
+      <th>banos</th>
+      <th>metroscubiertos</th>
+      <th>metrostotales</th>
+      <th>idzona</th>
+      <th>fecha</th>
+      <th>gimnasio</th>
+      <th>usosmultiples</th>
+      <th>piscina</th>
+      <th>escuelascercanas</th>
+      <th>centroscomercialescercanos</th>
+      <th>precio</th>
+      <th>ano</th>
+      <th>mes</th>
+      <th>dia</th>
+      <th>precio_metro_cubierto</th>
+      <th>precio_metro_total</th>
+      <th>cantidad_palabras_titulo</th>
+      <th>cantidad_palabras_descripcion</th>
+      <th>palabras_positivas_descripcion</th>
+      <th>palabras_negativas_descripcion</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>298880</th>
+      <td>negociable ultimo venta precio casa palmaris r...</td>
+      <td>estancia cocina medio closet residencial bano ...</td>
+      <td>Casa en condominio</td>
+      <td>Cancún</td>
+      <td>Quintana Roo</td>
+      <td>nan</td>
+      <td>3.000</td>
+      <td>2.000</td>
+      <td>2.000</td>
+      <td>170.000</td>
+      <td>160.000</td>
+      <td>NaN</td>
+      <td>2016-04-15</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>1900000.000</td>
+      <td>2016</td>
+      <td>4</td>
+      <td>15</td>
+      <td>11176.471</td>
+      <td>11875.000</td>
+      <td>7</td>
+      <td>24</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>87355</th>
+      <td>banos guaymas vista playa casa col habs sector...</td>
+      <td>mejores estancia cocina acceso excelente vista...</td>
+      <td>Casa</td>
+      <td>Guaymas</td>
+      <td>Sonora</td>
+      <td>5.000</td>
+      <td>2.000</td>
+      <td>1.000</td>
+      <td>2.000</td>
+      <td>140.000</td>
+      <td>156.000</td>
+      <td>350390.0</td>
+      <td>2016-12-21</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>1250000.000</td>
+      <td>2016</td>
+      <td>12</td>
+      <td>21</td>
+      <td>8928.571</td>
+      <td>8012.820</td>
+      <td>9</td>
+      <td>51</td>
+      <td>6</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>141560</th>
+      <td>pedro venta departamento san pinos</td>
+      <td>estancia cocina acceso excelentes cuidado ilum...</td>
+      <td>Apartamento</td>
+      <td>Benito Juárez</td>
+      <td>Distrito Federal</td>
+      <td>20.000</td>
+      <td>3.000</td>
+      <td>1.000</td>
+      <td>2.000</td>
+      <td>93.000</td>
+      <td>nan</td>
+      <td>23567.0</td>
+      <td>2016-12-12</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>2650000.000</td>
+      <td>2016</td>
+      <td>12</td>
+      <td>12</td>
+      <td>28494.623</td>
+      <td>nan</td>
+      <td>5</td>
+      <td>23</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>63104</th>
+      <td>valle hacienda</td>
+      <td>bano recamaras estacionar casa auto espacio me...</td>
+      <td>Casa</td>
+      <td>Cuautitlán Izcalli</td>
+      <td>Edo. de México</td>
+      <td>5.000</td>
+      <td>3.000</td>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>113.000</td>
+      <td>85.000</td>
+      <td>56868.0</td>
+      <td>2016-07-13</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>1200000.000</td>
+      <td>2016</td>
+      <td>7</td>
+      <td>13</td>
+      <td>10619.469</td>
+      <td>14117.647</td>
+      <td>2</td>
+      <td>9</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>260795</th>
+      <td>hermosa coyoacan casa</td>
+      <td>cocina medio tendido closet lugares recamara b...</td>
+      <td>Casa</td>
+      <td>Coyoacán</td>
+      <td>Distrito Federal</td>
+      <td>5.000</td>
+      <td>4.000</td>
+      <td>3.000</td>
+      <td>2.000</td>
+      <td>150.000</td>
+      <td>400.000</td>
+      <td>274529.0</td>
+      <td>2016-02-05</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>4100000.000</td>
+      <td>2016</td>
+      <td>2</td>
+      <td>5</td>
+      <td>27333.334</td>
+      <td>10250.000</td>
+      <td>3</td>
+      <td>27</td>
+      <td>2</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 </div>
 
 </div>
 
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;antiguedad&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;antiguedad&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">submit_data</span><span class="p">[</span><span class="s1">&#39;metrostotales&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 

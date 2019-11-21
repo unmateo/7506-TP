@@ -8,3 +8,4 @@ timestamp, modelo, validacion, kaggle, comentario
 2019-11-16_16:10:40,EnsamblePromedioXGBoost,None,700516.94212,test ensamble promedios + xgboost sin validacion local
 2019-11-17_12:41:46,EnsamblePromedioXGBoost,692638.2637891715,695056.97683,ensamble promedios + xgboost con peso 0.7
 2019-11-17_17:49:22,EnsamblePromedioXGBoostV2,632826.1,625924.92624,ensamble promedios + xgboost (concatenados)
+2019-11-20_22:01:11,EnsamblePromedioXGBoostConcatenados,624058.0,616174.27842,ensamble promedios + xgboost (concatenados) - con analisis de titulo y descripcion - score local 624058

@@ -3,6 +3,13 @@ import pandas as pd
 from shapely.geometry import Point
 from sklearn.model_selection import train_test_split
 
+from procesamiento_palabras import (
+    limpiar_campo,
+    cantidad_palabras,
+    cantidad_palabras_positivas,
+    cantidad_palabras_negativas
+)
+
 TRAIN_CSV = "../../datos/train.csv"
 TEST_CSV = "../../datos/test.csv"
 
@@ -14,7 +21,10 @@ FEATURES_DISPONIBLES = {
     "antiguedad", "tipodepropiedad",
     "idzona", "ciudad", "provincia", "gps", "lng", "lat"
     "fecha", "ano", "mes", "dia",
-    "precio", "precio_metro_cubierto", "precio_metro_total"
+    "precio", "precio_metro_cubierto", "precio_metro_total",
+    "titulo", "descripcion",
+    "cantidad_palabras_titulo", "cantidad_palabras_descripcion",
+    "palabras_positivas_descripcion", "palabras_negativas_descripcion",
 }
 
 def levantar_datos(train_file=TRAIN_CSV, test_file=TEST_CSV, features=None, seed=42):
@@ -54,7 +64,9 @@ def read_csv(csv_file, features) -> pd.DataFrame:
         "metroscubiertos": "float32",
         "metrostotales": "float32",
         "idzona": "category",
-        "precio": "float32"
+        "precio": "float32",
+        "titulo": "object",
+        "descripcion": "object"
     }
     columns = [col for col in types.keys() if col in features] + ["fecha", "id"]
     dtypes ={col:dtype for col,dtype in types.items() if col in features}
@@ -80,6 +92,24 @@ def read_csv(csv_file, features) -> pd.DataFrame:
     if {"gps","lng","lat"}.issubset(features):
         agregar_columnas_gps(df)
 
+    if {"titulo", "cantidad_palabras_titulo"}.issubset(features):
+        
+        df["titulo"] = df['titulo'].map(limpiar_campo)
+        df["cantidad_palabras_titulo"] = cantidad_palabras(df["titulo"])
+    
+    if "descripcion" in features:
+        
+        df['descripcion'] = df['descripcion'].map(limpiar_campo)
+        
+        if "cantidad_palabras_descripcion" in features:
+            df["cantidad_palabras_descripcion"] = cantidad_palabras(df['descripcion'])
+        
+        if "palabras_positivas_descripcion" in features:
+            df["palabras_positivas_descripcion"] = cantidad_palabras_positivas(df['descripcion'])
+        
+        if "palabras_negativas_descripcion" in features:
+            df["palabras_negativas_descripcion"] = cantidad_palabras_negativas(df['descripcion'])
+        
     return df
 
 

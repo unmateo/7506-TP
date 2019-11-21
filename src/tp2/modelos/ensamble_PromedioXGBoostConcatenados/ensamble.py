@@ -28,7 +28,7 @@ from xgboost_regressor.xgboost_predictor import XGBoostRegressor
 from promedio_zona.promedio_zona import PromedioZona
 
 
-# In[7]:
+# In[3]:
 
 
 class EnsamblePromedioXGBoostConcatenados(XGBoostRegressor):
@@ -60,39 +60,39 @@ class EnsamblePromedioXGBoostConcatenados(XGBoostRegressor):
         super().entrenar()
 
 
-# In[8]:
+# In[5]:
 
 
-ensamble = EnsamblePromedioXGBoostV2()
+ensamble = EnsamblePromedioXGBoostConcatenados()
 
 
-# In[9]:
+# In[6]:
 
 
 ensamble.cargar_datos()
 
 
-# In[10]:
+# In[7]:
 
 
 ensamble.entrenar()
 
 
-# In[11]:
+# In[8]:
 
 
 ensamble.validar()
 
 
-# In[12]:
+# In[9]:
 
 
 predicciones = ensamble.predecir(ensamble.submit_data)
 
 
-# In[13]:
+# In[10]:
 
 
-comentario = "ensamble promedios + xgboost (concatenados)"
+comentario = "ensamble promedios + xgboost (concatenados) - con analisis de titulo y descripcion - score local 624058"
 ensamble.presentar(predicciones, comentario)
 

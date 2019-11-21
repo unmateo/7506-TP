@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 import os
@@ -19,7 +19,7 @@ pd.set_option('display.max_columns', 100)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
-# In[ ]:
+# In[2]:
 
 
 import xgboost as xgb
@@ -28,7 +28,7 @@ from operator import concat
 from functools import reduce
 
 
-# In[ ]:
+# In[3]:
 
 
 class XGBoostRegressor(Modelo):
@@ -56,7 +56,7 @@ class XGBoostRegressor(Modelo):
     def preparar_datos(self, df):
         """
         """
-        df = df.drop(columns="fecha")   
+        df = df.drop(columns=["fecha", "titulo", "descripcion"]) 
         categoricas = {"tipodepropiedad", "provincia", "ciudad"}
         return self.one_hot_encode(df, categoricas)
     
@@ -104,15 +104,16 @@ class XGBoostRegressor(Modelo):
         return data
 
 
-# In[ ]:
+# In[6]:
 
 
 def test():
     modelo = XGBoostRegressor()
-    modelo.cargar_datos()
-    modelo.entrenar()
-    modelo.validar()
-    predicciones = modelo.predecir(modelo.submit_data)
-    comentario = "xgboost regressor con one hot encoding para tipodepropiedad, provincia y ciudad - puntaje local 738739.3"
-    modelo.presentar(predicciones, comentario)
+    print(modelo.cargar_datos())
+    print(modelo.entrenar())
+    print(modelo.validar())
+    #predicciones = modelo.predecir(modelo.submit_data)
+    #comentario = "xgboost regressor con one hot encoding para tipodepropiedad, provincia y ciudad - puntaje local 738739.3"
+    #modelo.presentar(predicciones, comentario)
+    return modelo
 
