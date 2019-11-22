@@ -10,6 +10,7 @@ this = os.getcwd()
 path = this[:this.rfind("/")]
 if not path in sys.path: sys.path.append(path)
 from modelo import Modelo
+from datos import FEATURES_DISPONIBLES
 
 
 # In[2]:
@@ -21,7 +22,7 @@ pd.set_option('display.max_columns', 100)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
-# In[26]:
+# In[10]:
 
 
 class RegresionLineal(Modelo):
@@ -33,13 +34,15 @@ class RegresionLineal(Modelo):
         """
         
         """
-        features = {
-            "piscina", "usosmultiples", "gimnasio", "garages",
-            "escuelascercanas", "centroscomercialescercanos",
-            "banos", "habitaciones", "metroscubiertos", "metrostotales",
-            "antiguedad", "ano", "precio"
+        excluir = {
+            "idzona",
+            "precio_metro_cubierto",
+            "precio_metro_total",
+            "tipodepropiedad",
+            "provincia",
+            "ciudad"
         }
-        super().cargar_datos(features)
+        super().cargar_datos(FEATURES_DISPONIBLES - excluir)
     
     @Modelo.cronometrar()
     def entrenar(self):
@@ -56,19 +59,9 @@ class RegresionLineal(Modelo):
         """
         
         """
-        #encodeadas = self.encodear_categoricas(df)
-        df.drop(columns=["fecha"], inplace=True)
+        df = df.drop(columns=["fecha", "titulo", "descripcion"]) 
         rellenas = self.rellenar_vacios(df)
         return rellenas
-    
-    def encodear_categoricas(self, df):
-        """
-            Recibe un set de datos y le aplica one hot encoding a sus
-            variables categoricas.
-        """
-        
-        categoricas = ["tipodepropiedad"]
-        return self.one_hot_encode(df, categoricas)
     
     def rellenar_vacios(self, df):
         """
@@ -78,58 +71,27 @@ class RegresionLineal(Modelo):
         return df.fillna(df.mean())
 
     @Modelo.cronometrar()
-    def predecir(self, datos):
+    def predecir(self, df):
         """
 
         """
-#        columnas = set(datos.columns)
+        datos = df.copy()
         a_predecir = datos.loc[:, self.train_data.columns != 'precio']
         datos['target'] = self.regression.predict(a_predecir)
         return datos
             
 
 
-# In[27]:
-
-
-modelo = RegresionLineal()
-
-
-# In[28]:
-
-
-modelo.cargar_datos()
-
-
-# In[29]:
-
-
-modelo.entrenar()
-
-
-# In[30]:
-
-
-modelo.validar()
-
-
 # In[ ]:
 
 
-predicciones = modelo.predecir(modelo.submit_data)
-
-
-# In[ ]:
-
-
-comentario = 'Primer intento con regresor lineal'
-#modelo.presentar(predicciones, comentario)
-
-
-# In[13]:
-
-
-import pandas as pd
-df = pd.DataFrame()
-df.drop()
+def test():
+    modelo = RegresionLineal()
+    modelo.cargar_datos()
+    modelo.entrenar()
+    modelo.validar()
+    predicciones = modelo.predecir(modelo.submit_data)
+    comentario = 'Primer intento con regresor lineal'
+    #modelo.presentar(predicciones, comentario)
+    return modelo
 
