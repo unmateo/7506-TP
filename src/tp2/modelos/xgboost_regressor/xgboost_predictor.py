@@ -42,8 +42,9 @@ class XGBoostRegressor(Modelo):
         """
         """
         excluir = {
-            "idzona", "fecha",
-            "precio_metro_cubierto", "precio_metro_total"
+            "idzona",
+            "precio_metro_cubierto",
+            "precio_metro_total",
         }
         features = FEATURES_DISPONIBLES - excluir
         super().cargar_datos(features)
@@ -104,7 +105,7 @@ class XGBoostRegressor(Modelo):
         return data
 
 
-# In[6]:
+# In[5]:
 
 
 def test():

@@ -60,16 +60,22 @@ class EnsamblePromedioXGBoostConcatenados(XGBoostRegressor):
         super().entrenar()
 
 
-# In[5]:
+# In[4]:
 
 
 ensamble = EnsamblePromedioXGBoostConcatenados()
 
 
-# In[6]:
+# In[5]:
 
 
 ensamble.cargar_datos()
+
+
+# In[6]:
+
+
+set(ensamble.modelo_promedios.submit_data.index.values) == set(ensamble.submit_data.index.values)
 
 
 # In[7]:
@@ -84,15 +90,23 @@ ensamble.entrenar()
 ensamble.validar()
 
 
-# In[9]:
+# In[10]:
 
 
 predicciones = ensamble.predecir(ensamble.submit_data)
 
 
-# In[10]:
+# In[11]:
 
 
-comentario = "ensamble promedios + xgboost (concatenados) - con analisis de titulo y descripcion - score local 624058"
+comentario = "Con dolar, año y mes - local 622174.75"
 ensamble.presentar(predicciones, comentario)
+
+
+# In[13]:
+
+
+import xgboost as xgb
+import matplotlib as plt
+plot = xgb.plot_importance(ensamble.model, max_num_features=10, importance_type='gain')
 

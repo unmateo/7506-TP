@@ -12,6 +12,7 @@ from procesamiento_palabras import (
 
 TRAIN_CSV = "../../datos/train.csv"
 TEST_CSV = "../../datos/test.csv"
+DOLAR_CSV = "../../datos/dolar.csv"
 
 
 FEATURES_DISPONIBLES = {
@@ -25,6 +26,7 @@ FEATURES_DISPONIBLES = {
     "titulo", "descripcion",
     "cantidad_palabras_titulo", "cantidad_palabras_descripcion",
     "palabras_positivas_descripcion", "palabras_negativas_descripcion",
+    "dolar"
 }
 
 def levantar_datos(train_file=TRAIN_CSV, test_file=TEST_CSV, features=None, seed=42):
@@ -109,7 +111,10 @@ def read_csv(csv_file, features) -> pd.DataFrame:
         
         if "palabras_negativas_descripcion" in features:
             df["palabras_negativas_descripcion"] = cantidad_palabras_negativas(df['descripcion'])
-        
+    
+    if {"ano", "mes", "dolar"}.issubset(features):
+        df = agregar_dolar(df)
+
     return df
 
 
@@ -132,3 +137,10 @@ def esta_en_mexico(point: Point) -> bool:
     MEX_MIN_LAT, MEX_MAX_LAT = (14,33)
     return (MEX_MIN_LNG < point.x < MEX_MAX_LNG) and (MEX_MIN_LAT < point.y < MEX_MAX_LAT)
 
+def agregar_dolar(df, index='id'):
+    cotizaciones = pd.read_csv(DOLAR_CSV, dtype={'cotizacion':'float16'}, parse_dates=["fecha"]).rename({"cotizacion": "dolar"}, axis= 'columns')
+    cotizaciones['mes'] = cotizaciones['fecha'].dt.month
+    cotizaciones['ano'] = cotizaciones['fecha'].dt.year
+    cotizaciones_por_mes = cotizaciones.groupby(['ano', 'mes']).agg({'dolar':'mean'})
+    cotizaciones_por_mes = cotizaciones_por_mes.reset_index()
+    return df.reset_index().merge(cotizaciones_por_mes, on=["ano","mes"], how="left").set_index(index)
