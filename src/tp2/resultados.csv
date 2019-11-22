@@ -11,3 +11,4 @@ timestamp, modelo, validacion, kaggle, comentario
 2019-11-20_22:01:11,EnsamblePromedioXGBoostConcatenados,624058.0,616174.27842,ensamble promedios + xgboost (concatenados) - con analisis de titulo y descripcion - score local 624058
 2019-11-21_23:41:06,EnsamblePromedioXGBoostConcatenados,723286.44,None,Con dolar, año y mes - local 723286.44 (con error)
 2019-11-22_01:16:14,EnsamblePromedioXGBoostConcatenados,622174.75,614615.74339,Con dolar, año y mes - local 622174.75
+2019-11-22_02:30:25,EnsambleConcatenados,621481.25,614154.14807,ensamble con regresor lineal - local 621481.25

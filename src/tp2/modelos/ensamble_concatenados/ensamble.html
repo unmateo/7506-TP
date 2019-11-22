@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>regresion_lineal</title>
+<title>ensamble</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13084,8 +13084,16 @@ div#notebook {
 <span class="n">this</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 <span class="n">path</span> <span class="o">=</span> <span class="n">this</span><span class="p">[:</span><span class="n">this</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)]</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">modelo</span> <span class="k">import</span> <span class="n">Modelo</span>
+<span class="n">xgboost_path</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/xgboost_regressor&quot;</span>
+<span class="n">promedios_path</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/promedio_zona&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">from</span> <span class="nn">datos</span> <span class="k">import</span> <span class="n">FEATURES_DISPONIBLES</span>
+<span class="kn">from</span> <span class="nn">modelo</span> <span class="k">import</span> <span class="n">Modelo</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.float_format&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13098,10 +13106,9 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LinearRegression</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.float_format&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">x</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">xgboost_regressor.xgboost_predictor</span> <span class="k">import</span> <span class="n">XGBoostRegressor</span>
+<span class="kn">from</span> <span class="nn">promedio_zona.promedio_zona</span> <span class="k">import</span> <span class="n">PromedioZona</span>
+<span class="kn">from</span> <span class="nn">regresion_lineal.regresion_lineal</span> <span class="k">import</span> <span class="n">RegresionLineal</span>
 </pre></div>
 
     </div>
@@ -13111,64 +13118,43 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">RegresionLineal</span><span class="p">(</span><span class="n">Modelo</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">EnsambleConcatenados</span><span class="p">(</span><span class="n">XGBoostRegressor</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-
+<span class="sd">        Usa el resultado de las predicciones del modelo PromedioZona</span>
+<span class="sd">        para entrenar y predecir con un XGBoostRegressor.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
+    
+    <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modelo_promedios</span> <span class="o">=</span> <span class="n">PromedioZona</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modelo_lineal</span> <span class="o">=</span> <span class="n">RegresionLineal</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>        
+        
+    <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">cargar_datos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">excluir</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;idzona&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;precio_metro_cubierto&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;precio_metro_total&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;tipodepropiedad&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;provincia&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ciudad&quot;</span>
-        <span class="p">}</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">(</span><span class="n">FEATURES_DISPONIBLES</span> <span class="o">-</span> <span class="n">excluir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modelo_promedios</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modelo_lineal</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
     
     <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">entrenar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agregar_predicciones_modelo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modelo_lineal</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agregar_predicciones_modelo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modelo_promedios</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preparar_datos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">)</span>
-        <span class="n">train_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="o">.</span><span class="n">columns</span> <span class="o">!=</span> <span class="s1">&#39;precio&#39;</span><span class="p">]</span>
-        <span class="n">train_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">[</span><span class="s2">&quot;precio&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">regression</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preparar_datos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_data</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">submit_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preparar_datos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_data</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">True</span>
     
-    <span class="k">def</span> <span class="nf">preparar_datos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fecha&quot;</span><span class="p">,</span> <span class="s2">&quot;titulo&quot;</span><span class="p">,</span> <span class="s2">&quot;descripcion&quot;</span><span class="p">])</span> 
-        <span class="n">rellenas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rellenar_vacios</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">rellenas</span>
-    
-    <span class="k">def</span> <span class="nf">rellenar_vacios</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Rellena los valores vacíos del df con el promedio de esa columna.</span>
-<span class="sd">            Devuelve el DataFrame modificado.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-
-    <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">predecir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">datos</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">a_predecir</span> <span class="o">=</span> <span class="n">datos</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">datos</span><span class="o">.</span><span class="n">columns</span> <span class="o">!=</span> <span class="s1">&#39;precio&#39;</span><span class="p">]</span>
-        <span class="n">datos</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regression</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">a_predecir</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">datos</span>
-            
+    <span class="k">def</span> <span class="nf">agregar_predicciones_modelo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modelo</span><span class="p">):</span>
+        <span class="n">columna</span> <span class="o">=</span> <span class="s1">&#39;prediccion_&#39;</span> <span class="o">+</span> <span class="n">modelo</span><span class="o">.</span><span class="n">modelo</span>
+        <span class="n">modelo</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
+        <span class="n">predicciones_train</span> <span class="o">=</span>  <span class="n">modelo</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">train_data</span><span class="p">)</span>
+        <span class="n">predicciones_test</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">test_data</span><span class="p">)</span>
+        <span class="n">predicciones_submit</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">submit_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span> <span class="o">=</span> <span class="n">predicciones_train</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_data</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span> <span class="o">=</span> <span class="n">predicciones_test</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_data</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span> <span class="o">=</span> <span class="n">predicciones_submit</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -13181,15 +13167,253 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
-    <span class="n">modelo</span> <span class="o">=</span> <span class="n">RegresionLineal</span><span class="p">()</span>
-    <span class="n">modelo</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
-    <span class="n">modelo</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
-    <span class="n">modelo</span><span class="o">.</span><span class="n">validar</span><span class="p">()</span>
-    <span class="n">predicciones</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">submit_data</span><span class="p">)</span>
-    <span class="n">comentario</span> <span class="o">=</span> <span class="s1">&#39;Primer intento con regresor lineal&#39;</span>
-    <span class="c1">#modelo.presentar(predicciones, comentario)</span>
-    <span class="k">return</span> <span class="n">modelo</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ensamble</span> <span class="o">=</span> <span class="n">EnsambleConcatenados</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>instanciar demoro 0.0 segundos
+instanciar demoro 0.0 segundos
+instanciar demoro 0.0 segundos
+__init__ demoro 0.0 segundos
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ensamble</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>cargar demoro 1.34 segundos
+cargar demoro 63.34 segundos
+cargar demoro 67.82 segundos
+cargar_datos demoro 137.34 segundos
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ensamble</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>entrenar demoro 0.0 segundos
+entrenar demoro 0.89 segundos
+predecir demoro 0.13 segundos
+predecir demoro 0.1 segundos
+predecir demoro 0.1 segundos
+entrenar demoro 0.0 segundos
+entrenar demoro 0.24 segundos
+predecir demoro 21.57 segundos
+predecir demoro 6.71 segundos
+predecir demoro 7.46 segundos
+[02:24:13] WARNING: /workspace/src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.
+entrenar demoro 0.0 segundos
+entrenar demoro 304.66 segundos
+entrenar demoro 341.87 segundos
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ensamble</span><span class="o">.</span><span class="n">validar</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>predecir demoro 3.09 segundos
+puntuar demoro 0.0 segundos
+validar demoro 3.1 segundos
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[7]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>621481.25</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predicciones</span> <span class="o">=</span> <span class="n">ensamble</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">ensamble</span><span class="o">.</span><span class="n">submit_data</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>predecir demoro 3.07 segundos
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">comentario</span> <span class="o">=</span> <span class="s2">&quot;ensamble con regresor lineal - local 621481.25&quot;</span>
+<span class="n">ensamble</span><span class="o">.</span><span class="n">presentar</span><span class="p">(</span><span class="n">predicciones</span><span class="p">,</span> <span class="n">comentario</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>guardar demoro 0.15 segundos
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>100%|██████████| 968k/968k [00:05&lt;00:00, 167kB/s] 
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>submit demoro 7.6 segundos
+presentar demoro 7.75 segundos
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">plot_importance</span><span class="p">(</span><span class="n">ensamble</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">max_num_features</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">importance_type</span><span class="o">=</span><span class="s1">&#39;gain&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>

@@ -22,7 +22,7 @@ pd.set_option('display.max_columns', 100)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
-# In[10]:
+# In[26]:
 
 
 class RegresionLineal(Modelo):
@@ -76,13 +76,13 @@ class RegresionLineal(Modelo):
 
         """
         datos = df.copy()
-        a_predecir = datos.loc[:, self.train_data.columns != 'precio']
+        a_predecir = datos.loc[:, datos.columns != 'precio']
         datos['target'] = self.regression.predict(a_predecir)
         return datos
             
 
 
-# In[ ]:
+# In[4]:
 
 
 def test():
