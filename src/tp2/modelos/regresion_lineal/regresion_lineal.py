@@ -40,7 +40,8 @@ class RegresionLineal(Modelo):
             "precio_metro_total",
             "tipodepropiedad",
             "provincia",
-            "ciudad"
+            "ciudad",
+            "gps", "lat", "lng"
         }
         super().cargar_datos(FEATURES_DISPONIBLES - excluir)
     

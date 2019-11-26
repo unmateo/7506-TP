@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>mateo</title>
+<title>xgboost_predictor</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13084,9 +13084,8 @@ div#notebook {
 <span class="n">this</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 <span class="n">path</span> <span class="o">=</span> <span class="n">this</span><span class="p">[:</span><span class="n">this</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)]</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-<span class="n">xgboost_path</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/xgboost_regressor&quot;</span>
-<span class="n">promedios_path</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/promedio_zona&quot;</span>
 
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">from</span> <span class="nn">datos</span> <span class="k">import</span> <span class="n">FEATURES_DISPONIBLES</span>
@@ -13106,103 +13105,8 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span> <span class="o">=</span> <span class="n">Modelo</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>instanciar demoro 0.0 segundos
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelo</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>cargar demoro 85.74 segundos
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[3]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>True</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">test_data</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Campos-Faltantes">Campos Faltantes<a class="anchor-link" href="#Campos-Faltantes">&#182;</a></h1><p>Análisis de qué campos tienen valores para cada df (train test submit)</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">test_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">train_data</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">submit_data</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">accuracy_score</span>
 </pre></div>
 
     </div>
@@ -13212,98 +13116,123 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[58]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">todo</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">XGBoost</span><span class="p">(</span><span class="n">Modelo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este modelo lo vamos a usar para predecir valores</span>
+<span class="sd">        faltantes en los sets de datos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">excluir</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;idzona&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ciudad&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;provincia&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;precio&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;precio_metro_total&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;precio_metro_cubierto&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gps&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lng&quot;</span>
+    <span class="p">}</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">FEATURES_DISPONIBLES</span> <span class="o">-</span> <span class="n">excluir</span>
+        
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">feature</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">cargar_datos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Junto los 3 dataframes y armo nuevos sets:</span>
+<span class="sd">            train y test con las publicaciones que tengan</span>
+<span class="sd">            el dato a predecir, submit con las que no lo tengan.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">)</span>
+        <span class="n">todos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_data</span>\
+            <span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_data</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+                <span class="s1">&#39;fecha&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;titulo&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;descripcion&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="n">todos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">one_hot_encode</span><span class="p">(</span><span class="n">todos</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;tipodepropiedad&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clases_feature</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">todos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_data</span> <span class="o">=</span> <span class="n">todos</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">todos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()]</span>
+        <span class="n">con_feature</span> <span class="o">=</span> <span class="n">todos</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">todos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span>
+        <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">con_feature</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span> <span class="o">=</span> <span class="n">train</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_data</span> <span class="o">=</span> <span class="n">test</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    
+
+    <span class="k">def</span> <span class="nf">_split_data_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">!=</span> <span class="n">label</span><span class="p">]</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span>
+    
+    <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">entrenar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">params</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="s1">&#39;eta&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s1">&#39;objective&#39;</span><span class="p">:</span> <span class="s1">&#39;multi:softmax&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;num_class&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">clases_feature</span><span class="p">,</span>
+                <span class="s1">&#39;nthread&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+                <span class="s1">&#39;eval_metric&#39;</span><span class="p">:</span> <span class="s1">&#39;merror&#39;</span>
+            <span class="p">}</span>
+        <span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_data_label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">)</span>
+        <span class="n">dtrain</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">train_label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictor</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">dtrain</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    
+    <span class="nd">@Modelo</span><span class="o">.</span><span class="n">cronometrar</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">predecir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            to_bool: bool</span>
+<span class="sd">                Transformar la columna target (0,1] a bool.</span>
+<span class="sd">                Lo hace poniendo un límite en 0.5</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">predict_data</span><span class="p">,</span> <span class="n">predict_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_data_label</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">)</span>
+        <span class="n">dpredict</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">predict_data</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dpredict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+    
+    <span class="k">def</span> <span class="nf">puntuar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">prediccion</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">real</span> <span class="o">==</span> <span class="n">prediccion</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="kc">True</span><span class="p">]</span>
+        
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[24]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>gps                               154969
-lat                               154183
-lng                               154183
-precio_metro_total                111467
-precio_metro_cubierto              77400
-metrostotales                      64122
-precio                             60000
-antiguedad                         54269
-garages                            47088
-idzona                             35800
-banos                              32775
-habitaciones                       28099
-metroscubiertos                    21699
-ciudad                               455
-provincia                            197
-tipodepropiedad                       53
-descripcion                            0
-dolar                                  0
-gimnasio                               0
-fecha                                  0
-palabras_negativas_descripcion         0
-usosmultiples                          0
-piscina                                0
-escuelascercanas                       0
-centroscomercialescercanos             0
-ano                                    0
-mes                                    0
-dia                                    0
-cantidad_palabras_titulo               0
-cantidad_palabras_descripcion          0
-palabras_positivas_descripcion         0
-titulo                                 0
-dtype: int64</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">todo</span><span class="o">.</span><span class="n">banos</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">-</span> <span class="mi">1</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+    <span class="n">modelo</span> <span class="o">=</span> <span class="n">XGBoost</span><span class="p">(</span><span class="n">feature</span><span class="o">=</span><span class="n">feature</span><span class="p">)</span>
+    <span class="n">modelo</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
+    <span class="n">modelo</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">validar</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">modelo</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[39]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>4</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -13313,44 +13242,11 @@ dtype: int64</pre>
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="p">{</span><span class="s1">&#39;antiguedad&#39;</span><span class="p">,</span> <span class="s1">&#39;garages&#39;</span><span class="p">,</span> <span class="s1">&#39;banos&#39;</span><span class="p">,</span> <span class="s1">&#39;habitaciones&#39;</span><span class="p">}</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Evaluaci&#243;n-de-modelo">Evaluaci&#243;n de modelo<a class="anchor-link" href="#Evaluaci&#243;n-de-modelo">&#182;</a></h1><p>Análisis de en qué propiedades hay mayor diferencia entre real/esperado.
-En xgboost da que hay mucha diferencia en los NA</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predicciones</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">predecir</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">test_data</span><span class="p">)</span>
-<span class="n">predicciones</span><span class="p">[</span><span class="s1">&#39;dif&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">predicciones</span><span class="p">[</span><span class="s1">&#39;precio&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">predicciones</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">predicciones</span><span class="p">[</span><span class="s1">&#39;precio&#39;</span><span class="p">]</span>
-<span class="n">peores_predicciones</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">test_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">predicciones</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;dif&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
-<span class="n">mejores_predicciones</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">test_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">predicciones</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;dif&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
-<span class="k">def</span> <span class="nf">plot_dif</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
-    <span class="n">plot</span> <span class="o">=</span> <span class="n">peores_predicciones</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-    <span class="n">plot</span> <span class="o">=</span> <span class="n">mejores_predicciones</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;peores&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">peores_predicciones</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mejores&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">mejores_predicciones</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-
-<span class="n">plot_dif</span><span class="p">(</span><span class="s1">&#39;banos&#39;</span><span class="p">)</span>
-<span class="n">plot_dif</span><span class="p">(</span><span class="s1">&#39;garages&#39;</span><span class="p">)</span>
-<span class="n">plot_dif</span><span class="p">(</span><span class="s1">&#39;metrostotales&#39;</span><span class="p">)</span>
-<span class="n">plot_dif</span><span class="p">(</span><span class="s1">&#39;metroscubiertos&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">tests</span><span class="p">():</span>
+    <span class="n">modelo_garage</span> <span class="o">=</span> <span class="n">test</span><span class="p">(</span><span class="s1">&#39;garages&#39;</span><span class="p">)</span>
+    <span class="n">modelo_banos</span><span class="o">=</span> <span class="n">test</span><span class="p">(</span><span class="s1">&#39;banos&#39;</span><span class="p">)</span>
+    <span class="n">modelo_habitaciones</span> <span class="o">=</span> <span class="n">test</span><span class="p">(</span><span class="s1">&#39;habitaciones&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">modelo_garage</span><span class="p">,</span> <span class="n">modelo_banos</span><span class="p">,</span> <span class="n">modelo_habitaciones</span>
 </pre></div>
 
     </div>

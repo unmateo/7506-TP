@@ -28,7 +28,7 @@ from operator import concat
 from functools import reduce
 
 
-# In[3]:
+# In[9]:
 
 
 class XGBoostRegressor(Modelo):
@@ -45,6 +45,7 @@ class XGBoostRegressor(Modelo):
             "idzona",
             "precio_metro_cubierto",
             "precio_metro_total",
+            "gps", "lat", "lng"
         }
         features = FEATURES_DISPONIBLES - excluir
         super().cargar_datos(features)

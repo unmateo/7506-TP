@@ -33,26 +33,62 @@ modelo = Modelo()
 modelo.cargar_datos()
 
 
-# In[5]:
+# In[4]:
 
 
-modelo.train_data.drop()
+df = modelo.test_data
+
+
+# # Campos Faltantes
+# 
+# Análisis de qué campos tienen valores para cada df (train test submit)
+
+# In[13]:
+
+
+todo = modelo.test_data.append(modelo.train_data, sort=False).append(modelo.submit_data, sort=False)
+
+
+# In[24]:
+
+
+todo.isna().sum().sort_values(ascending=False)
+
+
+# In[39]:
+
+
+len(todo.banos.unique()) - 1 
 
 
 # In[ ]:
 
 
-modelo.train_data['antiguedad'].describe()
+{'antiguedad', 'garages', 'banos', 'habitaciones'}
 
+
+# # Evaluación de modelo
+# 
+# Análisis de en qué propiedades hay mayor diferencia entre real/esperado.
+# En xgboost da que hay mucha diferencia en los NA
 
 # In[ ]:
 
 
-modelo.train_data['antiguedad'].value_counts()
+predicciones = modelo.predecir(modelo.test_data)
+predicciones['dif'] = abs(predicciones['precio'] - predicciones['target']) / predicciones['precio']
+peores_predicciones = modelo.test_data.loc[predicciones.sort_values(by='dif').tail(100).index]
+mejores_predicciones = modelo.test_data.loc[predicciones.sort_values(by='dif').head(100).index]
+def plot_dif(feature):
+    plot = peores_predicciones[feature].hist(color='red')
+    plot = mejores_predicciones[feature].hist(alpha=0.5, color='green')
+    print('peores')
+    print(peores_predicciones[feature].isna().value_counts(normalize=True))
+    print('mejores')
+    print(mejores_predicciones[feature].isna().value_counts(normalize=True))
 
-
-# In[ ]:
-
-
-modelo.submit_data['metrostotales'].describe()
+plot_dif('banos')
+plot_dif('garages')
+plot_dif('metrostotales')
+plot_dif('metroscubiertos')
 

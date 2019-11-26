@@ -20,7 +20,7 @@ FEATURES_DISPONIBLES = {
     "escuelascercanas", "centroscomercialescercanos",
     "banos", "habitaciones", "metroscubiertos", "metrostotales",
     "antiguedad", "tipodepropiedad",
-    "idzona", "ciudad", "provincia", "gps", "lng", "lat"
+    "idzona", "ciudad", "provincia", "gps", "lng", "lat",
     "fecha", "ano", "mes", "dia",
     "precio", "precio_metro_cubierto", "precio_metro_total",
     "titulo", "descripcion",
@@ -63,12 +63,14 @@ def read_csv(csv_file, features) -> pd.DataFrame:
         "provincia": "category",
         "antiguedad": "float16",
         "habitaciones": "float16",
-        "metroscubiertos": "float32",
-        "metrostotales": "float32",
+        "metroscubiertos": "float16",
+        "metrostotales": "float16",
         "idzona": "category",
         "precio": "float32",
         "titulo": "object",
-        "descripcion": "object"
+        "descripcion": "object",
+        "lng": "float16",
+        "lat": "float16"
     }
     columns = [col for col in types.keys() if col in features] + ["fecha", "id"]
     dtypes ={col:dtype for col,dtype in types.items() if col in features}
@@ -79,11 +81,11 @@ def read_csv(csv_file, features) -> pd.DataFrame:
                      index_col='id')
 
     if "ano" in features:
-        df["ano"] = df["fecha"].dt.year
+        df["ano"] = df["fecha"].dt.year.astype('int16')
     if "mes" in features:
-        df["mes"] = df["fecha"].dt.month
+        df["mes"] = df["fecha"].dt.month.astype('int8')
     if "dia" in features:
-        df["dia"] = df["fecha"].dt.day
+        df["dia"] = df["fecha"].dt.day.astype('int8')
 
     if "precio" in features:
         if "metroscubiertos" in features and "precio_metro_cubierto" in features:
@@ -104,13 +106,13 @@ def read_csv(csv_file, features) -> pd.DataFrame:
         df['descripcion'] = df['descripcion'].map(limpiar_campo)
         
         if "cantidad_palabras_descripcion" in features:
-            df["cantidad_palabras_descripcion"] = cantidad_palabras(df['descripcion'])
+            df["cantidad_palabras_descripcion"] = cantidad_palabras(df['descripcion']).astype('int16')
         
         if "palabras_positivas_descripcion" in features:
-            df["palabras_positivas_descripcion"] = cantidad_palabras_positivas(df['descripcion'])
+            df["palabras_positivas_descripcion"] = cantidad_palabras_positivas(df['descripcion']).astype('int16')
         
         if "palabras_negativas_descripcion" in features:
-            df["palabras_negativas_descripcion"] = cantidad_palabras_negativas(df['descripcion'])
+            df["palabras_negativas_descripcion"] = cantidad_palabras_negativas(df['descripcion']).astype('int16')
     
     if {"ano", "mes", "dolar"}.issubset(features):
         df = agregar_dolar(df)
@@ -143,4 +145,5 @@ def agregar_dolar(df, index='id'):
     cotizaciones['ano'] = cotizaciones['fecha'].dt.year
     cotizaciones_por_mes = cotizaciones.groupby(['ano', 'mes']).agg({'dolar':'mean'})
     cotizaciones_por_mes = cotizaciones_por_mes.reset_index()
+    cotizaciones_por_mes['dolar'] = cotizaciones_por_mes['dolar'].astype('float16')
     return df.reset_index().merge(cotizaciones_por_mes, on=["ano","mes"], how="left").set_index(index)
