@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 
 import os
@@ -19,16 +19,17 @@ pd.set_option('display.max_columns', 100)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
-# In[2]:
+# In[ ]:
 
 
 import xgboost as xgb
 from sklearn.metrics import accuracy_score
 from operator import concat
 from functools import reduce
+from random import choice
 
 
-# In[9]:
+# In[ ]:
 
 
 class XGBoostRegressor(Modelo):
@@ -89,8 +90,22 @@ class XGBoostRegressor(Modelo):
     def entrenar(self, params=None):
         """
         """
+        hiperparametros = {
+            'learning_rate': 0.1,
+            'objective': 'reg:squarederror',
+            'eval_metric': 'mae',
+            'max_depth': 10,
+            'number_estimators': 500,
+            'gamma': 0.5,
+            'min_child_weight': 5,
+            'reg_alpha': 0.5,
+            'reg_lambda': 1,
+            'base_score': 500000
+        }
+        if params:
+            hiperparametros.update(params)
         train_data, train_label = self._split_data_label(self.train_data, self.feature)
-        self.model = xgb.XGBRegressor()
+        self.model = xgb.XGBRegressor(**hiperparametros)
         self.model.fit(train_data, train_label)
         super().entrenar()
         return True
@@ -106,16 +121,76 @@ class XGBoostRegressor(Modelo):
         return data
 
 
-# In[5]:
+# In[ ]:
 
 
-def test():
+def params_to_tuple(params):
+    return tuple(params.items())
+
+
+# In[ ]:
+
+
+def probar_parametros(modelo, params):
+    modelo.entrenar(params)
+    return modelo.validar()
+
+
+# In[ ]:
+
+
+def random_prueba(parametros):
+    prueba = parametros.copy()
+    return {key:choice(values) for key,values in prueba.items()}
+
+
+# In[ ]:
+
+
+def generar_n_pruebas(n, parametros):
+    pruebas = []
+    set_pruebas = set()
+    while len(pruebas) < n:
+        prueba = random_prueba(parametros)
+        prueba_tuple = params_to_tuple(prueba)
+        if prueba_tuple in set_pruebas: continue
+        pruebas.append(prueba)
+        set_pruebas.add(prueba_tuple)
+    return pruebas
+
+
+# In[ ]:
+
+
+def buscar_hiperparametros():
+    resultados = {}
     modelo = XGBoostRegressor()
-    print(modelo.cargar_datos())
-    print(modelo.entrenar())
-    print(modelo.validar())
-    #predicciones = modelo.predecir(modelo.submit_data)
-    #comentario = "xgboost regressor con one hot encoding para tipodepropiedad, provincia y ciudad - puntaje local 738739.3"
-    #modelo.presentar(predicciones, comentario)
-    return modelo
+    modelo.cargar_datos()
+    cantidad_pruebas = 10
+    opciones = {
+        'learning_rate': [0.1, 0.01],
+        'max_depth': [10, 15, 20, 25],
+        'number_estimators': [500, 750, 1000, 1500],
+        'gamma': [0, 0.5, 1, 2, 4],
+        'min_child_weight': [5, 7, 10],
+        'reg_alpha': [0, 0.5, 1],
+        'reg_lambda': [0, 0.5, 1],
+        'base_score': [200000, 500000, 1000000, 2000000]
+    }
+    pruebas = generar_n_pruebas(cantidad_pruebas, opciones)
+    for prueba in pruebas:
+        print(prueba)
+        puntaje = probar_parametros(modelo, prueba)
+        print(puntaje)
+        resultados[params_to_tuple(prueba)] = puntaje
+        print(resultados)
+    return resultados
 
+
+# ## Mejores hiperparámetros
+# {'learning_rate': 0.1, 'max_depth': 15, 'number_estimators': 500, 'gamma': 0.5, 'min_child_weight': 5, 'reg_alpha': 0.5, 'reg_lambda': 1, 'base_score': 500000}
+# 
+# {'learning_rate': 0.1, 'max_depth': 15, 'number_estimators': 500, 'gamma': 1, 'min_child_weight': 7, 'reg_alpha': 1, 'reg_lambda': 1, 'base_score': 2000000}
+# 
+# {'learning_rate': 0.1, 'max_depth': 15, 'number_estimators': 1000, 'gamma': 2, 'min_child_weight': 7, 'reg_alpha': 0.5, 'reg_lambda': 0.5, 'base_score': 1000000}
+# 

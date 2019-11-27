@@ -101,14 +101,6 @@ predicciones = ensamble.predecir(ensamble.submit_data)
 # In[9]:
 
 
-comentario = "ensamble con regresor lineal - local 621481.25"
+comentario = "ensamble con xgboost tuneado - local 535801.6"
 ensamble.presentar(predicciones, comentario)
-
-
-# In[ ]:
-
-
-import xgboost as xgb
-import matplotlib as plt
-plot = xgb.plot_importance(ensamble.model, max_num_features=10, importance_type='gain')
 

@@ -12,4 +12,6 @@ timestamp, modelo, validacion, kaggle, comentario
 2019-11-21_23:41:06,EnsamblePromedioXGBoostConcatenados,723286.44,None,Con dolar, año y mes - local 723286.44 (con error)
 2019-11-22_01:16:14,EnsamblePromedioXGBoostConcatenados,622174.75,614615.74339,Con dolar, año y mes - local 622174.75
 2019-11-22_02:30:25,EnsambleConcatenados,621481.25,614154.14807,ensamble con regresor lineal - local 621481.25
-2019-11-26_01:03:24,EnsambleConcatenadosPrediciendoNaNs,622833.06,None,ensamble prediciendo nans - local 622833.06
+2019-11-26_01:03:24,EnsambleConcatenadosPrediciendoNaNs,622833.06,616320.06679,ensamble prediciendo nans - local 622833.06
+2019-11-26_19:53:04,XGBoostRegressor,578074.4,580542.88512,xgboost regressor con hiperparametros no default pero sin tunear - local 578074.4
+2019-11-27_14:04:31,EnsambleConcatenados,535801.6,533706.85016,ensamble con xgboost tuneado - local 535801.6

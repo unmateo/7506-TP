@@ -13076,7 +13076,7 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -13101,13 +13101,14 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">accuracy_score</span>
 <span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">concat</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">reduce</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">choice</span>
 </pre></div>
 
     </div>
@@ -13117,7 +13118,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">XGBoostRegressor</span><span class="p">(</span><span class="n">Modelo</span><span class="p">):</span>
@@ -13178,8 +13179,22 @@ div#notebook {
     <span class="k">def</span> <span class="nf">entrenar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hiperparametros</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+            <span class="s1">&#39;objective&#39;</span><span class="p">:</span> <span class="s1">&#39;reg:squarederror&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;eval_metric&#39;</span><span class="p">:</span> <span class="s1">&#39;mae&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="s1">&#39;number_estimators&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
+            <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+            <span class="s1">&#39;min_child_weight&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s1">&#39;reg_alpha&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+            <span class="s1">&#39;reg_lambda&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s1">&#39;base_score&#39;</span><span class="p">:</span> <span class="mi">500000</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">params</span><span class="p">:</span>
+            <span class="n">hiperparametros</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
         <span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_data_label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBRegressor</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBRegressor</span><span class="p">(</span><span class="o">**</span><span class="n">hiperparametros</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_label</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">entrenar</span><span class="p">()</span>
         <span class="k">return</span> <span class="kc">True</span>
@@ -13202,24 +13217,114 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
-    <span class="n">modelo</span> <span class="o">=</span> <span class="n">XGBoostRegressor</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">())</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">entrenar</span><span class="p">())</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">modelo</span><span class="o">.</span><span class="n">validar</span><span class="p">())</span>
-    <span class="c1">#predicciones = modelo.predecir(modelo.submit_data)</span>
-    <span class="c1">#comentario = &quot;xgboost regressor con one hot encoding para tipodepropiedad, provincia y ciudad - puntaje local 738739.3&quot;</span>
-    <span class="c1">#modelo.presentar(predicciones, comentario)</span>
-    <span class="k">return</span> <span class="n">modelo</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">params_to_tuple</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">probar_parametros</span><span class="p">(</span><span class="n">modelo</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="n">modelo</span><span class="o">.</span><span class="n">entrenar</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">modelo</span><span class="o">.</span><span class="n">validar</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">random_prueba</span><span class="p">(</span><span class="n">parametros</span><span class="p">):</span>
+    <span class="n">prueba</span> <span class="o">=</span> <span class="n">parametros</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span><span class="n">choice</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">values</span> <span class="ow">in</span> <span class="n">prueba</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">generar_n_pruebas</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">parametros</span><span class="p">):</span>
+    <span class="n">pruebas</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">set_pruebas</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">pruebas</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">prueba</span> <span class="o">=</span> <span class="n">random_prueba</span><span class="p">(</span><span class="n">parametros</span><span class="p">)</span>
+        <span class="n">prueba_tuple</span> <span class="o">=</span> <span class="n">params_to_tuple</span><span class="p">(</span><span class="n">prueba</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prueba_tuple</span> <span class="ow">in</span> <span class="n">set_pruebas</span><span class="p">:</span> <span class="k">continue</span>
+        <span class="n">pruebas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prueba</span><span class="p">)</span>
+        <span class="n">set_pruebas</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prueba_tuple</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pruebas</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">buscar_hiperparametros</span><span class="p">():</span>
+    <span class="n">resultados</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">modelo</span> <span class="o">=</span> <span class="n">XGBoostRegressor</span><span class="p">()</span>
+    <span class="n">modelo</span><span class="o">.</span><span class="n">cargar_datos</span><span class="p">()</span>
+    <span class="n">cantidad_pruebas</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">opciones</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span>
+        <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">25</span><span class="p">],</span>
+        <span class="s1">&#39;number_estimators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">750</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1500</span><span class="p">],</span>
+        <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="s1">&#39;min_child_weight&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+        <span class="s1">&#39;reg_alpha&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="s1">&#39;reg_lambda&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="s1">&#39;base_score&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">200000</span><span class="p">,</span> <span class="mi">500000</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">,</span> <span class="mi">2000000</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">pruebas</span> <span class="o">=</span> <span class="n">generar_n_pruebas</span><span class="p">(</span><span class="n">cantidad_pruebas</span><span class="p">,</span> <span class="n">opciones</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prueba</span> <span class="ow">in</span> <span class="n">pruebas</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">prueba</span><span class="p">)</span>
+        <span class="n">puntaje</span> <span class="o">=</span> <span class="n">probar_parametros</span><span class="p">(</span><span class="n">modelo</span><span class="p">,</span> <span class="n">prueba</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">puntaje</span><span class="p">)</span>
+        <span class="n">resultados</span><span class="p">[</span><span class="n">params_to_tuple</span><span class="p">(</span><span class="n">prueba</span><span class="p">)]</span> <span class="o">=</span> <span class="n">puntaje</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">resultados</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">resultados</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Mejores-hiperpar&#225;metros">Mejores hiperpar&#225;metros<a class="anchor-link" href="#Mejores-hiperpar&#225;metros">&#182;</a></h2><p>{'learning_rate': 0.1, 'max_depth': 15, 'number_estimators': 500, 'gamma': 0.5, 'min_child_weight': 5, 'reg_alpha': 0.5, 'reg_lambda': 1, 'base_score': 500000}</p>
+<p>{'learning_rate': 0.1, 'max_depth': 15, 'number_estimators': 500, 'gamma': 1, 'min_child_weight': 7, 'reg_alpha': 1, 'reg_lambda': 1, 'base_score': 2000000}</p>
+<p>{'learning_rate': 0.1, 'max_depth': 15, 'number_estimators': 1000, 'gamma': 2, 'min_child_weight': 7, 'reg_alpha': 0.5, 'reg_lambda': 0.5, 'base_score': 1000000}</p>
+
+</div>
+</div>
 </div>
     </div>
   </div>

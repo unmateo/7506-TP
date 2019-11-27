@@ -43,10 +43,16 @@ df = modelo.test_data
 # 
 # Análisis de qué campos tienen valores para cada df (train test submit)
 
-# In[13]:
+# In[4]:
 
 
 todo = modelo.test_data.append(modelo.train_data, sort=False).append(modelo.submit_data, sort=False)
+
+
+# In[5]:
+
+
+todo['precio'].mean()
 
 
 # In[24]:

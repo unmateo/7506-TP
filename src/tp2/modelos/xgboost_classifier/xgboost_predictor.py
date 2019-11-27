@@ -27,7 +27,7 @@ import xgboost as xgb
 from sklearn.metrics import accuracy_score
 
 
-# In[58]:
+# In[3]:
 
 
 class XGBoost(Modelo):
