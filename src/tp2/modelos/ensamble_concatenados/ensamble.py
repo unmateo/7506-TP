@@ -24,12 +24,18 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 # In[2]:
 
 
+pd.set_option('display.max_columns', 1200)
+
+
+# In[3]:
+
+
 from xgboost_regressor.xgboost_predictor import XGBoostRegressor
 from promedio_zona.promedio_zona import PromedioZona
 from regresion_lineal.regresion_lineal import RegresionLineal
 
 
-# In[3]:
+# In[4]:
 
 
 class EnsambleConcatenados(XGBoostRegressor):
@@ -68,39 +74,77 @@ class EnsambleConcatenados(XGBoostRegressor):
         self.submit_data[columna] = predicciones_submit['target']
 
 
-# In[4]:
+# In[5]:
 
 
 ensamble = EnsambleConcatenados()
 
 
-# In[5]:
+# In[6]:
 
 
 ensamble.cargar_datos()
 
 
-# In[6]:
+# In[7]:
 
 
 ensamble.entrenar()
 
 
-# In[7]:
+# In[11]:
 
 
-ensamble.validar()
+predicciones = ensamble.predecir(ensamble.test_data)
+
+
+# In[12]:
+
+
+columnas_predictoras = ['target', 'prediccion_PromedioZona', 'prediccion_RegresionLineal']
+for columna in columnas_predictoras:
+    predicciones['diferencia_'+columna] = predicciones['precio'] - predicciones[columna]
+
+
+# In[13]:
+
+
+mejores_100 = predicciones.sort_values(by='diferencia_target').head(200)
+
+
+# In[14]:
+
+
+peores_100 = predicciones.sort_values(by='diferencia_target').tail(200)
+
+
+# In[17]:
+
+
+peores_100.describe()
+
+
+# In[16]:
+
+
+mejores_100.describe()
 
 
 # In[8]:
 
 
-predicciones = ensamble.predecir(ensamble.submit_data)
+ensamble.validar()
 
 
 # In[9]:
 
 
-comentario = "ensamble con xgboost tuneado - local 535801.6"
+predicciones = ensamble.predecir(ensamble.submit_data)
+
+
+# In[10]:
+
+
+comentario = "con mejoras en modelo lineal y por zonas - local 534928.4"
 ensamble.presentar(predicciones, comentario)
 

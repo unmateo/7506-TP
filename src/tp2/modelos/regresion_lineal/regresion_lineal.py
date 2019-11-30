@@ -18,11 +18,12 @@ from datos import FEATURES_DISPONIBLES
 
 from sklearn.linear_model import LinearRegression
 import pandas as pd
+import numpy as np
 pd.set_option('display.max_columns', 100)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
-# In[26]:
+# In[11]:
 
 
 class RegresionLineal(Modelo):
@@ -50,8 +51,8 @@ class RegresionLineal(Modelo):
         super().entrenar()
         self.train_data = self.preparar_datos(self.train_data)
         train_data = self.train_data.loc[:, self.train_data.columns != 'precio']
-        train_label = self.train_data["precio"]
-        self.regression = LinearRegression(normalize=True).fit(train_data, train_label)
+        train_label = np.log(self.train_data["precio"])
+        self.regression = LinearRegression(normalize=False).fit(train_data, train_label)
         self.test_data = self.preparar_datos(self.test_data)
         self.submit_data = self.preparar_datos(self.submit_data)
         return True
@@ -78,7 +79,7 @@ class RegresionLineal(Modelo):
         """
         datos = df.copy()
         a_predecir = datos.loc[:, datos.columns != 'precio']
-        datos['target'] = self.regression.predict(a_predecir)
+        datos['target'] = np.exp(self.regression.predict(a_predecir))
         return datos
             
 
@@ -90,9 +91,5 @@ def test():
     modelo = RegresionLineal()
     modelo.cargar_datos()
     modelo.entrenar()
-    modelo.validar()
-    predicciones = modelo.predecir(modelo.submit_data)
-    comentario = 'Primer intento con regresor lineal'
-    #modelo.presentar(predicciones, comentario)
     return modelo
 

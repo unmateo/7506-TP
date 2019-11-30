@@ -12,7 +12,16 @@ if not path in sys.path: sys.path.append(path)
 from modelo import Modelo
 
 
-# In[2]:
+# In[38]:
+
+
+import pandas as pd
+from numpy import mean
+pd.set_option('display.max_columns', 100)
+pd.set_option('display.float_format', lambda x: '%.3f' % x)
+
+
+# In[54]:
 
 
 class PromedioZona(Modelo):
@@ -46,7 +55,7 @@ class PromedioZona(Modelo):
         self.promedio_cubiertos = self.train_data["precio_metro_cubierto"].mean()
         self.promedio_totales = self.train_data["precio_metro_total"].mean()
         promedio_general = (self.promedio_cubiertos + self.promedio_totales) / 2
-        metros_general = self.train_data["metroscubiertos"].mean()
+        metros_general = mean(self.train_data["metroscubiertos"].dropna())
         self.prediccion_default = metros_general * promedio_general
     
     @Modelo.cronometrar()
@@ -78,6 +87,10 @@ class PromedioZona(Modelo):
             predicciones_feature = predicciones.get(publicacion[feature])
             prediccion = self._predecir_por_feature(predicciones_feature, totales, cubiertos)
             if prediccion: return prediccion
+        if cubiertos > 0:
+            return cubiertos * self.promedio_cubiertos
+        if totales > 0:
+            return totales * self.promedio_totales
         return self.prediccion_default
     
     def _promedio_por_feature(self, df, feature, minimas_apariciones=5):
@@ -120,15 +133,12 @@ class PromedioZona(Modelo):
             
 
 
-# In[ ]:
+# In[55]:
 
 
 def test():
     modelo = PromedioZona()
     modelo.cargar_datos()
     modelo.entrenar()
-    modelo.validar()
-    predicciones = modelo.predecir(modelo.submit_data)
-    comentario = "Despues de usar datos de ciudad y provincia"
-    #modelo.presentar(predicciones, comentario)
+    return modelo
 

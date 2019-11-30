@@ -15,3 +15,4 @@ timestamp, modelo, validacion, kaggle, comentario
 2019-11-26_01:03:24,EnsambleConcatenadosPrediciendoNaNs,622833.06,616320.06679,ensamble prediciendo nans - local 622833.06
 2019-11-26_19:53:04,XGBoostRegressor,578074.4,580542.88512,xgboost regressor con hiperparametros no default pero sin tunear - local 578074.4
 2019-11-27_14:04:31,EnsambleConcatenados,535801.6,533706.85016,ensamble con xgboost tuneado - local 535801.6
+2019-11-30_19:35:30,EnsambleConcatenados,534928.4,532548.36036,con mejoras en modelo lineal y por zonas - local 534928.4
