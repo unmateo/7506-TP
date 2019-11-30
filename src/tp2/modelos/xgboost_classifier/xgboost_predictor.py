@@ -27,7 +27,7 @@ import xgboost as xgb
 from sklearn.metrics import accuracy_score
 
 
-# In[3]:
+# In[11]:
 
 
 class XGBoost(Modelo):
@@ -85,18 +85,19 @@ class XGBoost(Modelo):
     def entrenar(self, params=None):
         """
         """
-        if not params:
-            params = {
-                'max_depth': 2,
-                'eta': 1,
-                'objective': 'multi:softmax',
-                'num_class': self.clases_feature,
-                'nthread': 4,
-                'eval_metric': 'merror'
-            }
+        hiperparametros = {
+            'max_depth': 10,
+            'objective': 'multi:softmax',
+            'num_class': self.clases_feature,
+            'eval_metric': 'merror',
+            'learning_rate': 0.1,
+            'number_estimators': 1000,
+        }
+        if params:
+            hiperparametros.update(params)
         train_data, train_label = self._split_data_label(self.train_data, self.feature)
         dtrain = xgb.DMatrix(train_data, label=train_label)
-        self.predictor = xgb.train(params, dtrain)
+        self.predictor = xgb.train(hiperparametros, dtrain)
         super().entrenar()
         return True
     
@@ -122,7 +123,7 @@ class XGBoost(Modelo):
         
 
 
-# In[63]:
+# In[12]:
 
 
 def test(feature):
@@ -141,4 +142,10 @@ def tests():
     modelo_banos= test('banos')
     modelo_habitaciones = test('habitaciones')
     return modelo_garage, modelo_banos, modelo_habitaciones
+
+
+# In[15]:
+
+
+modelo = test('garages')
 
