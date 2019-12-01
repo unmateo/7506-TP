@@ -24,18 +24,13 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 # In[2]:
 
 
-pd.set_option('display.max_columns', 1200)
-
-
-# In[3]:
-
-
 from xgboost_regressor.xgboost_predictor import XGBoostRegressor
 from promedio_zona.promedio_zona import PromedioZona
 from regresion_lineal.regresion_lineal import RegresionLineal
+from mlp_regressor.mlp_regressor import MLP_Regressor
 
 
-# In[4]:
+# In[3]:
 
 
 class EnsambleConcatenados(XGBoostRegressor):
@@ -49,23 +44,28 @@ class EnsambleConcatenados(XGBoostRegressor):
     def __init__(self):
         self.modelo_promedios = PromedioZona()
         self.modelo_lineal = RegresionLineal()
+        self.modelo_mlp = MLP_Regressor()
         super().__init__()        
         
     @Modelo.cronometrar()
     def cargar_datos(self):
         self.modelo_promedios.cargar_datos()
         self.modelo_lineal.cargar_datos()
+        self.modelo_mlp.cargar_datos()
         super().cargar_datos()
     
     @Modelo.cronometrar()
     def entrenar(self):
         self.agregar_predicciones_modelo(self.modelo_lineal)
         self.agregar_predicciones_modelo(self.modelo_promedios)
+        self.agregar_predicciones_modelo(self.modelo_mlp)
         super().entrenar()
     
     def agregar_predicciones_modelo(self, modelo):
         columna = 'prediccion_' + modelo.modelo
         modelo.entrenar()
+        score = modelo.validar()
+        print("Score individual {}: {}".format(modelo.modelo, score))
         predicciones_train =  modelo.predecir(modelo.train_data)
         predicciones_test = modelo.predecir(modelo.test_data)
         predicciones_submit = modelo.predecir(modelo.submit_data)
@@ -74,31 +74,56 @@ class EnsambleConcatenados(XGBoostRegressor):
         self.submit_data[columna] = predicciones_submit['target']
 
 
-# In[5]:
+# In[4]:
 
 
 ensamble = EnsambleConcatenados()
 
 
-# In[6]:
+# In[5]:
 
 
 ensamble.cargar_datos()
 
 
-# In[7]:
+# In[6]:
 
 
 ensamble.entrenar()
 
 
-# In[11]:
+# In[7]:
+
+
+ensamble.validar()
+
+
+# In[8]:
+
+
+predicciones = ensamble.predecir(ensamble.submit_data)
+
+
+# In[9]:
+
+
+comentario = "con mlp - local 535595.7"
+ensamble.presentar(predicciones, comentario)
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
 
 
 predicciones = ensamble.predecir(ensamble.test_data)
 
 
-# In[12]:
+# In[ ]:
 
 
 columnas_predictoras = ['target', 'prediccion_PromedioZona', 'prediccion_RegresionLineal']
@@ -106,45 +131,26 @@ for columna in columnas_predictoras:
     predicciones['diferencia_'+columna] = predicciones['precio'] - predicciones[columna]
 
 
-# In[13]:
+# In[ ]:
 
 
 mejores_100 = predicciones.sort_values(by='diferencia_target').head(200)
 
 
-# In[14]:
+# In[ ]:
 
 
 peores_100 = predicciones.sort_values(by='diferencia_target').tail(200)
 
 
-# In[17]:
+# In[ ]:
 
 
 peores_100.describe()
 
 
-# In[16]:
+# In[ ]:
 
 
 mejores_100.describe()
-
-
-# In[8]:
-
-
-ensamble.validar()
-
-
-# In[9]:
-
-
-predicciones = ensamble.predecir(ensamble.submit_data)
-
-
-# In[10]:
-
-
-comentario = "con mejoras en modelo lineal y por zonas - local 534928.4"
-ensamble.presentar(predicciones, comentario)
 
