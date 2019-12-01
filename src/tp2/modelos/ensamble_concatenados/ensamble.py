@@ -107,7 +107,7 @@ predicciones = ensamble.predecir(ensamble.submit_data)
 # In[9]:
 
 
-comentario = "con mlp - local 535595.7"
+comentario = "con mlp mejorado(645731)- local 534796.2 - entrena en 1h30m"
 ensamble.presentar(predicciones, comentario)
 
 

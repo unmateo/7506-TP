@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 import os
@@ -19,7 +19,7 @@ pd.set_option('display.max_columns', 100)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
-# In[ ]:
+# In[2]:
 
 
 from sklearn.neural_network import MLPRegressor
@@ -28,14 +28,14 @@ from operator import concat
 from functools import reduce
 
 
-# In[ ]:
+# In[3]:
 
 
 import numpy as np
 from random import choice
 
 
-# In[ ]:
+# In[4]:
 
 
 class MLP_Regressor(Modelo):
@@ -50,8 +50,7 @@ class MLP_Regressor(Modelo):
             "idzona",
             "precio_metro_cubierto",
             "precio_metro_total",
-            "gps", "lat", "lng",
-            'ciudad', 'provincia'
+            "gps", "lat", "lng"
         }
         features = FEATURES_DISPONIBLES - excluir
         super().cargar_datos(features)
@@ -65,7 +64,7 @@ class MLP_Regressor(Modelo):
         """
         """
         df = df.drop(columns=["fecha", "titulo", "descripcion"])
-        categoricas = {"tipodepropiedad"}
+        categoricas = {"tipodepropiedad",'ciudad', 'provincia'}
         return self.one_hot_encode(df, categoricas)
     
     def agregar_columnas_faltantes(self):
@@ -133,7 +132,7 @@ class MLP_Regressor(Modelo):
         return data
 
 
-# In[ ]:
+# In[5]:
 
 
 def test():
