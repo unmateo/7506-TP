@@ -18,3 +18,4 @@ timestamp, modelo, validacion, kaggle, comentario
 2019-11-30_19:35:30,EnsambleConcatenados,534928.4,532548.36036,con mejoras en modelo lineal y por zonas - local 534928.4
 2019-12-01_15:47:08,EnsambleConcatenados,535595.7,533005.32704,con mlp - local 535595.7
 2019-12-01_19:08:00,EnsambleConcatenados,534796.2,530396.28376,con mlp mejorado(645731)- local 534796.2 - entrena en 1h30m
+2019-12-01_23:30:34,EnsambleConcatenados,533776.5,533931.21272,con regresion lineal mejorada- local 533776 - entrena en 6k segundos

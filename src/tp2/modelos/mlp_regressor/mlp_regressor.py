@@ -24,8 +24,6 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 from sklearn.neural_network import MLPRegressor
 from sklearn.preprocessing import StandardScaler
-from operator import concat
-from functools import reduce
 
 
 # In[3]:
@@ -67,23 +65,6 @@ class MLP_Regressor(Modelo):
         categoricas = {"tipodepropiedad",'ciudad', 'provincia'}
         return self.one_hot_encode(df, categoricas)
     
-    def agregar_columnas_faltantes(self):
-        """
-            Al hacer one hot encoding individualemente sobre los dfs,
-            puede pasar que queden con columnas dispares. Por eso,
-            en esta función las agrego a cada uno.
-        """
-        dfs = (self.train_data, self.test_data, self.submit_data)
-        columnas_todas = set(reduce(concat, [list(df.columns.values) for df in dfs], []))
-        def agregar_faltantes(df):
-            faltantes = list(columnas_todas - {'precio'} - set(df.columns.values))
-            for faltante in faltantes:
-                df[faltante] = False
-            return df.reindex(columnas_todas, axis='columns')
-        self.train_data = self.llenar_nans(agregar_faltantes(self.train_data))
-        self.test_data = self.llenar_nans(agregar_faltantes(self.test_data))
-        self.submit_data = self.llenar_nans(agregar_faltantes(self.submit_data))
-        return True
 
     def _split_data_label(self, df, label=None):
         if not label:

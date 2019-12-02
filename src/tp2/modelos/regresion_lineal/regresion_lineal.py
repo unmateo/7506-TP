@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[5]:
+# In[1]:
 
 
 import os
@@ -13,7 +13,7 @@ from modelo import Modelo
 from datos import FEATURES_DISPONIBLES
 
 
-# In[6]:
+# In[2]:
 
 
 from sklearn.linear_model import LinearRegression
@@ -23,7 +23,7 @@ pd.set_option('display.max_columns', 100)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
-# In[31]:
+# In[14]:
 
 
 class RegresionLineal(Modelo):
@@ -48,11 +48,12 @@ class RegresionLineal(Modelo):
     def entrenar(self):
         super().entrenar()
         self.train_data = self.preparar_datos(self.train_data)
-        train_data = self.train_data.loc[:, self.train_data.columns != 'precio']
-        train_label = np.log(self.train_data["precio"])
-        self.regression = LinearRegression(normalize=True).fit(train_data, train_label)
         self.test_data = self.preparar_datos(self.test_data)
         self.submit_data = self.preparar_datos(self.submit_data)
+        self.agregar_columnas_faltantes()
+        train_data = self.train_data.loc[:, self.train_data.columns != self.feature]
+        train_label = np.log(self.train_data[self.feature])
+        self.regression = LinearRegression(normalize=False).fit(train_data, train_label)
         return True
     
     def preparar_datos(self, df):
@@ -61,16 +62,8 @@ class RegresionLineal(Modelo):
         """
         df = df.drop(columns=["fecha", "titulo", "descripcion"])
         categoricas = ["tipodepropiedad", "provincia"]
-        df = self.one_hot_encode(df, categoricas)
-        rellenas = self.rellenar_vacios(df)
-        return rellenas
+        return self.one_hot_encode(df, categoricas)
     
-    def rellenar_vacios(self, df):
-        """
-            Rellena los valores vacíos del df con el promedio de esa columna.
-            Devuelve el DataFrame modificado.
-        """
-        return df.fillna(df.mean())
 
     @Modelo.cronometrar()
     def predecir(self, df):
@@ -84,7 +77,7 @@ class RegresionLineal(Modelo):
             
 
 
-# In[11]:
+# In[15]:
 
 
 def test():

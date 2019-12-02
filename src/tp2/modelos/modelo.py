@@ -5,6 +5,8 @@ from sklearn.metrics import mean_absolute_error
 from datos import levantar_datos
 from kaggle import api
 import pandas as pd
+from operator import concat
+from functools import reduce
 
 
 class Modelo:
@@ -173,3 +175,24 @@ class Modelo:
         
         return pd.get_dummies(df, prefix=categoricas, columns=categoricas, dtype='bool')
         
+
+    def agregar_columnas_faltantes(self):
+        """
+            Al hacer one hot encoding individualemente sobre los dfs,
+            puede pasar que queden con columnas dispares. Por eso,
+            en esta función las agrego a cada uno.
+        """
+        dfs = (self.train_data, self.test_data, self.submit_data)
+        columnas_todas = set(reduce(concat, [list(df.columns.values) for df in dfs], []))
+        def agregar_faltantes(df):
+            faltantes = list(columnas_todas - {self.feature} - set(df.columns.values))
+            for faltante in faltantes:
+                df[faltante] = False
+            return df.reindex(columnas_todas, axis='columns')
+        self.train_data = self.llenar_nans(agregar_faltantes(self.train_data))
+        self.test_data = self.llenar_nans(agregar_faltantes(self.test_data))
+        self.submit_data = self.llenar_nans(agregar_faltantes(self.submit_data))
+        return True
+    
+    def llenar_nans(self, df):
+        return df.fillna(df.mean(skipna=True, numeric_only=True))

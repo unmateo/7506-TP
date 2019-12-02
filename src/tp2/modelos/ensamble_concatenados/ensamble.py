@@ -104,10 +104,10 @@ ensamble.validar()
 predicciones = ensamble.predecir(ensamble.submit_data)
 
 
-# In[9]:
+# In[10]:
 
 
-comentario = "con mlp mejorado(645731)- local 534796.2 - entrena en 1h30m"
+comentario = "con regresion lineal mejorada- local 533776 - entrena en 6k segundos"
 ensamble.presentar(predicciones, comentario)
 
 
