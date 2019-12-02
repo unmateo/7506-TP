@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[5]:
 
 
 import os
@@ -13,7 +13,7 @@ from modelo import Modelo
 from datos import FEATURES_DISPONIBLES
 
 
-# In[2]:
+# In[6]:
 
 
 from sklearn.linear_model import LinearRegression
@@ -23,7 +23,7 @@ pd.set_option('display.max_columns', 100)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
-# In[11]:
+# In[31]:
 
 
 class RegresionLineal(Modelo):
@@ -39,10 +39,8 @@ class RegresionLineal(Modelo):
             "idzona",
             "precio_metro_cubierto",
             "precio_metro_total",
-            "tipodepropiedad",
-            "provincia",
-            "ciudad",
-            "gps", "lat", "lng"
+            "gps", "lat", "lng",
+            "ciudad"
         }
         super().cargar_datos(FEATURES_DISPONIBLES - excluir)
     
@@ -52,7 +50,7 @@ class RegresionLineal(Modelo):
         self.train_data = self.preparar_datos(self.train_data)
         train_data = self.train_data.loc[:, self.train_data.columns != 'precio']
         train_label = np.log(self.train_data["precio"])
-        self.regression = LinearRegression(normalize=False).fit(train_data, train_label)
+        self.regression = LinearRegression(normalize=True).fit(train_data, train_label)
         self.test_data = self.preparar_datos(self.test_data)
         self.submit_data = self.preparar_datos(self.submit_data)
         return True
@@ -61,7 +59,9 @@ class RegresionLineal(Modelo):
         """
         
         """
-        df = df.drop(columns=["fecha", "titulo", "descripcion"]) 
+        df = df.drop(columns=["fecha", "titulo", "descripcion"])
+        categoricas = ["tipodepropiedad", "provincia"]
+        df = self.one_hot_encode(df, categoricas)
         rellenas = self.rellenar_vacios(df)
         return rellenas
     
@@ -84,7 +84,7 @@ class RegresionLineal(Modelo):
             
 
 
-# In[4]:
+# In[11]:
 
 
 def test():
